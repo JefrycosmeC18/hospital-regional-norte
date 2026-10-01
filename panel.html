@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de gestión — Hospital Regional del Norte</title>
+  <meta name="description" content="Panel de administrador y empleado para gestionar las solicitudes de cita.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="panel.html" aria-current="page">Panel</a></li>
+          <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Panel de gestión de citas</h1>
+          <p>Crea, consulta, actualiza (incluido el estado) y elimina cualquier solicitud de cita del sistema.</p>
+          <span class="panel-rol-banner" id="rolBanner"></span>
+        </div>
+
+        <div class="confirm-box" id="confirmBox" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="11" fill="#0F5D52"/>
+            <path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p id="confirmTexto">Operación realizada con éxito.</p>
+        </div>
+
+        <div class="panel-layout">
+          <div>
+            <form class="panel-crear" id="crearForm" novalidate>
+              <fieldset>
+                <legend>Registrar cita de forma presencial o telefónica</legend>
+
+                <div class="field">
+                  <label for="pNombre">Nombres y apellidos del paciente</label>
+                  <input type="text" id="pNombre" required minlength="4">
+                </div>
+
+                <div class="field">
+                  <label for="pDni">DNI</label>
+                  <input type="text" id="pDni" pattern="[0-9]{8}" maxlength="8" required>
+                </div>
+
+                <div class="field">
+                  <label for="pEspecialidad">Especialidad</label>
+                  <select id="pEspecialidad" required>
+                    <option value="" selected disabled>Selecciona una especialidad</option>
+                    <option value="medicina-general">Medicina General</option>
+                    <option value="pediatria">Pediatría</option>
+                    <option value="ginecologia">Ginecología y Obstetricia</option>
+                    <option value="cardiologia">Cardiología</option>
+                    <option value="traumatologia">Traumatología</option>
+                    <option value="cirugia-general">Cirugía General</option>
+                    <option value="medicina-interna">Medicina Interna</option>
+                    <option value="odontologia">Odontología</option>
+                    <option value="oftalmologia">Oftalmología</option>
+                    <option value="psicologia">Psicología</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="pFecha">Fecha preferida</label>
+                  <input type="date" id="pFecha" required>
+                  <span class="hint">Se guarda con id_usuario vacío (atención presencial/telefónica, sin cuenta propia).</span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Registrar cita</button>
+              </fieldset>
+            </form>
+
+            <div class="panel-table-wrap">
+              <table class="panel-table" id="tablaPanel" hidden>
+                <thead>
+                  <tr>
+                    <th scope="col">Código</th>
+                    <th scope="col">Paciente</th>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Especialidad</th>
+                    <th scope="col">Fecha preferida</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="cuerpoPanel"></tbody>
+              </table>
+            </div>
+
+            <p class="panel-vacio" id="panelVacio" hidden>Aún no hay registros de citas en el sistema.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Proyecto académico — Panel interno de administrador/empleado.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/panel/panel.js"></script>
+
+</body>
+</html>

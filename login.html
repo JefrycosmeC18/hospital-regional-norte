@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso de Pacientes — Hospital Regional del Norte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Especialidades</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Acceso al Portal de Citas</h1>
+          <p>Inicia sesión o crea una cuenta para gestionar tus citas médicas en la plataforma.</p>
+        </div>
+
+        <div class="tabs">
+          <a href="#iniciar" id="tabIniciar">Iniciar Sesión</a>
+          <a href="#registrar" id="tabRegistrar">Registrar Nueva Cuenta</a>
+        </div>
+
+        <div>
+          <!-- FORMULARIO 1: INICIAR SESIÓN -->
+          <div id="seccionIniciar" class="form-section">
+            <form class="form-card" id="formLogin">
+              <fieldset>
+                <legend>Iniciar Sesión</legend>
+                <div id="msgLogin" class="hint" style="color: #b30000; font-weight: 600; margin-bottom: 1rem;"></div>
+
+                <div class="field">
+                  <label for="loginCorreo">Correo electrónico</label>
+                  <input type="email" id="loginCorreo" required placeholder="tucorreo@ejemplo.com">
+                </div>
+
+                <div class="field">
+                  <label for="loginPass">Contraseña</label>
+                  <div class="password-wrapper">
+                    <input type="password" id="loginPass" required placeholder="••••••••">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">Ingresar al sistema</button>
+              </fieldset>
+            </form>
+          </div>
+
+          <!-- FORMULARIO 2: CREAR CUENTA -->
+          <div id="seccionRegistrar" class="form-section">
+            <form class="form-card" id="formRegister">
+              <fieldset>
+                <legend>Registrar Nueva Cuenta</legend>
+                <div id="msgRegister" class="hint" style="font-weight: 600; margin-bottom: 1rem;"></div>
+
+                <div class="field">
+                  <label for="regNombre">Nombres y Apellidos</label>
+                  <input type="text" id="regNombre" required placeholder="Como figura en tu DNI">
+                </div>
+
+                <div class="field">
+                  <label for="regCorreo">Correo electrónico</label>
+                  <input type="email" id="regCorreo" required placeholder="tucorreo@ejemplo.com">
+                </div>
+
+                <div class="field">
+                  <label for="regPass">Contraseña</label>
+                  <div class="password-wrapper">
+                    <input type="password" id="regPass" required placeholder="Mínimo 6 caracteres">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Crear mi cuenta</button>
+              </fieldset>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Proyecto académico — Área de atención a pacientes.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/auth/login.js"></script>
+</body>
+</html>

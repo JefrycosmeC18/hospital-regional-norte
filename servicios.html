@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Especialidades — Hospital Regional del Norte</title>
+  <meta name="description" content="Especialidades médicas y servicios de consulta externa del Hospital Regional del Norte, Piura.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/servicios.css">
+</head>
+<body>
+
+  <div class="emergency-bar">
+    <div class="container">
+      <span>
+        <svg class="emergency-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <g class="cross">
+            <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+      </span>
+      <a href="tel:+51073123456">☎ (073) 123-456</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html" aria-current="page">Especialidades</a></li>
+          <li><a href="como-funciona.html">Cómo pedir cita</a></li>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="panel.html">Panel</a></li>
+          <li><a href="login.html" class="nav-link-login">Iniciar sesión</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Especialidades y servicios</h1>
+          <p>Consulta externa por especialidad, con y sin cobertura del Seguro Integral de Salud (SIS). Si no estás seguro de qué especialidad necesitas, empieza por Medicina General.</p>
+        </div>
+
+        <figure class="photo-feature">
+          <img
+            src="https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800&amp;h=373&amp;dpr=1"
+            srcset="
+              https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=480&amp;h=224&amp;dpr=1 480w,
+              https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800&amp;h=373&amp;dpr=1 800w,
+              https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200&amp;h=560&amp;dpr=1 1200w"
+            sizes="(max-width: 700px) 100vw, 74rem"
+            alt="Un médico conversa con una paciente durante una consulta"
+            loading="lazy" width="1200" height="560">
+          <figcaption>Consulta externa: cada especialidad atiende con cita previa o por orden de llegada, según el caso.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="horarios">
+      <div class="container">
+        <div class="section-head">
+          <h2>Horario de atención por especialidad</h2>
+          <p>Consultorios externos de lunes a sábado. La Emergencia no tiene horario: atiende los 365 días del año.</p>
+        </div>
+
+        <div class="schedule-table-wrap">
+          <table class="schedule-table">
+            <caption>Horarios de consulta externa — sede central. Los horarios pueden variar en feriados.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Especialidad</th>
+                <th scope="col">Días</th>
+                <th scope="col">Horario</th>
+                <th scope="col">Consultorio</th>
+                <th scope="col">Modalidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Medicina General</td>
+                <td>Lunes a sábado</td>
+                <td>7:00 a.m. – 3:00 p.m.</td>
+                <td>101 – 104</td>
+                <td><span class="schedule-tag">Sin referencia</span></td>
+              </tr>
+              <tr>
+                <td>Pediatría</td>
+                <td>Lunes a viernes</td>
+                <td>8:00 a.m. – 2:00 p.m.</td>
+                <td>205</td>
+                <td><span class="schedule-tag">Sin referencia</span></td>
+              </tr>
+              <tr>
+                <td>Ginecología y Obstetricia</td>
+                <td>Lunes, miércoles y viernes</td>
+                <td>8:00 a.m. – 1:00 p.m.</td>
+                <td>210</td>
+                <td><span class="schedule-tag">Con SIS</span></td>
+              </tr>
+              <tr>
+                <td>Cardiología</td>
+                <td>Martes y jueves</td>
+                <td>9:00 a.m. – 1:00 p.m.</td>
+                <td>301</td>
+                <td><span class="schedule-tag">Con referencia</span></td>
+              </tr>
+              <tr>
+                <td>Traumatología</td>
+                <td>Lunes a viernes</td>
+                <td>2:00 p.m. – 6:00 p.m.</td>
+                <td>108</td>
+                <td><span class="schedule-tag">Con referencia</span></td>
+              </tr>
+              <tr>
+                <td>Cirugía General</td>
+                <td>Lunes y miércoles</td>
+                <td>8:00 a.m. – 12:00 p.m.</td>
+                <td>305</td>
+                <td><span class="schedule-tag">Con referencia</span></td>
+              </tr>
+              <tr>
+                <td>Medicina Interna</td>
+                <td>Martes a viernes</td>
+                <td>8:00 a.m. – 1:00 p.m.</td>
+                <td>303</td>
+                <td><span class="schedule-tag">Con referencia</span></td>
+              </tr>
+              <tr>
+                <td>Oftalmología</td>
+                <td>Miércoles y viernes</td>
+                <td>9:00 a.m. – 1:00 p.m.</td>
+                <td>207</td>
+                <td><span class="schedule-tag">Sin referencia</span></td>
+              </tr>
+              <tr>
+                <td>Odontología</td>
+                <td>Lunes a sábado</td>
+                <td>8:00 a.m. – 4:00 p.m.</td>
+                <td>Módulo dental</td>
+                <td><span class="schedule-tag">Sin referencia</span></td>
+              </tr>
+              <tr>
+                <td>Psicología</td>
+                <td>Martes, jueves y sábado</td>
+                <td>9:00 a.m. – 1:00 p.m.</td>
+                <td>212</td>
+                <td><span class="schedule-tag">Sin referencia</span></td>
+              </tr>
+              <tr>
+                <td>Emergencia</td>
+                <td>Todos los días</td>
+                <td data-status="emergencia">24 horas</td>
+                <td>Ingreso de Emergencia</td>
+                <td><span class="schedule-tag" data-tag="emergencia">24 horas</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>¿Ya elegiste tu especialidad?</h2>
+          <p>El siguiente paso es revisar los requisitos según tu forma de pago, y luego completar el formulario de solicitud de cita.</p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="como-funciona.html">Ver requisitos</a>
+          <a class="btn btn-outline" href="registro.html">Ir directo al formulario</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="como-funciona.html">Cómo pedir cita</a></li>
+          <li><a href="registro.html">Solicitar cita</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Emergencia</h4>
+        <ul>
+          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Ver todas las sedes</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">Proyecto académico — Diseño Web.</p>
+  </footer>
+
+</body>
+</html>

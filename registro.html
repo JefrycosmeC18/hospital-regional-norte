@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitar cita — Hospital Regional del Norte</title>
+  <meta name="description" content="Formulario para solicitar una cita médica en el Hospital Regional del Norte, Piura.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/registro.css">
+</head>
+<body>
+
+  <div class="emergency-bar">
+    <div class="container">
+      <span>
+        <svg class="emergency-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <g class="cross">
+            <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+      </span>
+      <a href="tel:+51073123456">☎ (073) 123-456</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="como-funciona.html">Cómo pedir cita</a></li>
+          <li><a href="registro.html" aria-current="page">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+          <li><a href="panel.html">Panel</a></li>
+          <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Solicitud de cita médica</h1>
+          <p>Completa tus datos y te confirmaremos la fecha y hora por teléfono o correo electrónico dentro de las siguientes 24 horas hábiles.</p>
+          <p id="usuarioBienvenida" style="font-weight: 600; color: #0F5D52; margin-top: 0.5rem;"></p>
+        </div>
+
+        <div class="confirm-box" id="confirmBox" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="11" fill="#0F5D52"/>
+            <path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p id="confirmTexto">¡Listo! Registramos tu solicitud de cita. Te confirmaremos la fecha y hora por teléfono o correo dentro de 24 horas hábiles.</p>
+        </div>
+
+        <!-- CONTENEDOR EN 2 COLUMNAS PARA APROVECHAR EL ESPACIO -->
+        <div class="citas-layout">
+
+          <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+          <form class="form-card" id="citaForm" action="https://formsubmit.co/citas@hospitalregionaldelnorte.example.pe" method="POST" novalidate>
+
+            <fieldset>
+              <legend>Datos del paciente</legend>
+
+              <div class="field">
+                <label for="nombre">Nombres y apellidos</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Como figura en tu DNI" required minlength="4">
+              </div>
+
+              <div class="field">
+                <label for="dni">DNI</label>
+                <input type="text" id="dni" name="dni" placeholder="8 dígitos" pattern="[0-9]{8}" maxlength="8" required>
+                <span class="hint">Solo números, sin puntos ni espacios.</span>
+              </div>
+
+              <div class="field">
+                <label for="fecha-nacimiento">Fecha de nacimiento</label>
+                <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" required>
+              </div>
+
+              <div class="field">
+                <label for="telefono">Teléfono de contacto</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="9XX XXX XXX" pattern="[0-9]{9}" required>
+              </div>
+
+              <div class="field">
+                <label for="correo">Correo electrónico (opcional)</label>
+                <input type="email" id="correo" name="correo" placeholder="tucorreo@ejemplo.com">
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Datos de la cita</legend>
+
+              <div class="field">
+                <label for="especialidad">Especialidad</label>
+                <select id="especialidad" name="especialidad" required>
+                  <option value="" selected disabled>Selecciona una especialidad</option>
+                  <option value="medicina-general">Medicina General</option>
+                  <option value="pediatria">Pediatría</option>
+                  <option value="ginecologia">Ginecología y Obstetricia</option>
+                  <option value="cardiologia">Cardiología</option>
+                  <option value="traumatologia">Traumatología</option>
+                  <option value="cirugia-general">Cirugía General</option>
+                  <option value="medicina-interna">Medicina Interna</option>
+                  <option value="odontologia">Odontología</option>
+                  <option value="oftalmologia">Oftalmología</option>
+                  <option value="psicologia">Psicología</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <span>Forma de pago</span>
+                <div class="radio-group">
+                  <label><input type="radio" name="pago" value="sis" checked> SIS</label>
+                  <label><input type="radio" name="pago" value="particular"> Pago particular</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="fecha-preferida">Fecha de preferencia</label>
+                <input type="date" id="fecha-preferida" name="fecha_preferida" required>
+                <span class="hint">Solo se permiten fechas a partir de hoy. Sujeta a disponibilidad de cupos.</span>
+              </div>
+
+              <div class="field">
+                <label for="motivo">Motivo de consulta</label>
+                <textarea id="motivo" name="motivo" placeholder="Cuéntanos brevemente qué síntomas o control necesitas" required></textarea>
+              </div>
+            </fieldset>
+
+            <p class="form-footnote">Si tu situación es una emergencia, no completes este formulario: acude directamente al hospital o llama al <a href="tel:+51073123456">(073) 123-456</a>.</p>
+
+            <button type="submit" class="btn btn-primary">Enviar solicitud de cita</button>
+          </form>
+
+          <!-- COLUMNA DERECHA: PANEL INFORMATIVO LATERAL -->
+          <aside class="info-sidebar">
+            <h3>Requisitos para tu Cita</h3>
+            <ul>
+              <li>Presentar DNI físico vigente al momento de la consulta.</li>
+              <li>Si cuentas con SIS, verificar que se encuentre activo.</li>
+              <li>Llegar 20 minutos antes de la hora programada para el triaje.</li>
+              <li>Presentar carnet de vacunación si es consulta pediátrica.</li>
+            </ul>
+
+            <h3>Horarios de Atención</h3>
+            <div class="info-card-box">
+              <strong>Consultorios Externos:</strong>
+              <p style="margin: 0; font-size: 0.9rem; color: #4a5568;">Lunes a Sábado: 07:00 AM - 07:00 PM</p>
+            </div>
+
+            <div class="info-card-box">
+              <strong>Atención de Emergencias:</strong>
+              <p style="margin: 0; font-size: 0.9rem; color: #4a5568;">Disponible los 365 días del año (24 horas).</p>
+            </div>
+
+            <div class="info-card-box" style="border-left-color: #E0762E; margin-top: 1.5rem;">
+              <strong>¿Necesitas reprogramar?</strong>
+              <p style="margin: 0; font-size: 0.85rem; color: #4a5568;">Ve a <a href="consulta.html">Mis citas</a> con tu código generado.</p>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="misSolicitudes">
+      <div class="container">
+        <div class="section-head">
+          <h2>Tus solicitudes en este navegador</h2>
+          <p>Como mejora al formulario, cada solicitud enviada también queda guardada localmente (simulando una base de datos) para que puedas revisarla más tarde. Esta información no sale de tu navegador ni reemplaza la confirmación oficial por teléfono o correo. Para ver el estado real, revisa <a href="consulta.html">Mis citas</a>.</p>
+        </div>
+
+        <ul class="my-requests" id="misSolicitudesLista"></ul>
+        <p class="hint" id="misSolicitudesVacio">Aún no registras ninguna solicitud en este navegador.</p>
+
+        <button type="button" class="btn btn-outline" id="borrarSolicitudes" hidden>Vaciar historial local</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="como-funciona.html">Cómo pedir cita</a></li>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Emergencia</h4>
+        <ul>
+          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Ver todas las sedes</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">Proyecto académico — Diseño Web, Unidad 1. No corresponde a un establecimiento real.</p>
+  </footer>
+
+  <script type="module" src="js/registro/registro.js"></script>
+
+</body>
+</html>
