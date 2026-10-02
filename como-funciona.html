@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Especialidades — Hospital Regional del Norte</title>
-  <meta name="description" content="Especialidades médicas y servicios de consulta externa del Hospital Regional del Norte, Piura.">
+  <title>Cómo pedir una cita — Hospital Regional del Norte</title>
+  <meta name="description" content="Pasos y requisitos para solicitar una cita médica en el Hospital Regional del Norte, Piura.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/servicios.css">
+  <link rel="stylesheet" href="css/como-funciona.css">
 </head>
 <body>
 
@@ -38,11 +38,15 @@
           <span class="tagline">MINSA · Piura</span>
         </span>
       </a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </label>
       <nav class="main-nav" aria-label="Navegación principal">
         <ul>
           <li><a href="index.html">Inicio</a></li>
-          <li><a href="servicios.html" aria-current="page">Especialidades</a></li>
-          <li><a href="como-funciona.html">Cómo pedir cita</a></li>
+          <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="como-funciona.html" aria-current="page">Cómo pedir cita</a></li>
           <li><a href="registro.html">Solicitar cita</a></li>
           <li><a href="panel.html">Panel</a></li>
           <li><a href="login.html" class="nav-link-login">Iniciar sesión</a></li>
@@ -56,124 +60,75 @@
     <section class="section">
       <div class="container">
         <div class="section-head">
-          <h1>Especialidades y servicios</h1>
-          <p>Consulta externa por especialidad, con y sin cobertura del Seguro Integral de Salud (SIS). Si no estás seguro de qué especialidad necesitas, empieza por Medicina General.</p>
+          <h1>Cómo pedir tu cita</h1>
+          <p>El proceso es el mismo si tienes SIS o si pagas de forma particular; solo cambia el requisito de pago en el paso 3.</p>
         </div>
 
-        <figure class="photo-feature">
-          <img
-            src="https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800&amp;h=373&amp;dpr=1"
-            srcset="
-              https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=480&amp;h=224&amp;dpr=1 480w,
-              https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800&amp;h=373&amp;dpr=1 800w,
-              https://images.pexels.com/photos/7659873/pexels-photo-7659873.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200&amp;h=560&amp;dpr=1 1200w"
-            sizes="(max-width: 700px) 100vw, 74rem"
-            alt="Un médico conversa con una paciente durante una consulta"
-            loading="lazy" width="1200" height="560">
-          <figcaption>Consulta externa: cada especialidad atiende con cita previa o por orden de llegada, según el caso.</figcaption>
-        </figure>
+        <ol class="steps">
+          <li>
+            <div>
+              <h3>Elige la especialidad</h3>
+              <p>Revisa el listado de especialidades y ubica la que corresponde a tu malestar. Si tienes dudas, elige Medicina General: el médico te derivará si hace falta.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Reúne tus documentos</h3>
+              <p>Necesitas tu DNI vigente. Si usas SIS, también tu carné de afiliación. Si vienes referido de otro establecimiento, trae la hoja de referencia.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Completa el formulario o llama a admisión</h3>
+              <p>Puedes reservar en línea desde la página de citas, llamar al módulo de admisión, o acercarte de forma presencial de lunes a sábado.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Recibe la confirmación</h3>
+              <p>Te confirmamos fecha, hora y consultorio por teléfono o correo. Guarda este dato: lo pedirán al llegar a admisión.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Llega 20 minutos antes</h3>
+              <p>Pasa primero por admisión para el registro de tu cita y, si corresponde, el pago en caja. Luego dirígete al consultorio asignado.</p>
+            </div>
+          </li>
+        </ol>
       </div>
     </section>
 
-    <section class="section section--alt" id="horarios">
+    <section class="section section--alt">
       <div class="container">
         <div class="section-head">
-          <h2>Horario de atención por especialidad</h2>
-          <p>Consultorios externos de lunes a sábado. La Emergencia no tiene horario: atiende los 365 días del año.</p>
+          <h2>Requisitos según tu forma de atención</h2>
         </div>
 
-        <div class="schedule-table-wrap">
-          <table class="schedule-table">
-            <caption>Horarios de consulta externa — sede central. Los horarios pueden variar en feriados.</caption>
-            <thead>
-              <tr>
-                <th scope="col">Especialidad</th>
-                <th scope="col">Días</th>
-                <th scope="col">Horario</th>
-                <th scope="col">Consultorio</th>
-                <th scope="col">Modalidad</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Medicina General</td>
-                <td>Lunes a sábado</td>
-                <td>7:00 a.m. – 3:00 p.m.</td>
-                <td>101 – 104</td>
-                <td><span class="schedule-tag">Sin referencia</span></td>
-              </tr>
-              <tr>
-                <td>Pediatría</td>
-                <td>Lunes a viernes</td>
-                <td>8:00 a.m. – 2:00 p.m.</td>
-                <td>205</td>
-                <td><span class="schedule-tag">Sin referencia</span></td>
-              </tr>
-              <tr>
-                <td>Ginecología y Obstetricia</td>
-                <td>Lunes, miércoles y viernes</td>
-                <td>8:00 a.m. – 1:00 p.m.</td>
-                <td>210</td>
-                <td><span class="schedule-tag">Con SIS</span></td>
-              </tr>
-              <tr>
-                <td>Cardiología</td>
-                <td>Martes y jueves</td>
-                <td>9:00 a.m. – 1:00 p.m.</td>
-                <td>301</td>
-                <td><span class="schedule-tag">Con referencia</span></td>
-              </tr>
-              <tr>
-                <td>Traumatología</td>
-                <td>Lunes a viernes</td>
-                <td>2:00 p.m. – 6:00 p.m.</td>
-                <td>108</td>
-                <td><span class="schedule-tag">Con referencia</span></td>
-              </tr>
-              <tr>
-                <td>Cirugía General</td>
-                <td>Lunes y miércoles</td>
-                <td>8:00 a.m. – 12:00 p.m.</td>
-                <td>305</td>
-                <td><span class="schedule-tag">Con referencia</span></td>
-              </tr>
-              <tr>
-                <td>Medicina Interna</td>
-                <td>Martes a viernes</td>
-                <td>8:00 a.m. – 1:00 p.m.</td>
-                <td>303</td>
-                <td><span class="schedule-tag">Con referencia</span></td>
-              </tr>
-              <tr>
-                <td>Oftalmología</td>
-                <td>Miércoles y viernes</td>
-                <td>9:00 a.m. – 1:00 p.m.</td>
-                <td>207</td>
-                <td><span class="schedule-tag">Sin referencia</span></td>
-              </tr>
-              <tr>
-                <td>Odontología</td>
-                <td>Lunes a sábado</td>
-                <td>8:00 a.m. – 4:00 p.m.</td>
-                <td>Módulo dental</td>
-                <td><span class="schedule-tag">Sin referencia</span></td>
-              </tr>
-              <tr>
-                <td>Psicología</td>
-                <td>Martes, jueves y sábado</td>
-                <td>9:00 a.m. – 1:00 p.m.</td>
-                <td>212</td>
-                <td><span class="schedule-tag">Sin referencia</span></td>
-              </tr>
-              <tr>
-                <td>Emergencia</td>
-                <td>Todos los días</td>
-                <td data-status="emergencia">24 horas</td>
-                <td>Ingreso de Emergencia</td>
-                <td><span class="schedule-tag" data-tag="emergencia">24 horas</span></td>
-              </tr>
-            </tbody>
-          </table>
+        <figure class="photo-feature">
+          <img src="https://images.pexels.com/photos/33812025/pexels-photo-33812025.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200&amp;h=560&amp;dpr=1" alt="Recepción de un centro de salud, donde el personal de admisión registra las citas" loading="lazy" width="1200" height="560">
+          <figcaption>Admisión es tu primera parada al llegar al hospital, con o sin SIS.</figcaption>
+        </figure>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Con Seguro Integral de Salud (SIS)</h3>
+            <ul class="requirements">
+              <li>DNI vigente del paciente</li>
+              <li>Carné de afiliación al SIS</li>
+              <li>Hoja de referencia, si vienes de otro centro de salud</li>
+              <li>La consulta y los medicamentos del petitorio no tienen costo</li>
+            </ul>
+          </div>
+          <div class="contact-card">
+            <h3>Pago particular</h3>
+            <ul class="requirements">
+              <li>DNI vigente del paciente</li>
+              <li>Pago de derecho de consulta en caja o en línea</li>
+              <li>Recibo o boleta para presentar en admisión</li>
+              <li>Puedes solicitar factura si la necesitas para un seguro privado</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -181,13 +136,10 @@
     <section class="section">
       <div class="container">
         <div class="section-head">
-          <h2>¿Ya elegiste tu especialidad?</h2>
-          <p>El siguiente paso es revisar los requisitos según tu forma de pago, y luego completar el formulario de solicitud de cita.</p>
+          <h2>¿Listo para reservar?</h2>
+          <p>Con la especialidad y tus documentos definidos, el formulario te toma menos de tres minutos.</p>
         </div>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="como-funciona.html">Ver requisitos</a>
-          <a class="btn btn-outline" href="registro.html">Ir directo al formulario</a>
-        </div>
+        <a class="btn btn-accent" href="registro.html">Solicitar cita ahora</a>
       </div>
     </section>
   </main>

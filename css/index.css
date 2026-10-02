@@ -426,6 +426,82 @@ textarea { resize: vertical; min-height: 6rem; }
   font-weight: 700 !important;
 }
 
+/* ---------- Menú responsive (hamburguesa) ---------- */
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-label {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.nav-toggle-label span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: var(--color-primary-dark);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+@media (max-width: 900px) {
+  .site-header .container {
+    flex-wrap: wrap;
+  }
+
+  .nav-toggle-label {
+    display: flex;
+  }
+
+  .main-nav {
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  .main-nav ul {
+    display: none;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    width: 100%;
+    margin-top: 0.8rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .main-nav li {
+    width: 100%;
+  }
+
+  .main-nav a {
+    display: block;
+    padding: 0.7rem 0.2rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .nav-toggle:checked ~ .main-nav ul {
+    display: flex;
+  }
+
+  .nav-toggle:checked ~ .nav-toggle-label span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .nav-toggle:checked ~ .nav-toggle-label span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle:checked ~ .nav-toggle-label span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
+
 /* ---------- Estilos específicos de index.html ---------- */
 .hero {
   padding: 4rem 0;
