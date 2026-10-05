@@ -27,7 +27,7 @@ export async function registrarUsuario(nombre, correo, contrasena) {
 export async function iniciarSesion(correo, contrasena) {
   try {
     const resultado = await sql`
-      SELECT id, nombre, correo, contrasena, rol FROM usuarios
+      SELECT id, nombre, correo, contrasena, rol, turno FROM usuarios
       WHERE correo = ${correo};
     `;
 
@@ -44,7 +44,8 @@ export async function iniciarSesion(correo, contrasena) {
       id: usuario.id,
       nombre: usuario.nombre,
       correo: usuario.correo,
-      rol: usuario.rol
+      rol: usuario.rol,
+      turno: usuario.turno
     }));
 
     return { exito: true, usuario };

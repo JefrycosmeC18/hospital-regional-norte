@@ -654,3 +654,33 @@ textarea { resize: vertical; min-height: 6rem; }
   border: 1px solid var(--color-emergency);
   background: #FBE4E5;
 }
+
+/* Botones deshabilitados cuando el empleado está fuera de turno */
+.btn-editar-fila[aria-disabled="true"],
+.btn-eliminar-fila[aria-disabled="true"] {
+  border-color: var(--color-line);
+  color: var(--color-ink-soft);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.panel-rol-banner[data-rol="empleado"] {
+  background: #FFF3E0;
+  border-color: #B8860B;
+  color: #8a6400;
+}
+
+/* Botones deshabilitados cuando el empleado está fuera de turno */
+.btn-editar-fila[aria-disabled="true"],
+.btn-eliminar-fila[aria-disabled="true"] {
+  border-color: var(--color-line);
+  color: var(--color-ink-soft);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.panel-rol-banner[data-rol="empleado"] {
+  background: #FFF3E0;
+  border-color: #B8860B;
+  color: #8a6400;
+}

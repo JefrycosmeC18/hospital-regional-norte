@@ -1,7 +1,4 @@
-// js/panel/panel.js
-// Script propio de panel.html — RF-10.7 y RF-10.8: administrador y
-// empleado comparten el mismo panel con las cuatro operaciones sobre
-// TODOS los registros de citas_medicas (no solo los propios).
+
 
 import { sql } from '../config/neon-config.js';
 import { verificarPanelProtegido, cerrarSesion } from '../auth/auth.js';
@@ -10,6 +7,29 @@ import { verificarPanelProtegido, cerrarSesion } from '../auth/auth.js';
 const usuarioActual = verificarPanelProtegido();
 
 const ESTADOS = ['registrado', 'atendido', 'rechazado', 'cancelado'];
+
+// --- Turnos de empleado (requisito de la Evaluación Parcial) ---
+// El administrador siempre puede editar, sin importar la hora.
+// El empleado solo puede editar el estado mientras la hora actual
+// caiga dentro de SU turno asignado (mañana / tarde / noche-madrugada).
+const TURNOS_HORARIO = {
+  'mañana': { desde: 6, hasta: 14 },           // 06:00 a 13:59
+  'tarde': { desde: 14, hasta: 22 },           // 14:00 a 21:59
+  'noche-madrugada': { desde: 22, hasta: 6 }   // 22:00 a 05:59 (cruza medianoche)
+};
+
+function turnoActual() {
+  const hora = new Date().getHours();
+  if (hora >= 6 && hora < 14) return 'mañana';
+  if (hora >= 14 && hora < 22) return 'tarde';
+  return 'noche-madrugada';
+}
+
+function puedeEditarAhora() {
+  if (usuarioActual.rol === 'administrador') return true;
+  // Empleado: solo si su turno asignado coincide con la hora actual.
+  return usuarioActual.turno === turnoActual();
+}
 
 const NOMBRES_ESPECIALIDAD = {
   'medicina-general': 'Medicina General',
@@ -45,6 +65,9 @@ export async function crearRegistro(datos) {
 
 // --- Actualizar: cualquier registro, incluido el estado ---
 export async function actualizarComoPanel(id, datos) {
+  if (!puedeEditarAhora()) {
+    throw new Error('Estás fuera de tu turno asignado y no puedes editar en este momento.');
+  }
   await sql`
     UPDATE citas_medicas
     SET nombre_paciente = ${datos.nombre_paciente},
@@ -58,6 +81,9 @@ export async function actualizarComoPanel(id, datos) {
 
 // --- Eliminar: con confirmación obligatoria en la interfaz ---
 export async function eliminarRegistro(id) {
+  if (!puedeEditarAhora()) {
+    throw new Error('Estás fuera de tu turno asignado y no puedes eliminar en este momento.');
+  }
   await sql`DELETE FROM citas_medicas WHERE id = ${id};`;
 }
 
@@ -72,7 +98,13 @@ function formatearFecha(valor) {
   if (!usuarioActual) return;
 
   const rolBanner = document.getElementById('rolBanner');
-  rolBanner.textContent = `Sesión: ${usuarioActual.nombre} · Rol: ${usuarioActual.rol}`;
+  if (usuarioActual.rol === 'empleado') {
+    const enTurno = puedeEditarAhora();
+    rolBanner.textContent = `Sesión: ${usuarioActual.nombre} · Rol: empleado · Turno asignado: ${usuarioActual.turno} ` +
+      (enTurno ? '(dentro de turno, puedes editar)' : `(fuera de turno — ahora es turno ${turnoActual()}, solo puedes ver)`);
+  } else {
+    rolBanner.textContent = `Sesión: ${usuarioActual.nombre} · Rol: ${usuarioActual.rol} (acceso total, sin restricción de turno)`;
+  }
   rolBanner.setAttribute('data-rol', usuarioActual.rol);
 
   const btnCerrarSesion = document.getElementById('btnCerrarSesion');
@@ -101,6 +133,7 @@ function formatearFecha(valor) {
   function filaVista(r) {
     const tr = document.createElement('tr');
     tr.dataset.id = r.id;
+    const habilitado = puedeEditarAhora();
     tr.innerHTML =
       '<td>' + r.codigo_seguimiento + '</td>' +
       '<td>' + (r.nombre_paciente || '') + '</td>' +
@@ -109,8 +142,12 @@ function formatearFecha(valor) {
       '<td>' + formatearFecha(r.fecha_preferida) + '</td>' +
       '<td><span class="estado-badge" data-estado="' + r.estado + '">' + r.estado + '</span></td>' +
       '<td class="acciones-fila">' +
-        '<button type="button" class="btn-editar-fila" data-accion="editar">Editar</button>' +
-        '<button type="button" class="btn-eliminar-fila" data-accion="eliminar">Eliminar</button>' +
+        (habilitado
+          ? '<button type="button" class="btn-editar-fila" data-accion="editar">Editar</button>'
+          : '<span class="btn-editar-fila" aria-disabled="true" title="Fuera de tu turno">Editar</span>') +
+        (habilitado
+          ? '<button type="button" class="btn-eliminar-fila" data-accion="eliminar">Eliminar</button>'
+          : '<span class="btn-eliminar-fila" aria-disabled="true" title="Fuera de tu turno">Eliminar</span>') +
       '</td>';
     return tr;
   }
