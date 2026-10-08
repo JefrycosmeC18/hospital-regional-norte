@@ -36,44 +36,80 @@ const formRegister = document.getElementById('formRegister');
 const msgLogin = document.getElementById('msgLogin');
 const msgRegister = document.getElementById('msgRegister');
 
+// --- PANTALLA DE CARGA (cruz que gira a derecha e izquierda, luego ✓) ---
+const loaderOverlay = document.getElementById('loaderOverlay');
+const loaderText = document.getElementById('loaderText');
+const esperar = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function mostrarLoader(texto) {
+  loaderOverlay.removeAttribute('data-estado');
+  loaderText.textContent = texto;
+  loaderOverlay.hidden = false;
+}
+function loaderExito(texto) {
+  loaderText.textContent = texto;
+  loaderOverlay.setAttribute('data-estado', 'ok'); // cambia la cruz por el check
+}
+function ocultarLoader() {
+  loaderOverlay.hidden = true;
+  loaderOverlay.removeAttribute('data-estado');
+}
+function sacudir(form) {
+  form.classList.remove('shake');
+  void form.offsetWidth; // reinicia la animación
+  form.classList.add('shake');
+}
+
 formLogin.addEventListener('submit', async (e) => {
   e.preventDefault();
-  msgLogin.textContent = 'Verificando datos...';
+  msgLogin.textContent = '';
 
   const correo = document.getElementById('loginCorreo').value.trim();
   const pass = document.getElementById('loginPass').value.trim();
 
-  const res = await iniciarSesion(correo, pass);
+  mostrarLoader('Verificando datos...');
+  // Se espera al menos 0.9 s para que se alcance a ver la animación aunque Neon responda rápido
+  const [res] = await Promise.all([iniciarSesion(correo, pass), esperar(900)]);
+
   if (res.exito) {
-    // RF: redirige según el rol — cliente a su formulario, admin/empleado al panel.
+    loaderExito('¡Bienvenido, ' + res.usuario.nombre + '!');
+    await esperar(1300);
+    // Redirige según el rol — cliente a su formulario, admin/empleado al panel.
     if (res.usuario.rol === 'cliente') {
       window.location.href = 'registro.html';
     } else {
       window.location.href = 'panel.html';
     }
   } else {
+    ocultarLoader();
     msgLogin.textContent = res.mensaje;
+    sacudir(formLogin);
   }
 });
 
 formRegister.addEventListener('submit', async (e) => {
   e.preventDefault();
   msgRegister.style.color = '#0F5D52';
-  msgRegister.textContent = 'Registrando cuenta...';
+  msgRegister.textContent = '';
 
   const nombre = document.getElementById('regNombre').value.trim();
   const correo = document.getElementById('regCorreo').value.trim();
   const pass = document.getElementById('regPass').value.trim();
 
-  const res = await registrarUsuario(nombre, correo, pass);
+  mostrarLoader('Creando tu cuenta...');
+  const [res] = await Promise.all([registrarUsuario(nombre, correo, pass), esperar(900)]);
+
   if (res.exito) {
-    msgRegister.textContent = '¡Cuenta creada! Redirigiendo al inicio de sesión...';
+    loaderExito('¡Cuenta creada!');
+    await esperar(1400);
+    ocultarLoader();
     formRegister.reset();
-    setTimeout(() => {
-      window.location.hash = '#iniciar';
-    }, 1500);
+    msgRegister.textContent = '';
+    window.location.hash = '#iniciar';
   } else {
+    ocultarLoader();
     msgRegister.style.color = '#b30000';
     msgRegister.textContent = res.mensaje;
+    sacudir(formRegister);
   }
 });

@@ -115,6 +115,23 @@
     </div>
   </footer>
 
+  <!-- Pantalla de carga: cruz que gira a derecha e izquierda y luego un check -->
+  <div class="loader-overlay" id="loaderOverlay" role="status" aria-live="polite" hidden>
+    <div class="loader-box">
+      <div class="loader-icon">
+        <svg class="loader-cross" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+        <svg class="loader-check" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M14 25l7 7 13-14" pathLength="1" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p class="loader-text" id="loaderText">Cargando...</p>
+    </div>
+  </div>
+
   <script type="module" src="js/auth/login.js"></script>
 </body>
 </html>

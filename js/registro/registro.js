@@ -9,6 +9,12 @@ import { verificarSesionProtegida, cerrarSesion } from '../auth/auth.js';
 // RF-10.3: sin sesión activa, no se puede acceder al formulario.
 const usuarioActual = verificarSesionProtegida();
 
+// Muestra "Panel" en el menú solo si el usuario es administrador o empleado
+const panelLink = document.querySelector('.nav-link-panel');
+if (panelLink && usuarioActual && (usuarioActual.rol === 'administrador' || usuarioActual.rol === 'empleado')) {
+  panelLink.style.display = '';
+}
+
 export async function guardarRegistro(datos) {
   const codigo = 'COD-' + Date.now().toString().slice(-8);
 
@@ -152,6 +158,7 @@ export async function guardarRegistro(datos) {
 
     try {
       submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading'); // spinner dentro del botón
       submitBtn.textContent = 'Guardando cita en la base de datos...';
 
       var codigoGenerado = await guardarRegistro(datos);
@@ -181,6 +188,7 @@ export async function guardarRegistro(datos) {
       alert('Ocurrió un error al registrar la cita en la base de datos.');
     } finally {
       submitBtn.disabled = false;
+      submitBtn.classList.remove('is-loading');
       submitBtn.textContent = 'Enviar solicitud de cita';
     }
   });

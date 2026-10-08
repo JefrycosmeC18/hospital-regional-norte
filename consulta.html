@@ -50,7 +50,7 @@
           <li><a href="registro.html">Solicitar cita</a></li>
           <li><a href="consulta.html" aria-current="page">Mis citas</a></li>
           <li><a href="contacto.html">Contacto</a></li>
-          <li><a href="panel.html">Panel</a></li>
+          <li class="nav-link-panel" style="display:none;"><a href="panel.html">Panel</a></li>
           <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
         </ul>
       </nav>
@@ -65,6 +65,8 @@
           <p>Estos son los registros de "Solicitud de cita" guardados a tu nombre en el sistema. Mientras el estado siga en <strong>registrado</strong>, puedes editarlos.</p>
           <p id="usuarioBienvenida" style="font-weight: 600; color: #0F5D52; margin-top: 0.5rem;"></p>
         </div>
+
+        <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
 
         <div class="registros-table-wrap">
           <table class="registros-table" id="tablaRegistros" hidden>

@@ -9,6 +9,12 @@ import { verificarSesionProtegida, cerrarSesion } from '../auth/auth.js';
 
 const usuarioActual = verificarSesionProtegida();
 
+// Muestra "Panel" en el menú solo si el usuario es administrador o empleado
+const panelLink = document.querySelector('.nav-link-panel');
+if (panelLink && usuarioActual && (usuarioActual.rol === 'administrador' || usuarioActual.rol === 'empleado')) {
+  panelLink.style.display = '';
+}
+
 export async function obtenerRegistro(id) {
   const filas = await sql`
     SELECT id, nombre_paciente, dni, especialidad, fecha_preferida, estado
@@ -91,6 +97,7 @@ export async function actualizarRegistro(id, datos) {
 
     try {
       submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading'); // spinner dentro del botón
       submitBtn.textContent = 'Guardando cambios...';
 
       await actualizarRegistro(id, {
@@ -112,6 +119,7 @@ export async function actualizarRegistro(id, datos) {
       alert('No se pudieron guardar los cambios. Intenta de nuevo.');
     } finally {
       submitBtn.disabled = false;
+      submitBtn.classList.remove('is-loading');
       submitBtn.textContent = 'Guardar cambios';
     }
   });

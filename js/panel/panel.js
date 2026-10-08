@@ -1,4 +1,7 @@
-
+// js/panel/panel.js
+// Script propio de panel.html — RF-10.7 y RF-10.8: administrador y
+// empleado comparten el mismo panel con las cuatro operaciones sobre
+// TODOS los registros de citas_medicas (no solo los propios).
 
 import { sql } from '../config/neon-config.js';
 import { verificarPanelProtegido, cerrarSesion } from '../auth/auth.js';
@@ -117,6 +120,7 @@ function formatearFecha(valor) {
   const tabla = document.getElementById('tablaPanel');
   const cuerpo = document.getElementById('cuerpoPanel');
   const vacio = document.getElementById('panelVacio');
+  const cargando = document.getElementById('cargando'); // esqueleto shimmer
   const confirmBox = document.getElementById('confirmBox');
   const confirmTexto = document.getElementById('confirmTexto');
 
@@ -185,6 +189,7 @@ function formatearFecha(valor) {
   async function cargar() {
     try {
       registrosCache = await listarTodos();
+      cargando.hidden = true;
 
       if (registrosCache.length === 0) {
         vacio.hidden = false;
@@ -199,6 +204,7 @@ function formatearFecha(valor) {
         cuerpo.appendChild(filaVista(r));
       });
     } catch (error) {
+      cargando.hidden = true;
       console.error('Error al listar registros:', error);
       vacio.hidden = false;
       vacio.textContent = 'No se pudieron cargar los registros. Intenta de nuevo más tarde.';
@@ -248,10 +254,13 @@ function formatearFecha(valor) {
       const confirmar = confirm('¿Eliminar este registro de forma permanente? Esta acción no se puede deshacer.');
       if (!confirmar) return;
       try {
+        tr.classList.add('fila-saliendo'); // la fila se desliza y se desvanece
+        await new Promise((r) => setTimeout(r, 350));
         await eliminarRegistro(id);
         mostrarConfirmacion('Registro eliminado.');
         await cargar();
       } catch (error) {
+        tr.classList.remove('fila-saliendo');
         console.error('Error al eliminar:', error);
         alert('No se pudo eliminar el registro.');
       }
@@ -275,6 +284,7 @@ function formatearFecha(valor) {
     const submitBtn = crearForm.querySelector('button[type="submit"]');
     try {
       submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
       const codigo = await crearRegistro(datos);
       mostrarConfirmacion('Cita registrada con el código ' + codigo + '.');
       crearForm.reset();
@@ -284,6 +294,7 @@ function formatearFecha(valor) {
       alert('No se pudo registrar la cita.');
     } finally {
       submitBtn.disabled = false;
+      submitBtn.classList.remove('is-loading');
     }
   });
 

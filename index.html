@@ -49,7 +49,7 @@
           <li><a href="como-funciona.html">Cómo pedir cita</a></li>
           <li><a href="registro.html">Solicitar cita</a></li>
           <li><a href="contacto.html">Contacto</a></li>
-          <li><a href="panel.html">Panel</a></li>
+          <li class="nav-link-panel" style="display:none;"><a href="panel.html">Panel</a></li>
           <li><a href="login.html#iniciar" class="nav-link-login">Iniciar Sesión</a></li>
           <li><a href="login.html#registrar" class="nav-link-register">Registrarte</a></li>
         </ul>
@@ -109,15 +109,15 @@
         </div>
         <div class="photo-pair">
           <figure>
-            <picture>
+            <div class="img-zoom"><picture>
               <source media="(max-width: 600px)" srcset="https://images.pexels.com/photos/9741531/pexels-photo-9741531.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=600&amp;h=450&amp;dpr=1">
               <source media="(min-width: 601px)" srcset="https://images.pexels.com/photos/9741531/pexels-photo-9741531.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1">
               <img src="https://images.pexels.com/photos/9741531/pexels-photo-9741531.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1" alt="Vista de un edificio hospitalario moderno con una cruz de salud iluminada al atardecer" loading="lazy" width="900" height="600">
-            </picture>
+            </picture></div>
             <figcaption>Fachada principal, sede Piura.</figcaption>
           </figure>
           <figure>
-            <img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1" alt="Letrero de emergencia en rojo en la entrada de un hospital" loading="lazy" width="900" height="600">
+            <div class="img-zoom"><img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1" alt="Letrero de emergencia en rojo en la entrada de un hospital" loading="lazy" width="900" height="600"></div>
             <figcaption>Ingreso de Emergencia, disponible las 24 horas.</figcaption>
           </figure>
         </div>
@@ -192,5 +192,6 @@
     <p class="footer-bottom">Proyecto académico — Diseño Web.</p>
   </footer>
 
+  <script type="module" src="js/nav-rol.js"></script>
 </body>
 </html>

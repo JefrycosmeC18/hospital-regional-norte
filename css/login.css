@@ -568,3 +568,180 @@ textarea { resize: vertical; min-height: 6rem; }
   width: 22px;
   height: 22px;
 }
+/* =========================================================
+   ANIMACIONES AVANZADAS — sutiles, acordes a un sitio de salud
+   ========================================================= */
+
+@keyframes pageFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes revealIn   { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes revealUp   { from { opacity: 0; translate: 0 24px; } to { opacity: 1; translate: 0 0; } }
+@keyframes popIn      { 0% { transform: scale(0.4); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes spin       { to { transform: rotate(360deg); } }
+@keyframes menuSlide  { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.08); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.05); }
+  70% { transform: scale(1); }
+}
+
+/* 1. La página entra con un fade suave */
+body { animation: pageFadeIn 0.5s ease both; }
+
+/* 2. Latido del logo (cruz del hospital) */
+.brand-mark { animation: heartbeat 3s ease-in-out infinite; transform-origin: center; }
+
+/* 3. Subrayado del menú que crece desde el centro */
+.main-nav a { position: relative; }
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+.main-nav a:hover::after,
+.main-nav a[aria-current="page"]::after { transform: scaleX(1); }
+@media (min-width: 901px) {
+  .main-nav a:hover,
+  .main-nav a[aria-current="page"] { border-bottom-color: transparent; }
+}
+
+/* 4. Botones: se elevan al pasar el mouse y se hunden al hacer clic */
+.btn {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+              transform 0.18s ease, box-shadow 0.18s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(10, 63, 56, 0.18); }
+.btn:active { transform: translateY(0) scale(0.97); box-shadow: none; }
+
+/* 5. Halo verde suave en los campos de formulario */
+input, select, textarea { transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 82, 0.18); }
+
+/* 6. Spinner dentro del botón mientras se guarda */
+.btn.is-loading { pointer-events: none; opacity: 0.9; }
+.btn.is-loading::after {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.6em;
+  vertical-align: -0.15em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* 7. Zoom suave en las fotos */
+.img-zoom { overflow: hidden; }
+.img-zoom img, .img-zoom picture img { transition: transform 0.6s ease; }
+.img-zoom:hover img { transform: scale(1.05); }
+
+/* 8. Menú móvil: baja deslizándose */
+@media (max-width: 900px) {
+  .nav-toggle:checked ~ .main-nav ul { animation: menuSlide 0.3s ease both; }
+}
+
+/* 9. Aparición al hacer scroll (navegadores compatibles, CSS puro) */
+@supports (animation-timeline: view()) {
+  .section-head, .specialty-card, .contact-card, .info-card-box,
+  .form-card, .photo-feature, .photo-pair figure {
+    animation: revealUp linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+}
+
+/* Accesibilidad: quien pide "reducir movimiento" no ve animaciones */
+@media (prefers-reduced-motion: reduce) {
+  body, .brand-mark, .section-head, .specialty-card, .contact-card, .info-card-box,
+  .form-card, .photo-feature, .photo-pair figure, .quick-facts dl, .steps li,
+  .steps li::before, .hero-art, .form-section.active,
+  .estado-badge, .skeleton span, .fila-saliendo {
+    animation: none !important;
+  }
+  .registros-table tbody tr, .panel-table tbody tr, .confirm-box.show {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .btn, .main-nav a::after, .img-zoom img { transition: none !important; }
+}
+
+/* ---- Animaciones propias de login ---- */
+@keyframes slideFadeIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+.form-section.active { animation: slideFadeIn 0.4s ease both; }
+.form-card.shake { animation: shake 0.45s ease; }
+
+/* ---- Pantalla de carga: cruz que gira a derecha e izquierda y luego ✓ ---- */
+@keyframes crossSwing { 0%, 100% { transform: rotate(-40deg); } 50% { transform: rotate(40deg); } }
+@keyframes loaderIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes checkPop   { 0% { transform: scale(0.3); opacity: 0; } 60% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes drawCheck  { to { stroke-dashoffset: 0; } }
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(242, 245, 241, 0.9);
+  backdrop-filter: blur(4px);
+  animation: loaderIn 0.25s ease both;
+}
+.loader-overlay[hidden] { display: none; }
+
+.loader-box { display: flex; flex-direction: column; align-items: center; gap: 1.4rem; }
+
+.loader-icon { position: relative; width: 96px; height: 96px; display: grid; place-items: center; }
+.loader-icon::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 3px solid rgba(15, 93, 82, 0.15);
+  border-top-color: var(--color-accent);
+  animation: spin 1s linear infinite;
+}
+
+.loader-cross, .loader-check { width: 84px; height: 84px; grid-area: 1 / 1; }
+.loader-cross { transform-origin: center; animation: crossSwing 1.2s ease-in-out infinite; }
+.loader-check { display: none; }
+.loader-check path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawCheck 0.5s 0.25s ease forwards;
+}
+
+.loader-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-primary-dark);
+  text-align: center;
+}
+
+/* Estado de éxito: la cruz se reemplaza por el check */
+.loader-overlay[data-estado="ok"] .loader-cross { display: none; }
+.loader-overlay[data-estado="ok"] .loader-check { display: block; animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.loader-overlay[data-estado="ok"] .loader-icon::before { animation: none; border-color: var(--color-primary); }
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-cross, .loader-icon::before, .loader-overlay[data-estado="ok"] .loader-check { animation: none !important; }
+  .loader-check path { animation: none !important; stroke-dashoffset: 0 !important; }
+}

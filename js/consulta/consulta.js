@@ -8,6 +8,12 @@ import { verificarSesionProtegida, cerrarSesion } from '../auth/auth.js';
 
 const usuarioActual = verificarSesionProtegida();
 
+// Muestra "Panel" en el menú solo si el usuario es administrador o empleado
+const panelLink = document.querySelector('.nav-link-panel');
+if (panelLink && usuarioActual && (usuarioActual.rol === 'administrador' || usuarioActual.rol === 'empleado')) {
+  panelLink.style.display = '';
+}
+
 export async function listarMisRegistros(idUsuario) {
   return await sql`
     SELECT id, codigo_seguimiento, especialidad, fecha_preferida, estado, fecha_registro
@@ -43,10 +49,12 @@ function formatearFecha(valor) {
   const tabla = document.getElementById('tablaRegistros');
   const cuerpo = document.getElementById('cuerpoRegistros');
   const vacio = document.getElementById('registrosVacio');
+  const cargando = document.getElementById('cargando'); // esqueleto shimmer
 
   (async function cargar() {
     try {
       const registros = await listarMisRegistros(usuarioActual.id);
+      cargando.hidden = true;
 
       if (registros.length === 0) {
         vacio.hidden = false;
@@ -74,6 +82,7 @@ function formatearFecha(valor) {
         cuerpo.appendChild(tr);
       });
     } catch (error) {
+      cargando.hidden = true;
       console.error('Error al consultar registros:', error);
       vacio.hidden = false;
       vacio.textContent = 'No se pudieron cargar tus citas en este momento. Intenta de nuevo más tarde.';
