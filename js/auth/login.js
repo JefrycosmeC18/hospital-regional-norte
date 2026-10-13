@@ -3,7 +3,7 @@
 // (controladas por el hash de la URL) y llamadas a auth.js.
 // Semana 7: tras iniciar sesión, redirige según el rol del usuario.
 
-import { iniciarSesion, registrarUsuario } from './auth.js';
+import { iniciarSesion, registrarUsuario, rutaInicioSegunRol } from './auth.js';
 
 // --- LÓGICA DE PESTAÑAS Y URL HASH ---
 function mostrarApartado() {
@@ -74,12 +74,8 @@ formLogin.addEventListener('submit', async (e) => {
   if (res.exito) {
     loaderExito('¡Bienvenido, ' + res.usuario.nombre + '!');
     await esperar(1300);
-    // Redirige según el rol — cliente a su formulario, admin/empleado al panel.
-    if (res.usuario.rol === 'cliente') {
-      window.location.href = 'registro.html';
-    } else {
-      window.location.href = 'panel.html';
-    }
+    // Redirige según el rol (cliente, administrador, empleado o cajero)
+    window.location.href = rutaInicioSegunRol(res.usuario.rol);
   } else {
     ocultarLoader();
     msgLogin.textContent = res.mensaje;

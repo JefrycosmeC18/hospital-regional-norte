@@ -90,3 +90,24 @@ export function verificarPanelProtegido() {
   }
   return usuario;
 }
+// ===== Semana 9: control por rol (cliente, administrador, empleado, cajero) =====
+export function exigirRol(...rolesPermitidos) {
+  const usuario = verificarSesionProtegida();
+  if (!usuario) return null;
+  if (!rolesPermitidos.includes(usuario.rol)) {
+    alert('Tu perfil no tiene acceso a esta página.');
+    window.location.href = 'index.html';
+    return null;
+  }
+  return usuario;
+}
+
+export function rutaInicioSegunRol(rol) {
+  const rutas = {
+    cliente: 'registro.html',
+    administrador: 'panel.html',
+    empleado: 'panel.html',
+    cajero: 'caja.html'
+  };
+  return rutas[rol] ?? 'index.html';
+}
