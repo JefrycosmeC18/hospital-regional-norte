@@ -830,3 +830,32 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 .panel-table tbody tr:nth-child(18) { animation-delay: 1.08s; }
 .panel-table tbody tr:nth-child(19) { animation-delay: 1.14s; }
 .panel-table tbody tr:nth-child(20) { animation-delay: 1.20s; }
+
+/* ---- Semana 9: cotizador de monto ---- */
+.monto-estimado {
+  margin-top: 1.2rem;
+  padding: 1rem 1.2rem;
+  background: #E7F3EF;
+  border-left: 4px solid var(--color-primary);
+}
+.monto-estimado p { margin: 0; }
+.monto-estimado output {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+/* ---- Semana 9: estado de pago ---- */
+.pago-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+.pago-badge[data-pago="pendiente"] { color: #8a6400; border: 1px solid #B8860B; background: #FFF3E0; }
+.pago-badge[data-pago="pagado"]    { color: var(--color-primary-dark); border: 1px solid var(--color-primary); background: #E7F3EF; }
+.pago-badge[data-pago="exonerado"] { color: #3a5a8a; border: 1px solid #6b8cc0; background: #E8EFFA; }

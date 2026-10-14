@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caja — Hospital Regional del Norte</title>
+  <meta name="description" content="Módulo de caja: cobro presencial y verificación de pagos en línea.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/caja.css">
+</head>
+<body>
+
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li class="nav-link-panel" style="display:none;"><a href="panel.html">Panel</a></li>
+          <li><a href="caja.html" aria-current="page">Caja</a></li>
+          <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Módulo de Caja</h1>
+          <p>Cobra en ventanilla el ticket de una cita pendiente y verifica los pagos que llegaron por la pasarela.</p>
+          <p class="caja-sesion">Caja — <span id="nombre-cajero"></span></p>
+        </div>
+
+        <section class="caja-bloque" aria-labelledby="t-cobro">
+          <h2 id="t-cobro">Cobro presencial</h2>
+          <form id="form-buscar" class="caja-buscar" role="search">
+            <label for="criterio">Código de seguimiento, DNI o nombre</label>
+            <input id="criterio" name="criterio" type="search" autocomplete="off">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+          </form>
+          <div class="caja-tabla-wrap">
+            <table id="tabla-pendientes" class="caja-tabla">
+              <caption>Citas pendientes de pago</caption>
+              <thead>
+                <tr><th scope="col">Código</th><th scope="col">Paciente</th><th scope="col">DNI</th>
+                    <th scope="col">Monto</th><th scope="col">Acción</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="caja-bloque" aria-labelledby="t-linea">
+          <h2 id="t-linea">Pagos recibidos por la pasarela</h2>
+          <p id="aviso-nuevos" class="aviso-nuevos" role="status" aria-live="polite"></p>
+          <div class="caja-filtros">
+            <label for="fecha-caja">Fecha</label>
+            <input id="fecha-caja" type="date">
+            <label class="caja-check"><input id="solo-por-verificar" type="checkbox"> Solo pendientes de verificar</label>
+          </div>
+          <div class="caja-tabla-wrap">
+            <table id="tabla-en-linea" class="caja-tabla">
+              <caption>Operaciones en línea (se actualizan cada 15 segundos)</caption>
+              <thead>
+                <tr><th scope="col">Hora</th><th scope="col">Operación</th><th scope="col">Cita</th>
+                    <th scope="col">Paciente</th><th scope="col">Medio</th><th scope="col">Monto</th>
+                    <th scope="col">Resultado</th><th scope="col">Verificación</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="caja-bloque" aria-labelledby="t-resumen">
+          <h2 id="t-resumen">Resumen del día (cierre de caja)</h2>
+          <div class="caja-tabla-wrap">
+            <table id="tabla-resumen" class="caja-tabla">
+              <thead>
+                <tr><th scope="col">Canal</th><th scope="col">Medio</th>
+                    <th scope="col">Operaciones</th><th scope="col">Total</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="caja-total">Total recaudado: <strong id="total-dia">S/ 0.00</strong></p>
+        </section>
+      </div>
+    </section>
+
+    <dialog id="dialogo-cobro" class="dialogo-cobro" aria-labelledby="t-dialogo">
+      <form id="form-cobro">
+        <h2 id="t-dialogo">Registrar cobro</h2>
+        <p>Cita <strong id="cobro-codigo"></strong> — Total <strong id="cobro-total"></strong></p>
+
+        <div class="field">
+          <label for="metodo-caja">Medio de pago</label>
+          <select id="metodo-caja" name="metodo">
+            <option value="efectivo">Efectivo</option>
+            <option value="pos">Tarjeta en POS</option>
+            <option value="andipay">Billetera AndiPay (QR)</option>
+            <option value="pagomovil">Billetera PagoMóvil (QR)</option>
+          </select>
+        </div>
+
+        <div id="campo-recibido" class="field">
+          <label for="monto-recibido">Monto recibido (S/)</label>
+          <input id="monto-recibido" name="monto_recibido" type="number" min="0" step="0.01">
+          <p>Vuelto: <output id="vuelto">S/ 0.00</output></p>
+        </div>
+
+        <div id="campo-referencia" class="field" hidden>
+          <label for="referencia">N.° de voucher u operación</label>
+          <input id="referencia" name="referencia" inputmode="numeric" maxlength="12">
+        </div>
+
+        <p id="cobro-resumen" class="cobro-resumen" hidden></p>
+
+        <div class="dialogo-acciones">
+          <button type="submit" id="btn-revisar" class="btn btn-primary">Revisar cobro</button>
+          <button type="button" id="btn-confirmar" class="btn btn-accent" hidden>Sí, cobrar</button>
+          <button type="button" id="btn-volver" class="btn btn-outline" hidden>Volver</button>
+          <button type="button" id="cancelar-cobro" class="btn btn-outline">Cancelar</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html">Pagar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Emergencia</h4>
+        <ul>
+          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Ver todas las sedes</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">Proyecto académico — Diseño Web. Los pagos son una simulación y no corresponden a un establecimiento real.</p>
+  </footer>
+
+  <script type="module" src="js/caja/caja.js"></script>
+
+</body>
+</html>

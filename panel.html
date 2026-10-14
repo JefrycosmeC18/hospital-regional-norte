@@ -32,6 +32,7 @@
         <ul>
           <li><a href="index.html">Inicio</a></li>
           <li><a href="panel.html" aria-current="page">Panel</a></li>
+          <li class="nav-link-caja" style="display:none;"><a href="caja.html">Caja</a></li>
           <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
         </ul>
       </nav>
@@ -94,6 +95,15 @@
                   <span class="hint">Se guarda con id_usuario vacío (atención presencial/telefónica, sin cuenta propia).</span>
                 </div>
 
+                <div class="field">
+                  <label><input type="checkbox" id="pSis"> Paciente con SIS activo (exonerado de pago)</label>
+                </div>
+
+                <div class="monto-estimado">
+                  <p>Monto del ticket: <output id="pMonto" for="pEspecialidad pSis" aria-live="polite">S/ 0.00</output></p>
+                  <p class="hint">Si tiene costo, el paciente paga luego en caja buscando su código.</p>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Registrar cita</button>
               </fieldset>
             </form>
@@ -110,6 +120,8 @@
                     <th scope="col">Especialidad</th>
                     <th scope="col">Fecha preferida</th>
                     <th scope="col">Estado</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Pago</th>
                     <th scope="col">Acciones</th>
                   </tr>
                 </thead>

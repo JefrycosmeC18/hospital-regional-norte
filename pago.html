@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagar cita — Hospital Regional del Norte</title>
+  <meta name="description" content="Paga el ticket de tu cita médica con tarjeta o billetera electrónica.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/pago.css">
+</head>
+<body>
+
+  <div class="emergency-bar">
+    <div class="container">
+      <span>
+        <svg class="emergency-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <g class="cross">
+            <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+      </span>
+      <a href="tel:+51073123456">☎ (073) 123-456</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html" aria-current="page">Pagar</a></li>
+          <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Pago en línea</h1>
+          <p>Paga el ticket de tu cita con tarjeta o con billetera electrónica. Si tu cita está exonerada por SIS, no necesitas pagar.</p>
+        </div>
+
+        <p id="mensaje-pago" class="mensaje" role="status" aria-live="polite"></p>
+
+        <div id="bloque-pago" class="pago-layout">
+          <section class="pago-resumen" aria-labelledby="t-resumen">
+            <h2 id="t-resumen">Resumen</h2>
+            <label for="registro">Cita a pagar</label>
+            <select id="registro" name="registro"></select>
+            <p class="pago-total">Total a pagar: <strong id="resumen-monto">—</strong></p>
+          </section>
+
+          <fieldset class="pago-metodo">
+            <legend>Método de pago</legend>
+            <label><input type="radio" name="metodo" value="tarjeta" checked> Tarjeta de débito o crédito</label>
+            <label><input type="radio" name="metodo" value="billetera"> Billetera electrónica</label>
+          </fieldset>
+
+          <form id="form-tarjeta" class="form-card" novalidate>
+            <div class="field">
+              <label for="numero">Número de tarjeta</label>
+              <input id="numero" name="numero" inputmode="numeric" autocomplete="cc-number" maxlength="23"
+                     required aria-describedby="marca-detectada error-numero">
+              <span id="marca-detectada" class="marca-detectada"></span>
+              <span id="error-numero" class="error"></span>
+            </div>
+            <div class="field">
+              <label for="vencimiento">Vencimiento (MM/AA)</label>
+              <input id="vencimiento" name="vencimiento" inputmode="numeric" autocomplete="cc-exp" maxlength="5"
+                     placeholder="MM/AA" required aria-describedby="error-vencimiento">
+              <span id="error-vencimiento" class="error"></span>
+            </div>
+            <div class="field">
+              <label for="cvv">CVV</label>
+              <input id="cvv" name="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"
+                     required aria-describedby="error-cvv">
+              <span id="error-cvv" class="error"></span>
+            </div>
+            <div class="field">
+              <label for="titular">Nombre del titular</label>
+              <input id="titular" name="titular" autocomplete="cc-name" required aria-describedby="error-titular">
+              <span id="error-titular" class="error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Pagar con tarjeta</button>
+          </form>
+
+          <form id="form-billetera" class="form-card" novalidate hidden>
+            <div class="field">
+              <label for="proveedor">Billetera</label>
+              <select id="proveedor" name="proveedor">
+                <option value="andipay">AndiPay</option>
+                <option value="pagomovil">PagoMóvil</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="celular">Celular afiliado</label>
+              <input id="celular" name="celular" inputmode="numeric" autocomplete="tel-national" maxlength="9"
+                     required aria-describedby="error-celular">
+              <span id="error-celular" class="error"></span>
+            </div>
+            <div class="field">
+              <label for="codigo">Código de aprobación (6 dígitos que muestra tu billetera)</label>
+              <input id="codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
+                     required aria-describedby="error-codigo">
+              <span id="error-codigo" class="error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Pagar con billetera</button>
+          </form>
+
+          <details class="ayuda-pruebas">
+            <summary>Datos de prueba (simulación académica)</summary>
+            <ul>
+              <li><code>4111 1111 1111 1111</code> · 12/29 · CVV 123 → aprobada (débito)</li>
+              <li><code>4000 0000 0000 0002</code> · 08/28 · CVV 456 → rechazada: saldo insuficiente</li>
+              <li><code>5555 5555 5555 4444</code> · 05/30 · CVV 789 → aprobada (crédito)</li>
+              <li><code>5105 1051 0510 5100</code> · 03/27 · CVV 321 → rechazada: tarjeta bloqueada</li>
+              <li><code>3782 8224 6310 005</code> · 11/28 · CVV 1234 → aprobada (Amex, CVV de 4 dígitos)</li>
+              <li>AndiPay <code>987654321</code> · código <code>123456</code> → aprobada</li>
+              <li>PagoMóvil <code>912345678</code> · código <code>654321</code> → rechazada: saldo insuficiente</li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html">Pagar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Emergencia</h4>
+        <ul>
+          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Ver todas las sedes</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">Proyecto académico — Diseño Web.</p>
+  </footer>
+
+  <script type="module" src="js/pago/pago.js"></script>
+
+</body>
+</html>

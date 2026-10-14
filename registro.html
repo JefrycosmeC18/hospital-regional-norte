@@ -49,6 +49,7 @@
           <li><a href="como-funciona.html">Cómo pedir cita</a></li>
           <li><a href="registro.html" aria-current="page">Solicitar cita</a></li>
           <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html">Pagar</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li class="nav-link-panel" style="display:none;"><a href="panel.html">Panel</a></li>
           <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
@@ -147,6 +148,11 @@
               <div class="field">
                 <label for="motivo">Motivo de consulta</label>
                 <textarea id="motivo" name="motivo" placeholder="Cuéntanos brevemente qué síntomas o control necesitas" required></textarea>
+              </div>
+
+              <div class="monto-estimado">
+                <p>Monto estimado de tu ticket: <output id="monto-estimado" for="especialidad" aria-live="polite">S/ 0.00</output></p>
+                <p class="hint" id="monto-nota">Elige una especialidad para ver el precio de tu ticket.</p>
               </div>
             </fieldset>
 

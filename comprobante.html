@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constancia de pago — Hospital Regional del Norte</title>
+  <meta name="description" content="Constancia de pago de una cita médica.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/comprobante.css">
+</head>
+<body>
+
+  <div class="emergency-bar">
+    <div class="container">
+      <span>
+        <svg class="emergency-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <g class="cross">
+            <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+      </span>
+      <a href="tel:+51073123456">☎ (073) 123-456</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html">Pagar</a></li>
+          <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h1>Constancia de pago</h1>
+          <p>Conserva este comprobante como respaldo del pago de tu cita.</p>
+        </div>
+
+        <section id="comprobante" class="comprobante" aria-live="polite">Cargando comprobante…</section>
+
+        <div class="acciones">
+          <button type="button" id="imprimir" class="btn btn-primary">Imprimir</button>
+          <a id="volver" class="btn btn-outline" href="consulta.html">Volver</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <h4>Hospital Regional del Norte</h4>
+        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="registro.html">Solicitar cita</a></li>
+          <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html">Pagar</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Emergencia</h4>
+        <ul>
+          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Ver todas las sedes</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">Proyecto académico — Diseño Web. Los pagos son una simulación y no corresponden a un establecimiento real.</p>
+  </footer>
+
+  <script type="module" src="js/comprobante/comprobante.js"></script>
+
+</body>
+</html>

@@ -48,6 +48,7 @@
           <li><a href="servicios.html">Especialidades</a></li>
           <li><a href="registro.html">Solicitar cita</a></li>
           <li><a href="consulta.html">Mis citas</a></li>
+          <li><a href="pago.html">Pagar</a></li>
           <li><a href="contacto.html">Contacto</a></li>
           <li class="nav-link-panel" style="display:none;"><a href="panel.html">Panel</a></li>
           <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
@@ -75,7 +76,7 @@
         </div>
 
         <div class="aviso-solo-lectura" id="avisoSoloLectura" hidden>
-          Esta cita ya no está en estado "registrado", así que no se puede editar. Si necesitas un cambio, comunícate al <a href="tel:+51073123456">(073) 123-456</a>.
+          <span id="avisoTexto"></span> Si necesitas un cambio, comunícate al <a href="tel:+51073123456">(073) 123-456</a>.
         </div>
 
         <form class="form-card" id="actualizarForm" novalidate>
@@ -117,6 +118,19 @@
             <div class="field">
               <label for="fecha-preferida">Fecha de preferencia</label>
               <input type="date" id="fecha-preferida" name="fecha_preferida" required>
+            </div>
+
+            <div class="field">
+              <span>Forma de pago</span>
+              <div class="radio-group">
+                <label><input type="radio" name="pago" value="sis" checked> SIS</label>
+                <label><input type="radio" name="pago" value="particular"> Pago particular</label>
+              </div>
+            </div>
+
+            <div class="monto-estimado">
+              <p>Monto del ticket: <output id="monto-estimado" for="especialidad" aria-live="polite">S/ 0.00</output></p>
+              <p class="hint">Si cambias la especialidad o el SIS, el monto se recalcula.</p>
             </div>
           </fieldset>
 

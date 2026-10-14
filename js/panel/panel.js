@@ -5,6 +5,7 @@
 
 import { sql } from '../config/neon-config.js';
 import { verificarPanelProtegido, cerrarSesion } from '../auth/auth.js';
+import { calcularMontoServicio, datosDeTarifa, formatearSoles } from '../registro/tarifario.js';
 
 // Exige sesión Y rol administrador/empleado; si es cliente, lo redirige.
 const usuarioActual = verificarPanelProtegido();
@@ -50,7 +51,8 @@ const NOMBRES_ESPECIALIDAD = {
 // --- Consultar: todos los registros, sin filtrar por usuario ---
 export async function listarTodos() {
   return await sql`
-    SELECT id, codigo_seguimiento, nombre_paciente, dni, especialidad, fecha_preferida, estado
+    SELECT id, codigo_seguimiento, nombre_paciente, dni, especialidad, fecha_preferida, estado,
+           estado_pago, canal_pago, monto_calculado, tiene_sis
     FROM citas_medicas
     ORDER BY fecha_registro DESC;
   `;
@@ -59,11 +61,15 @@ export async function listarTodos() {
 // --- Crear: el panel también registra citas sin cuenta de paciente ---
 export async function crearRegistro(datos) {
   const codigo = 'COD-' + Date.now().toString().slice(-8);
+  const { tipo_consulta, tiene_sis } = datosDeTarifa(datos);
+  const monto = calcularMontoServicio(datos);
   await sql`
-    INSERT INTO citas_medicas (codigo_seguimiento, nombre_paciente, dni, especialidad, fecha_preferida, estado)
-    VALUES (${codigo}, ${datos.nombre}, ${datos.dni}, ${datos.especialidad}, ${datos.fecha_preferida}, 'registrado');
+    INSERT INTO citas_medicas (codigo_seguimiento, nombre_paciente, dni, especialidad, fecha_preferida, estado,
+                               tipo_consulta, tiene_sis, monto_calculado, estado_pago)
+    VALUES (${codigo}, ${datos.nombre}, ${datos.dni}, ${datos.especialidad}, ${datos.fecha_preferida}, 'registrado',
+            ${tipo_consulta}, ${tiene_sis}, ${monto}, ${monto === 0 ? 'exonerado' : 'pendiente'});
   `;
-  return codigo;
+  return codigo;   // el paciente presencial paga luego en caja.html buscando este código
 }
 
 // --- Actualizar: cualquier registro, incluido el estado ---
@@ -71,13 +77,21 @@ export async function actualizarComoPanel(id, datos) {
   if (!puedeEditarAhora()) {
     throw new Error('Estás fuera de tu turno asignado y no puedes editar en este momento.');
   }
+  const { tipo_consulta } = datosDeTarifa({ especialidad: datos.especialidad, tiene_sis: datos.tiene_sis });
+  const monto = calcularMontoServicio({ especialidad: datos.especialidad, tiene_sis: datos.tiene_sis });
+  // El panel NO cambia estado_pago a mano: los pagos nacen solo en la pasarela o en caja.
+  // Si la cita ya está pagada, su monto y su estado de pago no se tocan.
   await sql`
     UPDATE citas_medicas
     SET nombre_paciente = ${datos.nombre_paciente},
         dni = ${datos.dni},
         especialidad = ${datos.especialidad},
         fecha_preferida = ${datos.fecha_preferida},
-        estado = ${datos.estado}
+        estado = ${datos.estado},
+        tipo_consulta   = CASE WHEN estado_pago = 'pagado' THEN tipo_consulta ELSE ${tipo_consulta} END,
+        monto_calculado = CASE WHEN estado_pago = 'pagado' THEN monto_calculado ELSE ${monto} END,
+        estado_pago     = CASE WHEN estado_pago = 'pagado' THEN estado_pago
+                               WHEN tiene_sis THEN 'exonerado' ELSE 'pendiente' END
     WHERE id = ${id};
   `;
 }
@@ -87,14 +101,25 @@ export async function eliminarRegistro(id) {
   if (!puedeEditarAhora()) {
     throw new Error('Estás fuera de tu turno asignado y no puedes eliminar en este momento.');
   }
-  await sql`DELETE FROM citas_medicas WHERE id = ${id};`;
+  try {
+    await sql`DELETE FROM citas_medicas WHERE id = ${id};`;
+    return { ok: true };
+  } catch (error) {
+    // 23503 = violación de llave foránea: la cita tiene pagos (aprobados o rechazados)
+    if (error.code === '23503') {
+      return { ok: false, mensaje: 'No se puede eliminar: tiene historial de pagos. Cambie su estado a "rechazado".' };
+    }
+    throw error;
+  }
 }
 
+// Acepta Date (lo que devuelve el driver de Neon, medianoche local) o texto 'AAAA-MM-DD'.
+// Devuelve 'AAAA-MM-DD' sin pasar por UTC, para no correr el día.
 function formatearFecha(valor) {
   if (!valor) return '';
-  var d = new Date(valor);
-  if (isNaN(d.getTime())) return valor;
-  return d.toISOString().split('T')[0];
+  if (typeof valor === 'string') return valor.slice(0, 10);
+  if (isNaN(valor.getTime())) return '';
+  return `${valor.getFullYear()}-${String(valor.getMonth() + 1).padStart(2, '0')}-${String(valor.getDate()).padStart(2, '0')}`;
 }
 
 (function () {
@@ -109,6 +134,9 @@ function formatearFecha(valor) {
     rolBanner.textContent = `Sesión: ${usuarioActual.nombre} · Rol: ${usuarioActual.rol} (acceso total, sin restricción de turno)`;
   }
   rolBanner.setAttribute('data-rol', usuarioActual.rol);
+
+  // Solo el administrador ve el acceso a Caja
+  if (usuarioActual.rol === 'administrador') document.querySelector('.nav-link-caja').style.display = '';
 
   const btnCerrarSesion = document.getElementById('btnCerrarSesion');
   btnCerrarSesion.addEventListener('click', (e) => {
@@ -134,53 +162,110 @@ function formatearFecha(valor) {
     confirmBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
+  // ---- Filas armadas con createElement + textContent: los datos de la base nunca se
+  //      interpretan como HTML (práctica 8 del laboratorio) ----
+  function celda(tr, texto = '') {
+    const td = document.createElement('td');
+    td.textContent = texto ?? '';
+    tr.append(td);
+    return td;
+  }
+
+  function insignia(clase, atributo, valor, texto) {
+    const span = document.createElement('span');
+    span.className = clase;
+    span.dataset[atributo] = valor;
+    span.textContent = texto;
+    return span;
+  }
+
+  function textoPago(r) {
+    if (r.estado_pago !== 'pagado') return r.estado_pago;
+    return 'pagado' + (r.canal_pago ? ' · ' + (r.canal_pago === 'pasarela' ? 'en línea' : 'caja') : '');
+  }
+
+  function boton(texto, clase, accion) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = clase;
+    b.dataset.accion = accion;
+    b.textContent = texto;
+    return b;
+  }
+
+  function botonApagado(texto, clase) {
+    const s = document.createElement('span');
+    s.className = clase;
+    s.setAttribute('aria-disabled', 'true');
+    s.title = 'Fuera de tu turno';
+    s.textContent = texto;
+    return s;
+  }
+
   function filaVista(r) {
     const tr = document.createElement('tr');
     tr.dataset.id = r.id;
     const habilitado = puedeEditarAhora();
-    tr.innerHTML =
-      '<td>' + r.codigo_seguimiento + '</td>' +
-      '<td>' + (r.nombre_paciente || '') + '</td>' +
-      '<td>' + (r.dni || '') + '</td>' +
-      '<td>' + (NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad || '') + '</td>' +
-      '<td>' + formatearFecha(r.fecha_preferida) + '</td>' +
-      '<td><span class="estado-badge" data-estado="' + r.estado + '">' + r.estado + '</span></td>' +
-      '<td class="acciones-fila">' +
-        (habilitado
-          ? '<button type="button" class="btn-editar-fila" data-accion="editar">Editar</button>'
-          : '<span class="btn-editar-fila" aria-disabled="true" title="Fuera de tu turno">Editar</span>') +
-        (habilitado
-          ? '<button type="button" class="btn-eliminar-fila" data-accion="eliminar">Eliminar</button>'
-          : '<span class="btn-eliminar-fila" aria-disabled="true" title="Fuera de tu turno">Eliminar</span>') +
-      '</td>';
+
+    celda(tr, r.codigo_seguimiento);
+    celda(tr, r.nombre_paciente);
+    celda(tr, r.dni);
+    celda(tr, NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad);
+    celda(tr, formatearFecha(r.fecha_preferida));
+    celda(tr).append(insignia('estado-badge', 'estado', r.estado, r.estado));
+    celda(tr, formatearSoles(Number(r.monto_calculado)));
+    celda(tr).append(insignia('pago-badge', 'pago', r.estado_pago, textoPago(r)));
+
+    const acciones = celda(tr);
+    acciones.className = 'acciones-fila';
+    acciones.append(
+      habilitado ? boton('Editar', 'btn-editar-fila', 'editar') : botonApagado('Editar', 'btn-editar-fila'),
+      habilitado ? boton('Eliminar', 'btn-eliminar-fila', 'eliminar') : botonApagado('Eliminar', 'btn-eliminar-fila')
+    );
     return tr;
+  }
+
+  function campoTexto(nombre, valor, propiedades) {
+    const input = document.createElement('input');
+    input.type = nombre === 'fecha_preferida' ? 'date' : 'text';
+    input.dataset.campo = nombre;
+    input.value = valor ?? '';
+    Object.assign(input, propiedades);
+    return input;
+  }
+
+  function campoSelect(nombre, opciones, actual) {
+    const select = document.createElement('select');
+    select.dataset.campo = nombre;
+    for (const [valor, texto] of opciones) {
+      const opcion = document.createElement('option');
+      opcion.value = valor;
+      opcion.textContent = texto;
+      opcion.selected = valor === actual;
+      select.append(opcion);
+    }
+    return select;
   }
 
   function filaEdicion(r) {
     const tr = document.createElement('tr');
     tr.dataset.id = r.id;
 
-    const opcionesEspecialidad = Object.keys(NOMBRES_ESPECIALIDAD).map(function (clave) {
-      const sel = clave === r.especialidad ? ' selected' : '';
-      return '<option value="' + clave + '"' + sel + '>' + NOMBRES_ESPECIALIDAD[clave] + '</option>';
-    }).join('');
+    celda(tr, r.codigo_seguimiento);
+    celda(tr).append(campoTexto('nombre_paciente', r.nombre_paciente, { minLength: 4, required: true }));
+    celda(tr).append(campoTexto('dni', r.dni, { maxLength: 8, required: true, pattern: '[0-9]{8}' }));
+    celda(tr).append(campoSelect('especialidad', Object.entries(NOMBRES_ESPECIALIDAD), r.especialidad));
+    celda(tr).append(campoTexto('fecha_preferida', formatearFecha(r.fecha_preferida)));
+    celda(tr).append(campoSelect('estado', ESTADOS.map((e) => [e, e]), r.estado));
+    celda(tr, formatearSoles(Number(r.monto_calculado)));
+    celda(tr).append(insignia('pago-badge', 'pago', r.estado_pago, textoPago(r)));
 
-    const opcionesEstado = ESTADOS.map(function (e) {
-      const sel = e === r.estado ? ' selected' : '';
-      return '<option value="' + e + '"' + sel + '>' + e + '</option>';
-    }).join('');
-
-    tr.innerHTML =
-      '<td>' + r.codigo_seguimiento + '</td>' +
-      '<td><input type="text" data-campo="nombre_paciente" value="' + (r.nombre_paciente || '') + '" minlength="4" required></td>' +
-      '<td><input type="text" data-campo="dni" value="' + (r.dni || '') + '" pattern="[0-9]{8}" maxlength="8" required></td>' +
-      '<td><select data-campo="especialidad">' + opcionesEspecialidad + '</select></td>' +
-      '<td><input type="date" data-campo="fecha_preferida" value="' + formatearFecha(r.fecha_preferida) + '"></td>' +
-      '<td><select data-campo="estado">' + opcionesEstado + '</select></td>' +
-      '<td class="acciones-fila">' +
-        '<button type="button" class="btn-guardar-fila" data-accion="guardar">Guardar</button>' +
-        '<button type="button" class="btn-cancelar-fila" data-accion="cancelar">Cancelar</button>' +
-      '</td>';
+    const acciones = celda(tr);
+    acciones.className = 'acciones-fila';
+    acciones.append(
+      boton('Guardar', 'btn-guardar-fila', 'guardar'),
+      boton('Cancelar', 'btn-cancelar-fila', 'cancelar')
+    );
     return tr;
   }
 
@@ -199,7 +284,7 @@ function formatearFecha(valor) {
 
       vacio.hidden = true;
       tabla.hidden = false;
-      cuerpo.innerHTML = '';
+      cuerpo.replaceChildren();
       registrosCache.forEach(function (r) {
         cuerpo.appendChild(filaVista(r));
       });
@@ -237,7 +322,8 @@ function formatearFecha(valor) {
         dni: tr.querySelector('[data-campo="dni"]').value.trim(),
         especialidad: tr.querySelector('[data-campo="especialidad"]').value,
         fecha_preferida: tr.querySelector('[data-campo="fecha_preferida"]').value,
-        estado: tr.querySelector('[data-campo="estado"]').value
+        estado: tr.querySelector('[data-campo="estado"]').value,
+        tiene_sis: (registrosCache.find(function (r) { return String(r.id) === String(id); }) || {}).tiene_sis === true
       };
       try {
         await actualizarComoPanel(id, datos);
@@ -256,7 +342,12 @@ function formatearFecha(valor) {
       try {
         tr.classList.add('fila-saliendo'); // la fila se desliza y se desvanece
         await new Promise((r) => setTimeout(r, 350));
-        await eliminarRegistro(id);
+        const resultado = await eliminarRegistro(id);
+        if (!resultado.ok) {
+          tr.classList.remove('fila-saliendo');
+          alert(resultado.mensaje);
+          return;
+        }
         mostrarConfirmacion('Registro eliminado.');
         await cargar();
       } catch (error) {
@@ -278,7 +369,8 @@ function formatearFecha(valor) {
       nombre: document.getElementById('pNombre').value.trim(),
       dni: document.getElementById('pDni').value.trim(),
       especialidad: document.getElementById('pEspecialidad').value,
-      fecha_preferida: document.getElementById('pFecha').value
+      fecha_preferida: document.getElementById('pFecha').value,
+      pago: document.getElementById('pSis').checked ? 'sis' : 'particular'
     };
 
     const submitBtn = crearForm.querySelector('button[type="submit"]');
@@ -297,6 +389,18 @@ function formatearFecha(valor) {
       submitBtn.classList.remove('is-loading');
     }
   });
+
+  // Cotizador en vivo del formulario "Registrar cita"
+  const salidaMonto = document.getElementById('pMonto');
+  function actualizarCotizacion() {
+    salidaMonto.textContent = formatearSoles(calcularMontoServicio({
+      especialidad: document.getElementById('pEspecialidad').value,
+      pago: document.getElementById('pSis').checked ? 'sis' : 'particular'
+    }));
+  }
+  crearForm.addEventListener('input', actualizarCotizacion);
+  crearForm.addEventListener('change', actualizarCotizacion);
+  actualizarCotizacion();
 
   cargar();
 })();

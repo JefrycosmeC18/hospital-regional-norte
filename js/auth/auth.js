@@ -90,6 +90,7 @@ export function verificarPanelProtegido() {
   }
   return usuario;
 }
+
 // ===== Semana 9: control por rol (cliente, administrador, empleado, cajero) =====
 export function exigirRol(...rolesPermitidos) {
   const usuario = verificarSesionProtegida();
