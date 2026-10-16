@@ -3,7 +3,7 @@
 import { exigirRol, cerrarSesion } from '../auth/auth.js';
 import { formatearSoles } from '../registro/tarifario.js';
 import {
-  formatearNumeroTarjeta, formatearVencimiento, detectarMarca, validarFormularioTarjeta,
+  soloDigitos, formatearNumeroTarjeta, formatearVencimiento, detectarMarca, validarFormularioTarjeta,
   validarCelular, validarCodigoAprobacion
 } from './validaciones.js';
 import { obtenerRegistro, listarPendientesCliente, pagarConTarjeta, pagarConBilletera } from './pasarela.js';
@@ -74,14 +74,39 @@ function mostrarMetodo() {
   formBilletera.hidden = metodo !== 'billetera';
 }
 
-// 3. Formato en vivo
+// 3. Formato en vivo + vista previa de la tarjeta (se actualiza con cada tecla)
+const tarjetaVisual = document.querySelector('#tarjeta-visual');
+const inputCvv = document.querySelector('#cvv');
+const inputTitular = document.querySelector('#titular');
+
+function refrescarTarjeta() {
+  const numero = inputNumero.value;
+  const marca = detectarMarca(numero);
+  tarjetaVisual.dataset.marca = marca ?? '';                       // el CSS cambia el color según la marca
+  document.querySelector('#tv-marca').textContent = marca ?? '—';
+  document.querySelector('#tv-numero').textContent =
+    soloDigitos(numero) ? formatearNumeroTarjeta(numero) : '•••• •••• •••• ••••';
+  document.querySelector('#tv-titular').textContent = inputTitular.value.trim().toUpperCase() || 'NOMBRE APELLIDO';
+  document.querySelector('#tv-venc').textContent = inputVenc.value || 'MM/AA';
+  document.querySelector('#tv-cvv').textContent = inputCvv.value
+    ? '•'.repeat(inputCvv.value.length)
+    : (marca === 'American Express' ? '••••' : '•••');             // Amex usa CVV de 4 dígitos
+}
+
 inputNumero.addEventListener('input', () => {
   inputNumero.value = formatearNumeroTarjeta(inputNumero.value);
   marcaDetectada.textContent = detectarMarca(inputNumero.value) ?? '';
+  refrescarTarjeta();
 });
 inputVenc.addEventListener('input', () => {
   inputVenc.value = formatearVencimiento(inputVenc.value);
+  refrescarTarjeta();
 });
+[inputCvv, inputTitular].forEach((campo) => campo.addEventListener('input', refrescarTarjeta));
+
+// Al entrar al CVV la tarjeta gira (rotateY, solo CSS); al salir, vuelve
+inputCvv.addEventListener('focus', () => tarjetaVisual.classList.add('volteada'));
+inputCvv.addEventListener('blur', () => tarjetaVisual.classList.remove('volteada'));
 
 // 4. Procesar un pago (común a tarjeta y billetera)
 async function procesar(formulario, operacion) {
@@ -100,6 +125,7 @@ async function procesar(formulario, operacion) {
     const resultado = await operacion();
     if (resultado.aprobado) {
       formulario.reset();
+      if (formulario === formTarjeta) refrescarTarjeta();   // reset() no dispara 'input'
       mostrarMensaje(`Pago aprobado. Operación ${resultado.codigo}.`, 'exito');
       setTimeout(() => {
         window.location.href = `comprobante.html?op=${encodeURIComponent(resultado.codigo)}`;

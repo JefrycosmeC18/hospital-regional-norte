@@ -730,5 +730,109 @@ input[aria-invalid="true"] { border-color: var(--color-emergency); }
   .mensaje { animation: none !important; }
 }
 
+/* ---- Tarjeta 3D (vista previa): gira con rotateY al enfocar el CVV, solo CSS ---- */
+.tarjeta {
+  --card-ink: #FFFFFF;
+  --ca: #44525C; --cb: #75858F;                       /* sin marca detectada */
+  width: min(100%, 340px);
+  aspect-ratio: 1.586;
+  perspective: 1100px;
+  margin: 0 auto 1.6rem;
+}
+.tarjeta[data-marca="Visa"]             { --ca: #13406B; --cb: #2E7BBF; }
+.tarjeta[data-marca="Mastercard"]       { --ca: #3A2A1F; --cb: #C2552A; }
+.tarjeta[data-marca="American Express"] { --ca: #1E5E5A; --cb: #49A39A; }
+
+.tarjeta-giro {
+  position: relative;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.3, 0.1, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.tarjeta.volteada .tarjeta-giro { transform: rotateY(180deg); }
+
+.cara {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 14px;
+  padding: 18px 20px;
+  color: var(--card-ink);
+  background: linear-gradient(135deg, var(--ca), var(--cb));
+  box-shadow: 0 14px 30px -12px rgba(10, 63, 56, 0.45);
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  overflow: hidden;
+  transition: background 0.5s;
+}
+.cara::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% -10%, rgba(255, 255, 255, 0.22), transparent 55%);
+  pointer-events: none;
+}
+.cara .fila-sup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.cara .marca-txt {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.chip-emv {
+  width: 38px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #E8C76A, #B18A2E);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+  align-self: center;
+}
+.cara .numero {
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: clamp(15px, 4.3vw, 20px);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+.cara .fila-inf {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 11.5px;
+  text-transform: uppercase;
+}
+.cara .fila-inf small { display: block; font-size: 9px; opacity: 0.7; letter-spacing: 0.1em; }
+
+.dorso { transform: rotateY(180deg); grid-template-rows: auto auto 1fr; padding: 22px 0; }
+.dorso .banda { height: 40px; background: rgba(0, 0, 0, 0.75); }
+.dorso .firma {
+  margin: 16px 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 34px;
+  padding-inline: 10px;
+  background: repeating-linear-gradient(45deg, #F4F1E8 0 6px, #E6E1D2 6px 12px);
+  color: #222;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta-giro, .cara { transition: none !important; }
+}
+
 /* El atributo hidden siempre oculta, aunque otra regla defina display */
 [hidden] { display: none !important; }

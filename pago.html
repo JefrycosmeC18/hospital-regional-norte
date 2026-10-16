@@ -80,6 +80,25 @@
           </fieldset>
 
           <form id="form-tarjeta" class="form-card" novalidate>
+            <!-- Vista previa de la tarjeta (decorativa): gira al hacer clic en el CVV -->
+            <div class="tarjeta" id="tarjeta-visual" data-marca="" aria-hidden="true">
+              <div class="tarjeta-giro">
+                <div class="cara frente">
+                  <div class="fila-sup"><span>Entidad de pruebas</span><span class="marca-txt" id="tv-marca">—</span></div>
+                  <span class="chip-emv"></span>
+                  <div class="numero" id="tv-numero">•••• •••• •••• ••••</div>
+                  <div class="fila-inf">
+                    <span><small>Titular</small><span id="tv-titular">NOMBRE APELLIDO</span></span>
+                    <span><small>Vence</small><span id="tv-venc">MM/AA</span></span>
+                  </div>
+                </div>
+                <div class="cara dorso">
+                  <div class="banda"></div>
+                  <div class="firma"><span id="tv-cvv">•••</span></div>
+                </div>
+              </div>
+            </div>
+
             <div class="field">
               <label for="numero">Número de tarjeta</label>
               <input id="numero" name="numero" inputmode="numeric" autocomplete="cc-number" maxlength="23"
