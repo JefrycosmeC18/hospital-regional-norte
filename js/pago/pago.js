@@ -25,6 +25,9 @@ const inputNumero = document.querySelector('#numero');
 const inputVenc = document.querySelector('#vencimiento');
 const marcaDetectada = document.querySelector('#marca-detectada');
 const bloquePago = document.querySelector('#bloque-pago');
+const latCodigo = document.querySelector('#lat-codigo');
+const latMedio = document.querySelector('#lat-medio');
+const latTotal = document.querySelector('#lat-total');
 
 let registroActual = null;
 
@@ -65,6 +68,9 @@ async function cargarPendientes() {
 async function seleccionarRegistro() {
   registroActual = await obtenerRegistro(Number(selectRegistro.value), usuario.id);
   resumenMonto.textContent = registroActual ? formatearSoles(Number(registroActual.monto_calculado)) : '—';
+  // El panel lateral repite el mismo ticket
+  latTotal.textContent = resumenMonto.textContent;
+  latCodigo.textContent = registroActual?.codigo_seguimiento ?? '—';
 }
 
 // 2. Alternar entre tarjeta y billetera
@@ -72,6 +78,8 @@ function mostrarMetodo() {
   const metodo = document.querySelector('input[name="metodo"]:checked').value;
   formTarjeta.hidden = metodo !== 'tarjeta';
   formBilletera.hidden = metodo !== 'billetera';
+  tarjetaVisual.hidden = metodo !== 'tarjeta';          // la tarjeta solo acompaña al pago con tarjeta
+  latMedio.textContent = metodo === 'tarjeta' ? 'Tarjeta de débito o crédito' : 'Billetera electrónica';
 }
 
 // 3. Formato en vivo + vista previa de la tarjeta (se actualiza con cada tecla)
@@ -83,6 +91,7 @@ function refrescarTarjeta() {
   const numero = inputNumero.value;
   const marca = detectarMarca(numero);
   tarjetaVisual.dataset.marca = marca ?? '';                       // el CSS cambia el color según la marca
+  if (!formTarjeta.hidden) latMedio.textContent = marca ? `Tarjeta ${marca}` : 'Tarjeta de débito o crédito';
   document.querySelector('#tv-marca').textContent = marca ?? '—';
   document.querySelector('#tv-numero').textContent =
     soloDigitos(numero) ? formatearNumeroTarjeta(numero) : '•••• •••• •••• ••••';

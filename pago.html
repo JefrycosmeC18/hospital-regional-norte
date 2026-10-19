@@ -11,6 +11,42 @@
 </head>
 <body>
 
+  <!-- Pantalla de carga: la moneda de la cruz rebota, salta al centro y explota en el signo S/ -->
+  <div class="carga-pantalla" aria-hidden="true">
+    <div class="carga-escena">
+      <div class="carga-suelo"></div>
+      <div class="carga-x">
+        <div class="carga-y">
+          <svg class="carga-moneda" viewBox="0 0 48 48" focusable="false">
+            <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+            <circle cx="24" cy="24" r="18.5" fill="none" stroke="#F2F5F1" stroke-opacity="0.35" stroke-width="1"/>
+            <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+      <div class="carga-onda"></div>
+      <div class="carga-chispas">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="carga-soles">S/</div>
+    </div>
+  </div>
+
+
   <div class="emergency-bar">
     <div class="container">
       <span>
@@ -66,20 +102,76 @@
         <p id="mensaje-pago" class="mensaje" role="status" aria-live="polite"></p>
 
         <div id="bloque-pago" class="pago-layout">
-          <section class="pago-resumen" aria-labelledby="t-resumen">
-            <h2 id="t-resumen">Resumen</h2>
-            <label for="registro">Cita a pagar</label>
-            <select id="registro" name="registro"></select>
-            <p class="pago-total">Total a pagar: <strong id="resumen-monto">—</strong></p>
-          </section>
 
-          <fieldset class="pago-metodo">
-            <legend>Método de pago</legend>
-            <label><input type="radio" name="metodo" value="tarjeta" checked> Tarjeta de débito o crédito</label>
-            <label><input type="radio" name="metodo" value="billetera"> Billetera electrónica</label>
-          </fieldset>
+          <!-- COLUMNA IZQUIERDA: datos del pago -->
+          <div class="pago-principal">
+            <section class="pago-resumen" aria-labelledby="t-resumen">
+              <h2 id="t-resumen">Resumen</h2>
+              <label for="registro">Cita a pagar</label>
+              <select id="registro" name="registro"></select>
+              <p class="pago-total">Total a pagar: <strong id="resumen-monto">—</strong></p>
+            </section>
 
-          <form id="form-tarjeta" class="form-card" novalidate>
+            <fieldset class="pago-metodo">
+              <legend>Método de pago</legend>
+              <label><input type="radio" name="metodo" value="tarjeta" checked> Tarjeta de débito o crédito</label>
+              <label><input type="radio" name="metodo" value="billetera"> Billetera electrónica</label>
+            </fieldset>
+
+            <form id="form-tarjeta" class="form-card" novalidate>
+              <div class="field">
+                <label for="numero">Número de tarjeta</label>
+                <input id="numero" name="numero" inputmode="numeric" autocomplete="cc-number" maxlength="19"
+                       required aria-describedby="marca-detectada error-numero">
+                <span id="marca-detectada" class="marca-detectada"></span>
+                <span id="error-numero" class="error"></span>
+              </div>
+              <div class="field">
+                <label for="vencimiento">Vencimiento (MM/AA)</label>
+                <input id="vencimiento" name="vencimiento" inputmode="numeric" autocomplete="cc-exp" maxlength="5"
+                       placeholder="MM/AA" required aria-describedby="error-vencimiento">
+                <span id="error-vencimiento" class="error"></span>
+              </div>
+              <div class="field">
+                <label for="cvv">CVV</label>
+                <input id="cvv" name="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"
+                       required aria-describedby="error-cvv">
+                <span id="error-cvv" class="error"></span>
+              </div>
+              <div class="field">
+                <label for="titular">Nombre del titular</label>
+                <input id="titular" name="titular" autocomplete="cc-name" required aria-describedby="error-titular">
+                <span id="error-titular" class="error"></span>
+              </div>
+              <button type="submit" class="btn btn-primary">Pagar con tarjeta</button>
+            </form>
+
+            <form id="form-billetera" class="form-card" novalidate hidden>
+              <div class="field">
+                <label for="proveedor">Billetera</label>
+                <select id="proveedor" name="proveedor">
+                  <option value="andipay">AndiPay</option>
+                  <option value="pagomovil">PagoMóvil</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="celular">Celular afiliado</label>
+                <input id="celular" name="celular" inputmode="numeric" autocomplete="tel-national" maxlength="9"
+                       required aria-describedby="error-celular">
+                <span id="error-celular" class="error"></span>
+              </div>
+              <div class="field">
+                <label for="codigo">Código de aprobación (6 dígitos que muestra tu billetera)</label>
+                <input id="codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
+                       required aria-describedby="error-codigo">
+                <span id="error-codigo" class="error"></span>
+              </div>
+              <button type="submit" class="btn btn-primary">Pagar con billetera</button>
+            </form>
+          </div>
+
+          <!-- COLUMNA DERECHA: tarjeta animada + ticket + información (queda fija al hacer scroll) -->
+          <aside class="pago-lateral" aria-label="Información del pago">
             <!-- Vista previa de la tarjeta (decorativa): gira al hacer clic en el CVV -->
             <div class="tarjeta" id="tarjeta-visual" data-marca="" aria-hidden="true">
               <div class="tarjeta-giro">
@@ -99,68 +191,36 @@
               </div>
             </div>
 
-            <div class="field">
-              <label for="numero">Número de tarjeta</label>
-              <input id="numero" name="numero" inputmode="numeric" autocomplete="cc-number" maxlength="23"
-                     required aria-describedby="marca-detectada error-numero">
-              <span id="marca-detectada" class="marca-detectada"></span>
-              <span id="error-numero" class="error"></span>
-            </div>
-            <div class="field">
-              <label for="vencimiento">Vencimiento (MM/AA)</label>
-              <input id="vencimiento" name="vencimiento" inputmode="numeric" autocomplete="cc-exp" maxlength="5"
-                     placeholder="MM/AA" required aria-describedby="error-vencimiento">
-              <span id="error-vencimiento" class="error"></span>
-            </div>
-            <div class="field">
-              <label for="cvv">CVV</label>
-              <input id="cvv" name="cvv" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4"
-                     required aria-describedby="error-cvv">
-              <span id="error-cvv" class="error"></span>
-            </div>
-            <div class="field">
-              <label for="titular">Nombre del titular</label>
-              <input id="titular" name="titular" autocomplete="cc-name" required aria-describedby="error-titular">
-              <span id="error-titular" class="error"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Pagar con tarjeta</button>
-          </form>
+            <section class="pago-ticket" aria-labelledby="t-ticket">
+              <h2 id="t-ticket">Tu ticket</h2>
+              <dl>
+                <dt>Cita</dt><dd id="lat-codigo">—</dd>
+                <dt>Medio de pago</dt><dd id="lat-medio">Tarjeta de débito o crédito</dd>
+                <dt>Total</dt><dd id="lat-total" class="pago-ticket-total">—</dd>
+              </dl>
+            </section>
 
-          <form id="form-billetera" class="form-card" novalidate hidden>
-            <div class="field">
-              <label for="proveedor">Billetera</label>
-              <select id="proveedor" name="proveedor">
-                <option value="andipay">AndiPay</option>
-                <option value="pagomovil">PagoMóvil</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="celular">Celular afiliado</label>
-              <input id="celular" name="celular" inputmode="numeric" autocomplete="tel-national" maxlength="9"
-                     required aria-describedby="error-celular">
-              <span id="error-celular" class="error"></span>
-            </div>
-            <div class="field">
-              <label for="codigo">Código de aprobación (6 dígitos que muestra tu billetera)</label>
-              <input id="codigo" name="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
-                     required aria-describedby="error-codigo">
-              <span id="error-codigo" class="error"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Pagar con billetera</button>
-          </form>
+            <section class="pago-aceptamos" aria-labelledby="t-aceptamos">
+              <h2 id="t-aceptamos">Medios aceptados</h2>
+              <ul>
+                <li>Visa</li>
+                <li>Mastercard</li>
+                <li>American Express</li>
+                <li>AndiPay</li>
+                <li>PagoMóvil</li>
+              </ul>
+            </section>
 
-          <details class="ayuda-pruebas">
-            <summary>Datos de prueba (simulación académica)</summary>
-            <ul>
-              <li><code>4111 1111 1111 1111</code> · 12/29 · CVV 123 → aprobada (débito)</li>
-              <li><code>4000 0000 0000 0002</code> · 08/28 · CVV 456 → rechazada: saldo insuficiente</li>
-              <li><code>5555 5555 5555 4444</code> · 05/30 · CVV 789 → aprobada (crédito)</li>
-              <li><code>5105 1051 0510 5100</code> · 03/27 · CVV 321 → rechazada: tarjeta bloqueada</li>
-              <li><code>3782 8224 6310 005</code> · 11/28 · CVV 1234 → aprobada (Amex, CVV de 4 dígitos)</li>
-              <li>AndiPay <code>987654321</code> · código <code>123456</code> → aprobada</li>
-              <li>PagoMóvil <code>912345678</code> · código <code>654321</code> → rechazada: saldo insuficiente</li>
-            </ul>
-          </details>
+            <section class="pago-pasos-caja" aria-labelledby="t-pasos">
+              <h2 id="t-pasos">Cómo funciona</h2>
+              <ol class="pago-pasos">
+                <li>Elige la cita que vas a pagar.</li>
+                <li>Escoge tarjeta o billetera y completa tus datos.</li>
+                <li>Recibe tu comprobante y preséntalo en admisión.</li>
+              </ol>
+            </section>
+          </aside>
+
         </div>
       </div>
     </section>
@@ -188,7 +248,7 @@
         </ul>
       </div>
     </div>
-    <p class="footer-bottom">Proyecto académico — Diseño Web.</p>
+    <p class="footer-bottom">Proyecto académico — Diseño Web. Los pagos son una simulación y no corresponden a un establecimiento real.</p>
   </footer>
 
   <script type="module" src="js/pago/pago.js"></script>

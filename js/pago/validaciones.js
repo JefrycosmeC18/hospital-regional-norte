@@ -30,13 +30,19 @@ export function detectarMarca(numero) {
   return null;
 }
 
-const LONGITUDES = { 'Visa': [13, 16, 19], 'Mastercard': [16], 'American Express': [15] };
+// Longitud EXACTA por marca: Visa y Mastercard 16 dígitos; American Express 15 (así es esa marca)
+const LONGITUDES = { 'Visa': [16], 'Mastercard': [16], 'American Express': [15] };
 export const longitudValida = (numero, marca) =>
   (LONGITUDES[marca] ?? []).includes(soloDigitos(numero).length);
 
-// "4111111111111111" -> "4111 1111 1111 1111" mientras el usuario escribe
-export const formatearNumeroTarjeta = (valor) =>
-  soloDigitos(valor).slice(0, 19).replace(/(\d{4})(?=\d)/g, '$1 ');
+// Máximo de dígitos que se pueden escribir: 16 (American Express: 15)
+export const longitudMaxima = (numero) => (/^3[47]/.test(soloDigitos(numero)) ? 15 : 16);
+
+// "4111111111111111" -> "4111 1111 1111 1111" mientras el usuario escribe (nunca más de 16 dígitos)
+export function formatearNumeroTarjeta(valor) {
+  const digitos = soloDigitos(valor);
+  return digitos.slice(0, longitudMaxima(digitos)).replace(/(\d{4})(?=\d)/g, '$1 ');
+}
 
 // "1229" -> "12/29"
 export function formatearVencimiento(valor) {

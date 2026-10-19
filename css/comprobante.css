@@ -684,3 +684,147 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 
 /* El atributo hidden siempre oculta, aunque otra regla defina display */
 [hidden] { display: none !important; }
+
+/* =========================================================
+   Pantalla de carga: la moneda de la cruz rebota de izquierda a derecha,
+   da un salto al centro, explota y aparece el signo S/. Solo CSS (sin JS).
+   Línea de tiempo: 0–1.7 s viaje · 1.7 s explosión · 1.75 s aparece S/ · 2.75–3.2 s se retira.
+   ========================================================= */
+.carga-pantalla {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #F2F5F1 55%, #E3EBE6 100%);
+  animation: cargaSalir 0.45s 2.75s ease forwards;
+}
+.carga-escena { position: absolute; inset: 0; overflow: hidden; }
+
+.carga-suelo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(72vh + 44px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(15, 93, 82, 0.3), transparent);
+  animation: cargaSuelo 1.7s both;
+}
+
+/* x = avance horizontal · y = rebotes y salto · moneda = giro (cada capa anima una sola cosa) */
+.carga-x { position: absolute; left: 0; top: 0; animation: cargaX 1.7s both; }
+.carga-y {
+  position: absolute;
+  left: -42px;
+  top: -42px;
+  width: 84px;
+  height: 84px;
+  animation: cargaY 1.7s both, cargaOcultar 0.01s 1.7s forwards;
+}
+.carga-moneda {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 10px rgba(10, 63, 56, 0.3));
+  animation: cargaGiro 1.7s linear both;
+}
+
+@keyframes cargaX {
+  0%   { transform: translateX(-14vw); animation-timing-function: linear; }
+  66%  { transform: translateX(64vw);  animation-timing-function: ease-in-out; }
+  100% { transform: translateX(50vw); }
+}
+@keyframes cargaY {
+  0%   { transform: translateY(72vh); animation-timing-function: ease-out; }
+  11%  { transform: translateY(48vh); animation-timing-function: ease-in; }
+  22%  { transform: translateY(72vh); animation-timing-function: ease-out; }
+  33%  { transform: translateY(58vh); animation-timing-function: ease-in; }
+  44%  { transform: translateY(72vh); animation-timing-function: ease-out; }
+  50%  { transform: translateY(65vh); animation-timing-function: ease-in; }
+  56%  { transform: translateY(72vh); animation-timing-function: linear; }
+  66%  { transform: translateY(72vh); animation-timing-function: ease-out; }
+  82%  { transform: translateY(14vh); animation-timing-function: ease-in; }
+  100% { transform: translateY(50vh); }
+}
+@keyframes cargaGiro {
+  0%   { transform: rotate(0deg) scale(1); }
+  66%  { transform: rotate(1080deg) scale(1); }
+  100% { transform: rotate(1440deg) scale(1.3); }
+}
+@keyframes cargaSuelo { 0%, 55% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes cargaOcultar { to { opacity: 0; } }
+
+/* Explosión en el centro de la pantalla */
+.carga-onda {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  border: 4px solid var(--color-accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: cargaOnda 0.7s 1.7s ease-out forwards;
+}
+@keyframes cargaOnda {
+  from { opacity: 0.9; transform: scale(0.5); }
+  to   { opacity: 0;   transform: scale(4.5); }
+}
+
+.carga-chispas span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0;
+  animation: cargaChispa 0.8s 1.7s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+}
+.carga-chispas span:nth-child(even) { border-radius: 2px; width: 8px; height: 8px; }
+@keyframes cargaChispa {
+  from { opacity: 1; transform: rotate(var(--a)) translateX(0) scale(1); }
+  to   { opacity: 0; transform: rotate(var(--a)) translateX(var(--d)) scale(0.2); }
+}
+.carga-chispas span:nth-child(1) { --a: 0.0deg; --d: 18vmin; --c: #0F5D52; }
+.carga-chispas span:nth-child(2) { --a: 25.7deg; --d: 26vmin; --c: #E0762E; }
+.carga-chispas span:nth-child(3) { --a: 51.4deg; --d: 22vmin; --c: #E8C76A; }
+.carga-chispas span:nth-child(4) { --a: 77.1deg; --d: 32vmin; --c: #0A3F38; }
+.carga-chispas span:nth-child(5) { --a: 102.9deg; --d: 18vmin; --c: #0F5D52; }
+.carga-chispas span:nth-child(6) { --a: 128.6deg; --d: 26vmin; --c: #E0762E; }
+.carga-chispas span:nth-child(7) { --a: 154.3deg; --d: 22vmin; --c: #E8C76A; }
+.carga-chispas span:nth-child(8) { --a: 180.0deg; --d: 32vmin; --c: #0A3F38; }
+.carga-chispas span:nth-child(9) { --a: 205.7deg; --d: 18vmin; --c: #0F5D52; }
+.carga-chispas span:nth-child(10) { --a: 231.4deg; --d: 26vmin; --c: #E0762E; }
+.carga-chispas span:nth-child(11) { --a: 257.1deg; --d: 22vmin; --c: #E8C76A; }
+.carga-chispas span:nth-child(12) { --a: 282.9deg; --d: 32vmin; --c: #0A3F38; }
+.carga-chispas span:nth-child(13) { --a: 308.6deg; --d: 18vmin; --c: #0F5D52; }
+.carga-chispas span:nth-child(14) { --a: 334.3deg; --d: 26vmin; --c: #E0762E; }
+
+/* El signo de soles aparece justo cuando explota la moneda */
+.carga-soles {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(5rem, 16vw, 9rem);
+  line-height: 1;
+  color: var(--color-primary);
+  text-shadow: 0 6px 0 rgba(224, 118, 46, 0.35), 0 0 40px rgba(224, 118, 46, 0.35);
+  opacity: 0;
+  animation: cargaSoles 0.6s 1.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes cargaSoles {
+  from { opacity: 0; transform: scale(0.2) rotate(-12deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* Al terminar, la pantalla se desvanece y deja de bloquear la página */
+@keyframes cargaSalir { to { opacity: 0; visibility: hidden; } }
+
+/* Si el sistema pide reducir movimiento, no se muestra; al imprimir tampoco */
+@media (prefers-reduced-motion: reduce) { .carga-pantalla { display: none; } }
+@media print { .carga-pantalla { display: none !important; } }
