@@ -910,3 +910,52 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
   .dashboard-filtros .btn{width:100%;}
 }
 @media(prefers-reduced-motion:reduce){.dashboard-kpi{transition:none;}}
+
+
+/* Calendario mensual de citas: fechas preferidas, sin cambiar el CRUD */
+.calendario-seccion{margin:0 0 2.35rem;}
+.calendario-encabezado{display:flex;justify-content:space-between;align-items:flex-start;gap:1.4rem;flex-wrap:wrap;margin-bottom:1rem;}
+.calendario-encabezado h2{font-size:clamp(1.35rem,2vw,1.8rem);margin-bottom:.3rem;}
+.calendario-encabezado p{margin:0;}
+.calendario-navegacion{display:flex;align-items:center;gap:.55rem;}
+.calendario-navegacion button{
+  width:40px;height:40px;border:1px solid var(--color-line);border-radius:8px;
+  background:#fff;color:var(--color-primary-dark);font-size:1.5rem;cursor:pointer;
+}
+.calendario-navegacion button:hover{background:#e7f3ef;border-color:var(--color-primary);}
+.calendario-navegacion button:focus-visible,.calendario-dia:focus-visible{outline:3px solid var(--color-accent);outline-offset:2px;}
+.calendario-navegacion h3{margin:0;font:600 1.05rem var(--font-body);text-align:center;min-width:155px;}
+.calendario-panel{background:#fff;border:1px solid var(--color-line);border-radius:12px;padding:1.1rem;}
+.calendario-semana,.calendario-cuadricula{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.4rem;}
+.calendario-semana{margin-bottom:.4rem;}
+.calendario-semana span{font-size:.8rem;text-align:center;font-weight:700;color:var(--color-ink-soft);padding:.35rem;}
+.calendario-espacio{min-width:0;}
+.calendario-dia{
+  display:flex;flex-direction:column;align-items:flex-start;
+  gap:.25rem;width:100%;min-height:79px;padding:.6rem;
+  background:#f8fbf9;border:1px solid var(--color-line);
+  border-radius:7px;cursor:pointer;text-align:left;
+  font-family:var(--font-body);color:var(--color-ink);
+  transition:border-color .2s,background-color .2s;
+}
+.calendario-dia:hover{border-color:var(--color-primary);background:#e7f3ef;}
+.calendario-dia[data-hoy="true"]{border-color:var(--color-accent);}
+.calendario-dia[aria-pressed="true"]{background:var(--color-primary);border-color:var(--color-primary);color:#fff;}
+.calendario-numero{font-weight:700;font-size:.92rem;line-height:1.2;}
+.calendario-cantidad{display:block;font-size:.74rem;line-height:1.3;color:var(--color-primary-dark);font-weight:700;}
+.calendario-dia[aria-pressed="true"] .calendario-cantidad{color:#fff;}
+.calendario-dia[data-vacio="true"]{background:#fff;}
+.calendario-pie{margin-top:1rem;border-top:1px solid var(--color-line);padding-top:.8rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;}
+.calendario-pie p{margin:0;max-width:none;color:var(--color-primary-dark);font-weight:700;font-size:.9rem;}
+#limpiarDiaCalendario[hidden]{display:none!important;}
+@media(max-width:720px){
+  .calendario-encabezado{display:block;}
+  .calendario-navegacion{justify-content:space-between;margin-top:1rem;}
+  .calendario-panel{padding:.6rem;}
+  .calendario-semana,.calendario-cuadricula{gap:.16rem;}
+  .calendario-dia{min-height:56px;padding:.3rem;}
+  .calendario-numero{font-size:.82rem;}
+  .calendario-cantidad{font-size:.65rem;}
+}
+@media(max-width:390px){.calendario-dia{min-height:48px;}.calendario-cantidad{font-size:.6rem;}}
+@media(prefers-reduced-motion:reduce){.calendario-dia{transition:none;}}
