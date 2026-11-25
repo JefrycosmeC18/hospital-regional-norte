@@ -125,18 +125,6 @@ function formatearFecha(valor) {
 (function () {
   if (!usuarioActual) return;
 
-  // El nombre y el rol provienen de la sesión que creó el login.
-  // textContent evita interpretar los datos del usuario como HTML.
-  const nombreCompleto = (usuarioActual.nombre || 'usuario').trim();
-  const nombreUsuario = document.getElementById('panelNombreUsuario');
-  const rolEtiqueta = document.getElementById('panelRolUsuario');
-  const bienvenida = document.getElementById('panelBienvenida');
-
-  nombreUsuario.textContent = nombreCompleto;
-  rolEtiqueta.textContent = usuarioActual.rol === 'administrador' ? 'Administrador' : 'Empleado';
-  rolEtiqueta.dataset.rol = usuarioActual.rol;
-  bienvenida.hidden = false;
-
   const rolBanner = document.getElementById('rolBanner');
   if (usuarioActual.rol === 'empleado') {
     const enTurno = puedeEditarAhora();
