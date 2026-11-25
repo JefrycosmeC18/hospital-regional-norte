@@ -965,3 +965,29 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
   .train-track.is-moving{animation:none!important;}
   .train-track .train-set[aria-hidden="true"]{display:none!important;}
 }
+
+/* Renovación institucional, sin modificar estilos del resto del portal. */
+.hero-renovado{background:linear-gradient(115deg,#073a33,#0f5d52);padding:clamp(2.5rem,5vw,5rem) 0}
+.hero-renovado .container{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,4vw,5rem)}
+.hero-renovado h1{color:#fff;font-size:clamp(2.4rem,4.4vw,4.75rem);max-width:14ch;line-height:1.08}
+.hero-renovado .hero-copy>p{color:#e2f0ea;font-size:1.08rem;max-width:55ch;line-height:1.7}
+.hero-renovado .hero-copy .hero-kicker{color:#ffce9d;font-size:.78rem;font-weight:800;letter-spacing:.13em}
+.hero-renovado .hero-copy .hero-aclaracion{font-size:.78rem;margin-top:1.4rem;color:#deece8}
+.hero-renovado .btn-primary{background:#e0762e;border-color:#e0762e;color:#fff}
+.hero-renovado .btn-outline{border-color:#fff;color:#fff}.hero-renovado .btn-outline:hover{background:#fff;color:#0a3f38}
+.hero-foto{position:relative;margin:0}.hero-foto img{width:100%;height:clamp(320px,34vw,475px);object-fit:cover;border-radius:17px;box-shadow:0 25px 55px rgba(0,0,0,.2)}
+.hero-foto figcaption{position:absolute;bottom:1rem;left:1rem;right:1rem;background:#fff;padding:.85rem 1rem;border-left:4px solid #e0762e;border-radius:7px;font-weight:700;color:#0a3f38}
+.accesos-portal{background:#fff;padding:3rem 0}.accesos-portal .section-head{margin-bottom:1.4rem}
+.accesos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem}
+.accesos-grid a{display:flex;flex-direction:column;gap:.55rem;background:#f7faf8;border:1px solid #d8e3de;border-radius:12px;padding:1.3rem;text-decoration:none;transition:transform .2s,box-shadow .2s}
+.accesos-grid a:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(15,93,82,.12);border-color:#0f5d52}
+.accesos-grid span{color:#b85a1d;font-size:.8rem;font-weight:800}.accesos-grid strong{font:600 1.2rem var(--font-display);color:#0a3f38}.accesos-grid small{font-size:.85rem;color:#4a5d57}
+.resumen-institucion{background:#f4f8f5}.resumen-institucion-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+.resumen-pilares{display:grid;gap:.85rem}.resumen-pilares article{background:#fff;border-left:4px solid #0f5d52;padding:1rem 1.2rem;border-radius:7px}.resumen-pilares span,.novedades-grid article>span{font-weight:800;color:#b85a1d;font-size:.8rem;letter-spacing:.07em}
+.resumen-pilares h3{margin:.2rem 0}.resumen-pilares p{margin:0}
+.novedades-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.novedades-grid article{background:#fff;border:1px solid #d8e3de;border-radius:10px;padding:1.4rem;display:flex;flex-direction:column}
+.novedades-grid h3{font-size:1.25rem;margin-top:.8rem}.novedades-grid p{flex:1}.novedades-grid a{font-weight:700}
+@media(max-width:1000px){.accesos-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.novedades-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.hero-renovado .container,.resumen-institucion-grid{grid-template-columns:1fr}.hero-renovado .hero-foto{order:0}.hero-renovado h1{max-width:none}.hero-foto img{height:280px}.novedades-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.accesos-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.accesos-grid a{transition:none}}

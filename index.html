@@ -46,7 +46,9 @@
       <nav class="main-nav" aria-label="Navegación principal">
         <ul>
           <li><a href="index.html" aria-current="page">Inicio</a></li>
+          <li><a href="institucion.html">Institución</a></li>
           <li><a href="servicios.html">Especialidades</a></li>
+          <li><a href="actualidad.html">Actualidad</a></li>
           <li><a href="como-funciona.html">Cómo pedir cita</a></li>
           <li><a href="registro.html">Solicitar cita</a></li>
           <li><a href="contacto.html">Contacto</a></li>
@@ -59,28 +61,27 @@
   </header>
 
   <main>
-    <section class="hero">
+    <section class="hero hero-renovado" aria-labelledby="portada">
       <div class="container">
         <div class="hero-copy">
-          <h1>Atención de salud para Piura, todos los días del año</h1>
-          <p>Consulta nuestras especialidades, revisa los pasos para solicitar una cita y encuentra los servicios de orientación al paciente en un solo lugar.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="registro.html">Solicitar una cita</a>
-            <a class="btn btn-outline" href="servicios.html">Ver especialidades</a>
-          </div>
+          <p class="hero-kicker">PORTAL DE ORIENTACIÓN Y GESTIÓN HOSPITALARIA</p>
+          <h1 id="portada">Atención más cercana, organizada y accesible.</h1>
+          <p>Conoce las especialidades, prepara tu solicitud de cita y sigue su estado en un solo lugar. Información y herramientas para pacientes y familias.</p>
+          <div class="hero-actions"><a class="btn btn-primary" href="registro.html">Solicitar una cita</a><a class="btn btn-outline" href="como-funciona.html">Cómo funciona</a></div>
+          <p class="hero-aclaracion">Portal desarrollado como proyecto académico. No es el sitio oficial de un hospital.</p>
         </div>
-        <svg class="hero-art" viewBox="0 0 420 340" role="img" aria-label="Ilustración del sol y las olas de la costa de Piura sobre un motivo de salud">
-          <rect width="420" height="340" fill="none"/>
-          <circle cx="300" cy="90" r="70" fill="#E0762E" opacity="0.9"/>
-          <circle cx="300" cy="90" r="70" fill="none" stroke="#B85A1D" stroke-width="2"/>
-          <path d="M0 230 C 60 200, 120 260, 180 230 S 300 200, 420 230 V340 H0 Z" fill="#0F5D52"/>
-          <path d="M0 260 C 60 235, 120 285, 180 260 S 300 235, 420 260 V340 H0 Z" fill="#0A3F38"/>
-          <path d="M195 150v70M165 185h60" stroke="#F2F5F1" stroke-width="10" stroke-linecap="round"/>
-          <circle cx="195" cy="185" r="55" fill="none" stroke="#F2F5F1" stroke-width="6"/>
-        </svg>
+        <figure class="hero-foto"><img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1000&amp;h=1000&amp;fit=crop" alt="Imagen ilustrativa de acceso a un hospital, no fotografía institucional" width="560" height="490"><figcaption>Servicios, orientación y seguimiento digital.</figcaption></figure>
       </div>
     </section>
-
+    <section class="accesos-portal" aria-labelledby="accesos-titulo"><div class="container">
+      <div class="section-head"><p class="info-kicker">Accesos principales</p><h2 id="accesos-titulo">¿Qué necesitas hacer hoy?</h2><p>Encuentra rápidamente el trámite o servicio que necesitas.</p></div>
+      <div class="accesos-grid">
+        <a href="registro.html"><span>01</span><strong>Solicitar cita</strong><small>Formulario guiado para el paciente</small></a>
+        <a href="consulta.html"><span>02</span><strong>Mis citas</strong><small>Estado, pagos y ruta de atención</small></a>
+        <a href="servicios.html"><span>03</span><strong>Especialidades</strong><small>Áreas médicas del portal</small></a>
+        <a href="contacto.html"><span>04</span><strong>Orientación</strong><small>Requisitos y canales informativos</small></a>
+      </div>
+    </div></section>
     <section class="quick-facts" aria-label="Datos del hospital">
       <div class="container">
         <div class="train-viewport" aria-label="Información destacada del hospital">
@@ -129,6 +130,10 @@
       </div>
     </section>
 
+    <section class="section resumen-institucion" aria-labelledby="resumen-titulo"><div class="container resumen-institucion-grid">
+      <div><p class="info-kicker">Conócenos</p><h2 id="resumen-titulo">Un portal hospitalario pensado para orientar a las personas</h2><p>Este proyecto académico reúne información de atención y herramientas digitales para gestionar solicitudes de citas. Presenta una propuesta de organización hospitalaria, sus funciones y el recorrido del paciente.</p><a class="btn btn-outline" href="institucion.html">Conocer nuestro proyecto</a></div>
+      <div class="resumen-pilares"><article><span>01</span><h3>Orientación clara</h3><p>Guías, trámites y especialidades al alcance del paciente.</p></article><article><span>02</span><h3>Gestión digital</h3><p>Citas, estados y reportes dentro de un mismo sistema.</p></article><article><span>03</span><h3>Accesibilidad</h3><p>Un modo fácil para mejorar la lectura y el contraste.</p></article></div>
+    </div></section>
     <section class="section" id="especialidades-destacadas">
       <div class="container">
         <div class="section-head">
@@ -177,6 +182,14 @@
       </div>
     </section>
 
+    <section class="section section--alt" id="novedades-portal" aria-labelledby="novedades-titulo"><div class="container">
+      <div class="section-head"><p class="info-kicker">Información y novedades</p><h2 id="novedades-titulo">Actualidad del portal</h2><p>Recursos y avances del proyecto hospitalario académico.</p></div>
+      <div class="novedades-grid">
+        <article><span>ORIENTACIÓN</span><h3>Cómo prepararte para solicitar una cita</h3><p>Documentos, especialidad y fechas para completar una solicitud.</p><a href="como-funciona.html">Leer guía →</a></article>
+        <article><span>ACCESIBILIDAD</span><h3>Modo fácil para pacientes</h3><p>Opciones para ajustar el tamaño de letra y contraste visual.</p><a href="institucion.html#servicios-digitales">Ver funciones →</a></article>
+        <article><span>EVOLUCIÓN DEL PROYECTO</span><h3>Seguimiento y reportes administrativos</h3><p>Conoce las nuevas herramientas del portal de demostración.</p><a href="actualidad.html">Ver novedades →</a></article>
+      </div>
+    </div></section>
     <!-- NUEVA SECCIÓN: orientación al paciente, versión mejorada -->
     <section class="section section--alt" id="orientacion-paciente" aria-labelledby="orientacion-titulo">
       <div class="container">
