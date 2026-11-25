@@ -82,7 +82,9 @@
     </section>
 
     <section class="quick-facts" aria-label="Datos del hospital">
-      <div class="container facts-track" id="datos-destacados">
+      <div class="container">
+        <div class="train-viewport" aria-label="Información destacada del hospital">
+          <div class="facts-track train-track" id="datos-destacados">
         <dl>
           <dt>Salud</dt>
           <dd>Orientación para emergencias</dd>
@@ -99,11 +101,8 @@
           <dt>En línea</dt>
           <dd>Solicitud y seguimiento de citas</dd>
         </dl>
-      </div>
-      <div class="container facts-motion-controls">
-        <button type="button" class="motion-toggle" data-motion-target="datos-destacados" aria-pressed="false" hidden>
-          <span class="motion-toggle-symbol" aria-hidden="true">Ⅱ</span> Pausar movimiento
-        </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -136,7 +135,8 @@
           <h2>Especialidades destacadas</h2>
           <p>Conoce algunas de nuestras áreas de atención. Puedes revisar las demás opciones en la página de especialidades.</p>
         </div>
-        <ul class="specialty-cards" id="tarjetas-destacadas">
+        <div class="train-viewport" aria-label="Especialidades destacadas">
+          <ul class="specialty-cards train-track" id="tarjetas-destacadas">
           <li class="specialty-card">
             <h3>Medicina General</h3>
             <p>Primera consulta, control de enfermedades comunes y derivación a especialidad si es necesario.</p>
@@ -158,11 +158,9 @@
             <span class="specialty-tag" data-tag="emergencia">24 horas</span>
           </li>
         </ul>
+        </div>
         <div class="specialty-footer">
           <a class="btn btn-outline" href="servicios.html">Ver las 10 especialidades</a>
-          <button type="button" class="motion-toggle" data-motion-target="tarjetas-destacadas" aria-pressed="false" hidden>
-            <span class="motion-toggle-symbol" aria-hidden="true">Ⅱ</span> Pausar movimiento
-          </button>
         </div>
       </div>
     </section>
