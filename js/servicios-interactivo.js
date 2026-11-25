@@ -18,9 +18,10 @@
       tarjeta.hidden = !coincide;
       if (coincide) visibles++;
     }
+    const nombresVisibles = new Set(tarjetas.filter(tarjeta => !tarjeta.hidden).map(tarjeta => normalizar(tarjeta.querySelector("h3").textContent)));
     for (const fila of filas) {
-      const coincide = (tipo === "todas" || fila.dataset.categoria === tipo) && normalizar(fila.textContent).includes(texto);
-      fila.hidden = !coincide;
+      const nombre = normalizar(fila.cells[0].textContent);
+      fila.hidden = !nombresVisibles.has(nombre);
     }
     vacio.hidden = visibles !== 0;
     total.textContent = `Se muestran ${visibles} de ${tarjetas.length} servicios.`;
