@@ -125,16 +125,6 @@ function formatearFecha(valor) {
 (function () {
   if (!usuarioActual) return;
 
-  const rolBanner = document.getElementById('rolBanner');
-  if (usuarioActual.rol === 'empleado') {
-    const enTurno = puedeEditarAhora();
-    rolBanner.textContent = `Rol: empleado · Turno asignado: ${usuarioActual.turno} ` +
-      (enTurno ? '(dentro de turno, puedes editar)' : `(fuera de turno — ahora es turno ${turnoActual()}, solo puedes ver)`);
-  } else {
-    rolBanner.textContent = `Rol: ${usuarioActual.rol} · Acceso de gestión, sin restricción de turno`;
-  }
-  rolBanner.setAttribute('data-rol', usuarioActual.rol);
-
   // Solo el administrador ve el acceso a Caja
   if (usuarioActual.rol === 'administrador') document.querySelector('.nav-link-caja').style.display = '';
 
