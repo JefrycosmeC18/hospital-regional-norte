@@ -125,13 +125,30 @@ function formatearFecha(valor) {
 (function () {
   if (!usuarioActual) return;
 
+  // El nombre y el rol provienen de la sesión que creó el login.
+  // textContent evita interpretar los datos del usuario como HTML.
+  const nombreCompleto = (usuarioActual.nombre || 'usuario').trim();
+  const nombreCorto = nombreCompleto.split(/\s+/)[0] || 'Usuario';
+  const nombreUsuario = document.getElementById('panelNombreUsuario');
+  const nombreNav = document.getElementById('panelNombreNav');
+  const rolEtiqueta = document.getElementById('panelRolUsuario');
+  const bienvenida = document.getElementById('panelBienvenida');
+  const usuarioNav = document.getElementById('panelUsuarioNav');
+
+  nombreUsuario.textContent = nombreCompleto;
+  nombreNav.textContent = nombreCorto;
+  rolEtiqueta.textContent = usuarioActual.rol === 'administrador' ? 'Administrador' : 'Empleado';
+  rolEtiqueta.dataset.rol = usuarioActual.rol;
+  bienvenida.hidden = false;
+  usuarioNav.hidden = false;
+
   const rolBanner = document.getElementById('rolBanner');
   if (usuarioActual.rol === 'empleado') {
     const enTurno = puedeEditarAhora();
-    rolBanner.textContent = `Sesión: ${usuarioActual.nombre} · Rol: empleado · Turno asignado: ${usuarioActual.turno} ` +
+    rolBanner.textContent = `Rol: empleado · Turno asignado: ${usuarioActual.turno} ` +
       (enTurno ? '(dentro de turno, puedes editar)' : `(fuera de turno — ahora es turno ${turnoActual()}, solo puedes ver)`);
   } else {
-    rolBanner.textContent = `Sesión: ${usuarioActual.nombre} · Rol: ${usuarioActual.rol} (acceso total, sin restricción de turno)`;
+    rolBanner.textContent = `Rol: ${usuarioActual.rol} · Acceso de gestión, sin restricción de turno`;
   }
   rolBanner.setAttribute('data-rol', usuarioActual.rol);
 
