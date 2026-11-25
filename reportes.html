@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes administrativos — Hospital Regional del Norte</title>
+  <meta name="description" content="Indicadores y gráficos administrativos de citas y pagos del Hospital Regional del Norte.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/reportes.css">
+  <link rel="stylesheet" href="css/nav-superior.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle cx="24" cy="24" r="22" fill="#0F5D52"/>
+          <path d="M24 12v24M12 24h24" stroke="#F2F5F1" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#E0762E" stroke-width="2"/>
+        </svg>
+        <span class="brand-text">
+          <span class="name">Hospital Regional del Norte</span>
+          <span class="tagline">MINSA · Piura</span>
+        </span>
+      </a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Abrir menú de navegación">
+        <span></span><span></span><span></span>
+      </label>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="panel.html">Panel</a></li>
+          <li><a href="reportes.html" aria-current="page">Reportes</a></li>
+          <li class="nav-link-caja"><a href="caja.html">Caja</a></li>
+          <li><a href="#" id="btnCerrarSesion">Cerrar sesión</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="reportes-hero">
+          <div>
+            <p class="reportes-eyebrow">GESTIÓN HOSPITALARIA</p>
+            <h1>Reportes administrativos</h1>
+            <p>Analiza las solicitudes y los pagos registrados. Los gráficos utilizan datos del sistema y respetan los filtros seleccionados.</p>
+          </div>
+          <a class="btn btn-outline" href="panel.html">Volver al Panel</a>
+        </div>
+
+        <section class="reportes-filtros" aria-labelledby="reportes-filtros-titulo">
+          <div class="reportes-filtros-head">
+            <h2 id="reportes-filtros-titulo">Personaliza tu reporte</h2>
+            <p>Las fechas corresponden a la <strong>fecha preferida de atención</strong>, no a una cita confirmada.</p>
+          </div>
+          <div class="reportes-filtros-grid">
+            <div class="reportes-campo">
+              <label for="reporteDesde">Desde</label>
+              <input type="date" id="reporteDesde">
+            </div>
+            <div class="reportes-campo">
+              <label for="reporteHasta">Hasta</label>
+              <input type="date" id="reporteHasta">
+            </div>
+            <div class="reportes-campo">
+              <label for="reporteEspecialidad">Especialidad</label>
+              <select id="reporteEspecialidad"><option value="">Todas las especialidades</option></select>
+            </div>
+            <div class="reportes-acciones">
+              <button type="button" class="btn btn-outline" id="limpiarReporte">Limpiar filtros</button>
+              <button type="button" class="btn btn-primary" id="exportarReporte" disabled>Exportar CSV</button>
+            </div>
+          </div>
+          <p class="reportes-error-filtro" id="errorFiltroReporte" role="alert" hidden>La fecha inicial no puede ser posterior a la final.</p>
+          <p class="reportes-estado" id="estadoReportes" role="status">Cargando información...</p>
+        </section>
+
+        <div id="reporteContenido" hidden>
+          <section class="reportes-resumen" aria-labelledby="reportes-resumen-titulo">
+            <h2 id="reportes-resumen-titulo">Resumen de solicitudes</h2>
+            <div class="reportes-kpis">
+              <article class="reportes-kpi"><span>Total de citas</span><strong id="reporteTotal">0</strong><small>Solicitudes registradas</small></article>
+              <article class="reportes-kpi" data-tipo="registrado"><span>Registradas</span><strong id="reporteRegistradas">0</strong><small>Estado registrado</small></article>
+              <article class="reportes-kpi" data-tipo="atendido"><span>Atendidas</span><strong id="reporteAtendidas">0</strong><small>Atención completada</small></article>
+              <article class="reportes-kpi" data-tipo="cancelado"><span>Canceladas</span><strong id="reporteCanceladas">0</strong><small>No incluye rechazadas</small></article>
+            </div>
+            <p class="reportes-nota" id="reporteRechazadas">Rechazadas: 0</p>
+          </section>
+
+          <div class="reportes-grid">
+            <section class="reportes-grafico" aria-labelledby="tituloEspecialidades">
+              <div class="reportes-grafico-head">
+                <div><h2 id="tituloEspecialidades">Citas por especialidad</h2><p>Distribución de solicitudes seleccionadas.</p></div>
+              </div>
+              <div id="graficoEspecialidades" class="reportes-barras" aria-label="Gráfico de citas por especialidad"></div>
+            </section>
+            <section class="reportes-grafico" aria-labelledby="tituloEstados">
+              <div class="reportes-grafico-head">
+                <div><h2 id="tituloEstados">Estados de las citas</h2><p>Comparación de registradas, atendidas, canceladas y rechazadas.</p></div>
+              </div>
+              <div class="reportes-dona-layout">
+                <div id="graficoEstados" class="reportes-dona" role="img" aria-label="Distribución de estados">
+                  <span><strong id="graficoEstadosTotal">0</strong><small>solicitudes</small></span>
+                </div>
+                <ul id="leyendaEstados" class="reportes-leyenda"></ul>
+              </div>
+            </section>
+          </div>
+
+          <section class="reportes-grafico reportes-evolucion" aria-labelledby="tituloEvolucion">
+            <div class="reportes-grafico-head"><div>
+              <h2 id="tituloEvolucion">Evolución mensual</h2>
+              <p>Cantidad de solicitudes por mes de fecha preferida.</p>
+            </div></div>
+            <div id="graficoMeses" class="reportes-meses" aria-label="Evolución mensual de citas"></div>
+          </section>
+
+          <section class="reportes-grafico reportes-economia" aria-labelledby="tituloEconomia">
+            <div class="reportes-grafico-head"><div>
+              <h2 id="tituloEconomia">Resumen de pagos</h2>
+              <p>Importes de citas según su estado de pago, sin contar montos pendientes como cobrados.</p>
+            </div></div>
+            <div class="reportes-economia-grid">
+              <div><span>Monto de citas pagadas</span><strong id="montoPagado">S/ 0.00</strong><small>Estado de pago: pagado</small></div>
+              <div><span>Monto de citas pendientes</span><strong id="montoPendiente">S/ 0.00</strong><small>No son ingresos cobrados</small></div>
+              <div><span>Citas exoneradas (SIS)</span><strong id="citasExoneradas">0</strong><small>Estado de pago: exonerado</small></div>
+            </div>
+            <p class="reportes-nota">Los importes son montos registrados por cita; este resumen no sustituye una conciliación de transacciones bancarias.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container"><p>Hospital Regional del Norte · Reportes de gestión de citas</p></div>
+  </footer>
+  <script type="module" src="js/reportes/reportes.js"></script>
+  <script src="js/perfil-usuario.js" defer></script>
+  <script src="js/accesibilidad.js" defer></script>
+</body>
+</html>
