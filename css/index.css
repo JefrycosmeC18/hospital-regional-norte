@@ -883,80 +883,83 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 }
 
 
-/* ==========================================================
-   Tarjetas de informacion y especialidades con movimiento
-   Conserva la tipografia y los colores originales.
-   ========================================================== */
-.quick-facts .facts-track dl {
-  display:flex;
-  flex-direction:column;
+
+/* Cinta continua de especialidades e información: desplazamiento a la izquierda. */
+.quick-facts .container {max-width: var(--content-width);}
+.train-viewport {
+  overflow:hidden;
+  width:100%;
+  position:relative;
+  padding:.75rem 0 1.1rem;
+  /* Las tarjetas salen y entran por los extremos como un tren. */
+}
+.train-track {
+  display:flex!important;
+  align-items:stretch;
   justify-content:flex-start;
-  min-width:0;
-  min-height:137px;
+  flex-wrap:nowrap;
+  width:max-content;
+  max-width:none;
+  gap:0!important;
   margin:0;
-  padding:1.15rem 1.25rem;
-  background:var(--color-surface);
+  padding:0;
+  list-style:none;
+}
+.train-set {
+  display:flex;
+  align-items:stretch;
+  flex:0 0 auto;
+  gap:1.25rem;
+  padding-right:1.25rem;
+}
+.quick-facts .facts-track dl {
+  flex:0 0 clamp(220px,21vw,278px);
+  width:clamp(220px,21vw,278px);
+  min-height:145px;
+  margin:0;
+  padding:1.3rem;
   border:1px solid var(--color-line);
   border-left:3px solid var(--color-accent);
   border-radius:9px;
-  box-shadow:0 4px 16px rgba(15,93,82,.04);
-}
-.quick-facts .facts-track dt { margin:0 0 .65rem; font-size:clamp(1.55rem,2.1vw,1.9rem); line-height:1.15; }
-.quick-facts .facts-track dd { line-height:1.55; overflow-wrap:break-word; }
-.quick-facts .facts-motion-controls {
-  display:flex;
-  justify-content:flex-end;
-  padding-top:0;
-  padding-bottom:1.25rem;
-}
-.specialty-footer {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:1rem;
-  margin-top:1.6rem;
-}
-.specialty-footer .btn { flex:0 0 auto; }
-.specialty-cards .specialty-card:hover {
-  border-color:var(--color-primary);
-  box-shadow:0 12px 24px rgba(15,93,82,.14);
-  /* Evitamos translateY en hover para no interferir con la animacion de cambio de lugar. */
-  transform:none;
-}
-.motion-toggle {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:.45rem;
-  border:1px solid var(--color-line);
-  border-radius:999px;
   background:#fff;
-  padding:.45rem .85rem;
-  min-height:36px;
-  font:600 .82rem var(--font-body);
-  color:var(--color-primary-dark);
-  cursor:pointer;
-  transition:background-color .2s ease,border-color .2s ease;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 4px 16px rgba(15,93,82,.05);
 }
-.motion-toggle:hover { background:#e7f3ef; border-color:var(--color-primary); }
-.motion-toggle:focus-visible { outline:3px solid var(--color-accent); outline-offset:3px; }
-.motion-toggle[hidden] {display:none!important;}
-.motion-toggle-symbol {font-size:.95rem;line-height:1;}
-/* Disposicion estable en laptop, tablet y telefono */
-@media (max-width:950px) {
-  .quick-facts .facts-track,
-  .specialty-cards {grid-template-columns:repeat(2,minmax(0,1fr));}
-  .specialty-card {min-height:200px;}
+.quick-facts .facts-track dt{margin-bottom:.5rem;}
+.quick-facts .facts-track dd{overflow-wrap:anywhere;}
+.specialty-cards .specialty-card {
+  flex:0 0 clamp(240px,25vw,295px);
+  width:clamp(240px,25vw,295px);
+  min-height:245px;
+  margin:0;
+  padding:1.4rem;
+  display:flex;
+  flex-direction:column;
+  background:var(--color-surface);
+  border:1px solid var(--color-line);
+  border-radius:9px;
+  box-sizing:border-box;
+  transition:border-color .2s ease,box-shadow .2s ease;
 }
-@media (max-width:560px) {
-  .quick-facts .facts-track,
-  .specialty-cards {grid-template-columns:1fr;gap:.85rem;}
-  .quick-facts .facts-track dl {min-height:104px;padding:1rem 1.15rem;}
-  .specialty-card {min-height:0;padding:1.2rem;}
-  .specialty-footer {align-items:stretch;flex-direction:column;}
-  .specialty-footer .btn,.specialty-footer .motion-toggle {align-self:stretch;text-align:center;}
+.specialty-cards .specialty-card p{flex:1;}
+.specialty-cards .specialty-card .specialty-tag{align-self:flex-start;margin-top:auto;}
+.specialty-cards .specialty-card:hover{transform:none;border-color:var(--color-primary);}
+.specialty-footer{margin-top:1.25rem;}
+/* Cada grupo se duplica en JS; mover la mitad del tren hace un ciclo sin saltos. */
+@keyframes trenIzquierda {
+  from { transform:translateX(0); }
+  to { transform:translateX(-50%); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .motion-toggle,.specialty-card {transition:none!important;}
+.train-track.is-moving { animation:trenIzquierda var(--train-duration,38s) linear infinite; }
+@media (max-width:600px) {
+  .train-viewport{padding:.5rem 0 1rem;}
+  .train-set{gap:.85rem;padding-right:.85rem;}
+  .quick-facts .facts-track dl {width:230px;flex-basis:230px;min-height:126px;}
+  .specialty-cards .specialty-card{width:245px;flex-basis:245px;min-height:240px;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .train-viewport{overflow-x:auto;}
+  .train-track.is-moving{animation:none!important;}
+  .train-track .train-set[aria-hidden="true"]{display:none!important;}
 }
