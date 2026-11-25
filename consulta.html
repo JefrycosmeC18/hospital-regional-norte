@@ -67,9 +67,36 @@
           <p>Estos son los registros de "Solicitud de cita" guardados a tu nombre en el sistema. Mientras el estado siga en <strong>registrado</strong> y no estén pagados, puedes editarlos. Si tienen costo, aquí mismo puedes pagarlos.</p>
         </div>
 
-        <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+        <section class="mis-citas-busqueda" aria-labelledby="mis-citas-filtros-titulo">
+          <div class="mis-citas-titulo">
+            <h2 id="mis-citas-filtros-titulo">Encuentra tu cita</h2>
+            <p>Consulta los datos de tus solicitudes, sus estados y los pagos asociados.</p>
+          </div>
+          <div class="mis-citas-filtros">
+            <div class="mis-citas-campo">
+              <label for="buscarMisCitas">Buscar por código o especialidad</label>
+              <input type="search" id="buscarMisCitas" placeholder="Código de seguimiento o especialidad" autocomplete="off">
+            </div>
+            <div class="mis-citas-campo">
+              <label for="estadoMisCitas">Estado de la solicitud</label>
+              <select id="estadoMisCitas">
+                <option value="">Todos los estados</option>
+                <option value="registrado">Registradas</option>
+                <option value="atendido">Atendidas</option>
+                <option value="rechazado">Rechazadas</option>
+                <option value="cancelado">Canceladas</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-outline" id="limpiarMisCitas">Limpiar filtros</button>
+          </div>
+          <p class="mis-citas-contador" id="contadorMisCitas" role="status">Cargando citas...</p>
+        </section>
+                <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="mis-citas-tarjetas" id="tarjetasMisCitas" aria-live="off"></div>
 
-        <div class="registros-table-wrap">
+        <details class="mis-citas-tabla-detalle" id="detalleTablaMisCitas" hidden>
+          <summary>Ver mis citas en formato de tabla</summary>
+          <div class="registros-table-wrap">
           <table class="registros-table" id="tablaRegistros" hidden>
             <thead>
               <tr>
@@ -85,7 +112,8 @@
             </thead>
             <tbody id="cuerpoRegistros"></tbody>
           </table>
-        </div>
+          </div>
+        </details>
 
         <p class="registros-vacio" id="registrosVacio" hidden>Todavía no tienes solicitudes de cita registradas. <a href="registro.html">Solicita una cita</a>.</p>
       </div>
