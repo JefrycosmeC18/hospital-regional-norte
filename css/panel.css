@@ -859,3 +859,30 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 .pago-badge[data-pago="pendiente"] { color: #8a6400; border: 1px solid #B8860B; background: #FFF3E0; }
 .pago-badge[data-pago="pagado"]    { color: var(--color-primary-dark); border: 1px solid var(--color-primary); background: #E7F3EF; }
 .pago-badge[data-pago="exonerado"] { color: #3a5a8a; border: 1px solid #6b8cc0; background: #E8EFFA; }
+/* Bienvenida personalizada del panel — usa la paleta original del Hospital */
+.panel-welcome[hidden],.nav-user-item[hidden]{display:none!important;}
+.panel-welcome{
+  display:flex;align-items:center;gap:1.35rem;flex-wrap:wrap;
+  background:linear-gradient(120deg,#e7f3ef 0%,#fff 75%);
+  border:1px solid var(--color-line);border-left:5px solid var(--color-primary);
+  border-radius:14px;padding:1.7rem 2rem;margin-bottom:2.25rem;
+  box-shadow:0 8px 30px rgba(15,93,82,.07);
+}
+.panel-welcome-icon{
+  display:grid;place-items:center;width:72px;height:72px;flex-shrink:0;
+  border-radius:50%;background:var(--color-primary);color:#fff;
+  box-shadow:0 0 0 7px rgba(15,93,82,.08);
+}
+.panel-welcome-icon svg{width:38px;height:38px;}
+.panel-welcome-message{flex:1 1 250px;min-width:0;}
+.panel-welcome-eyebrow{display:block;text-transform:uppercase;letter-spacing:.1em;font-size:.73rem;font-weight:700;color:var(--color-accent-dark);margin-bottom:.45rem;}
+.panel-welcome-message h1{font-size:clamp(1.5rem,2.6vw,2.4rem);margin:0 0 .35rem;overflow-wrap:anywhere;}
+.panel-welcome-message p{margin:0;}
+.panel-welcome-role{align-self:flex-start;border-radius:999px;background:#fff;border:1px solid var(--color-primary);color:var(--color-primary-dark);padding:.45rem .8rem;font-weight:700;font-size:.83rem;white-space:nowrap;}
+.panel-welcome-role[data-rol="administrador"]{border-color:var(--color-accent-dark);color:var(--color-accent-dark);background:#fff8f0;}
+.panel-welcome + .section-head{max-width:none;}
+.panel-welcome + .section-head h2{font-size:clamp(1.45rem,2.4vw,1.95rem);}
+@keyframes panelWelcomeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.panel-welcome{animation:panelWelcomeIn .45s ease both;}
+@media(max-width:720px){.panel-welcome{padding:1.35rem;gap:1.2rem;}.panel-welcome-icon{width:56px;height:56px;}.panel-welcome-icon svg{width:30px;height:30px;}.panel-welcome-role{margin-left:0;}}
+@media(prefers-reduced-motion:reduce){.panel-welcome{animation:none;}}
