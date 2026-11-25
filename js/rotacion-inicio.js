@@ -3,8 +3,10 @@
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   function crearTren(id, segundos) {
     const pista = document.getElementById(id);
-    if (!pista || pista.children.length < 2 || pista.querySelector('.train-set')) return;
+    if (!pista || pista.querySelectorAll(':scope > .train-set').length > 1) return;
     let grupo = pista.querySelector(':scope > .train-set');
+    const cantidad = grupo ? grupo.children.length : pista.children.length;
+    if (cantidad < 2) return;
     if (!grupo) {
       grupo = document.createElement('div');
       grupo.className = 'train-set';
