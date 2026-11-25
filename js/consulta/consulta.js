@@ -107,41 +107,125 @@ function accionDePago(td, r) {
   const vacio = document.getElementById('registrosVacio');
   const cargando = document.getElementById('cargando'); // esqueleto shimmer
 
+  const tarjetas = document.getElementById('tarjetasMisCitas');
+  const buscar = document.getElementById('buscarMisCitas');
+  const estadoFiltro = document.getElementById('estadoMisCitas');
+  const limpiar = document.getElementById('limpiarMisCitas');
+  const contador = document.getElementById('contadorMisCitas');
+  const tablaDetalle = document.getElementById('detalleTablaMisCitas');
+  let registrosCache = [];
+
+  const normalizar = (valor) => String(valor ?? '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+  function mostrarTarjeta(r) {
+    const card = document.createElement('article');
+    card.className = 'mis-cita-card';
+    card.dataset.estado = r.estado;
+
+    const cabecera = document.createElement('div');
+    cabecera.className = 'mis-cita-card-top';
+    const titulo = document.createElement('h3');
+    titulo.textContent = NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad;
+    cabecera.append(titulo, insignia('estado-badge', 'estado', r.estado, r.estado));
+
+    const codigo = document.createElement('p');
+    codigo.className = 'mis-cita-codigo';
+    codigo.textContent = 'Código de seguimiento: ' + (r.codigo_seguimiento || '—');
+
+    const detalles = document.createElement('dl');
+    detalles.className = 'mis-cita-detalles';
+    function dato(etiqueta, valor) {
+      const contenedor = document.createElement('div');
+      const dt = document.createElement('dt');
+      const dd = document.createElement('dd');
+      dt.textContent = etiqueta;
+      dd.textContent = valor;
+      contenedor.append(dt, dd);
+      detalles.append(contenedor);
+    }
+    dato('Fecha preferida', formatearFecha(r.fecha_preferida));
+    dato('Fecha de registro', formatearFecha(r.fecha_registro));
+    dato('Monto', r.estado_pago === 'exonerado' ? 'S/ 0.00' : formatearSoles(Number(r.monto_calculado)));
+    const pago = document.createElement('div');
+    const pagoDt = document.createElement('dt');
+    pagoDt.textContent = 'Estado del pago';
+    const pagoDd = document.createElement('dd');
+    pagoDd.append(insignia('pago-badge', 'pago', r.estado_pago, r.estado_pago));
+    pago.append(pagoDt, pagoDd);
+    detalles.append(pago);
+
+    const acciones = document.createElement('div');
+    acciones.className = 'mis-cita-acciones';
+    accionEditar(acciones, r);
+    accionDePago(acciones, r);
+    card.append(cabecera, codigo, detalles, acciones);
+    return card;
+  }
+
+  function mostrarTabla(registros) {
+    cuerpo.replaceChildren();
+    for (const r of registros) {
+      const tr = document.createElement('tr');
+      celda(tr, r.codigo_seguimiento);
+      celda(tr, NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad);
+      celda(tr, formatearFecha(r.fecha_preferida));
+      celda(tr).append(insignia('estado-badge', 'estado', r.estado, r.estado));
+      celda(tr, r.estado_pago === 'exonerado' ? 'S/ 0.00' : formatearSoles(Number(r.monto_calculado)));
+      celda(tr).append(insignia('pago-badge', 'pago', r.estado_pago, r.estado_pago));
+      celda(tr, formatearFecha(r.fecha_registro));
+      const tdAcciones = celda(tr);
+      tdAcciones.className = 'acciones-fila';
+      accionEditar(tdAcciones, r);
+      accionDePago(tdAcciones, r);
+      cuerpo.append(tr);
+    }
+  }
+
+  function aplicarFiltros() {
+    const palabra = normalizar(buscar.value);
+    const estado = estadoFiltro.value;
+    const filtrados = registrosCache.filter(r => {
+      const criterio = normalizar((r.codigo_seguimiento || '') + ' ' +
+        (NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad));
+      return (!palabra || criterio.includes(palabra)) && (!estado || r.estado === estado);
+    });
+    tarjetas.replaceChildren();
+    for (const r of filtrados) tarjetas.append(mostrarTarjeta(r));
+    mostrarTabla(filtrados);
+    const vacioTotal = registrosCache.length === 0;
+    vacio.hidden = !vacioTotal && filtrados.length > 0;
+    vacio.textContent = vacioTotal
+      ? 'Todavía no tienes solicitudes de cita registradas.'
+      : 'No encontramos citas que coincidan con los filtros.';
+    tablaDetalle.hidden = filtrados.length === 0;
+    tabla.hidden = filtrados.length === 0;
+    contador.textContent = 'Mostrando ' + filtrados.length + ' de ' + registrosCache.length + ' citas';
+  }
+  buscar.addEventListener('input', aplicarFiltros);
+  estadoFiltro.addEventListener('change', aplicarFiltros);
+  limpiar.addEventListener('click', () => {
+    buscar.value = '';
+    estadoFiltro.value = '';
+    aplicarFiltros();
+    buscar.focus();
+  });
+
+
   (async function cargar() {
     try {
       const registros = await listarMisRegistros(usuarioActual.id);
       cargando.hidden = true;
 
-      if (registros.length === 0) {
-        vacio.hidden = false;
-        tabla.hidden = true;
-        return;
-      }
-
-      vacio.hidden = true;
-      tabla.hidden = false;
-      cuerpo.replaceChildren();
-
-      registros.forEach(function (r) {
-        const tr = document.createElement('tr');
-        celda(tr, r.codigo_seguimiento);
-        celda(tr, NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad);
-        celda(tr, formatearFecha(r.fecha_preferida));
-        celda(tr).append(insignia('estado-badge', 'estado', r.estado, r.estado));
-        celda(tr, r.estado_pago === 'exonerado' ? 'S/ 0.00' : formatearSoles(Number(r.monto_calculado)));
-        celda(tr).append(insignia('pago-badge', 'pago', r.estado_pago, r.estado_pago));
-        celda(tr, formatearFecha(r.fecha_registro));
-        const tdAcciones = celda(tr);
-        tdAcciones.className = 'acciones-fila';
-        accionEditar(tdAcciones, r);
-        accionDePago(tdAcciones, r);
-        cuerpo.append(tr);
-      });
+      registrosCache = registros;
+      aplicarFiltros();
     } catch (error) {
       cargando.hidden = true;
       console.error('Error al consultar registros:', error);
       vacio.hidden = false;
       vacio.textContent = 'No se pudieron cargar tus citas en este momento. Intenta de nuevo más tarde.';
+      contador.textContent = 'No se pudo actualizar la lista.';
+      tablaDetalle.hidden = true;
       tabla.hidden = true;
     }
   })();
