@@ -87,6 +87,30 @@
           </div>
         </section>
 
+        <section class="calendario-seccion" aria-labelledby="calendario-citas-titulo">
+          <div class="calendario-encabezado">
+            <div>
+              <h2 id="calendario-citas-titulo">Calendario de citas</h2>
+              <p>Visualiza las solicitudes por <strong>fecha preferida</strong>. Selecciona un día para filtrar la lista de gestión.</p>
+            </div>
+            <div class="calendario-navegacion" aria-label="Cambiar mes del calendario">
+              <button type="button" id="calendarioMesAnterior" aria-label="Mes anterior">‹</button>
+              <h3 id="calendarioTitulo" aria-live="polite">Calendario</h3>
+              <button type="button" id="calendarioMesSiguiente" aria-label="Mes siguiente">›</button>
+            </div>
+          </div>
+          <div class="calendario-panel">
+            <div class="calendario-semana" aria-hidden="true">
+              <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+            </div>
+            <div class="calendario-cuadricula" id="calendarioCuadricula" role="group" aria-label="Fechas del mes"></div>
+            <div class="calendario-pie">
+              <p id="calendarioDiaSeleccionado" role="status">Selecciona una fecha para filtrar solicitudes.</p>
+              <button type="button" id="limpiarDiaCalendario" class="btn btn-outline" hidden>Mostrar todas las fechas</button>
+            </div>
+          </div>
+        </section>
+
         <div class="panel-layout">
           <div>
             <form class="panel-crear" id="crearForm" novalidate>
