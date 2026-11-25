@@ -61,7 +61,7 @@
       <div class="container">
         <div class="section-head">
           <h1>Cómo pedir tu cita</h1>
-          <p>El proceso es el mismo si tienes SIS o si pagas de forma particular; solo cambia el requisito de pago en el paso 3.</p>
+          <p>Conoce el recorrido de la solicitud en este portal académico. Los requisitos, la cobertura y la confirmación real de una cita deben verificarse con el establecimiento correspondiente.</p>
         </div>
 
         <ol class="steps">
@@ -74,7 +74,7 @@
           <li>
             <div>
               <h3>Reúne tus documentos</h3>
-              <p>Necesitas tu DNI vigente. Si usas SIS, también tu carné de afiliación. Si vienes referido de otro establecimiento, trae la hoja de referencia.</p>
+              <p>Ten a mano tu documento de identidad. Si corresponde, verifica tu afiliación al SIS y la indicación de referencia que te haya dado el personal de salud.</p>
             </div>
           </li>
           <li>
@@ -86,13 +86,13 @@
           <li>
             <div>
               <h3>Recibe la confirmación</h3>
-              <p>Te confirmamos fecha, hora y consultorio por teléfono o correo. Guarda este dato: lo pedirán al llegar a admisión.</p>
+              <p>Revisa el mensaje del sistema y consulta tu registro. Una solicitud enviada no representa por sí sola una cita confirmada por un establecimiento real.</p>
             </div>
           </li>
           <li>
             <div>
-              <h3>Llega 20 minutos antes</h3>
-              <p>Pasa primero por admisión para el registro de tu cita y, si corresponde, el pago en caja. Luego dirígete al consultorio asignado.</p>
+              <h3>Prepara tu visita</h3>
+              <p>Cuando cuentes con una cita real confirmada, verifica con el establecimiento la hora de llegada, la ubicación del consultorio y cualquier trámite de admisión.</p>
             </div>
           </li>
         </ol>
@@ -107,7 +107,7 @@
 
         <figure class="photo-feature">
           <div class="img-zoom"><img src="https://images.pexels.com/photos/33812025/pexels-photo-33812025.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200&amp;h=560&amp;dpr=1" alt="Recepción de un centro de salud, donde el personal de admisión registra las citas" loading="lazy" width="1200" height="560"></div>
-          <figcaption>Admisión es tu primera parada al llegar al hospital, con o sin SIS.</figcaption>
+          <figcaption>Fotografía referencial de un módulo de admisión en un centro de salud.</figcaption>
         </figure>
 
         <div class="contact-grid">
@@ -115,20 +115,63 @@
             <h3>Con Seguro Integral de Salud (SIS)</h3>
             <ul class="requirements">
               <li>DNI vigente del paciente</li>
-              <li>Carné de afiliación al SIS</li>
+              <li>Verificar el estado de afiliación al SIS en sus canales oficiales</li>
               <li>Hoja de referencia, si vienes de otro centro de salud</li>
-              <li>La consulta y los medicamentos del petitorio no tienen costo</li>
+              <li>Consultar cuáles prestaciones corresponden a tu cobertura y establecimiento</li>
             </ul>
           </div>
           <div class="contact-card">
             <h3>Pago particular</h3>
             <ul class="requirements">
               <li>DNI vigente del paciente</li>
-              <li>Pago de derecho de consulta en caja o en línea</li>
-              <li>Recibo o boleta para presentar en admisión</li>
-              <li>Puedes solicitar factura si la necesitas para un seguro privado</li>
+              <li>Consultar previamente las tarifas y medios de pago del establecimiento real</li>
+              <li>Conservar el comprobante si el trámite requiere pago</li>
+              <li>Verificar el tipo de comprobante que ofrece el establecimiento</li>
             </ul>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section readiness-section" id="checklist-cita" aria-labelledby="checklist-titulo">
+      <div class="container">
+        <div class="readiness-layout">
+          <div>
+            <p class="info-kicker">Antes de comenzar</p>
+            <h2 id="checklist-titulo">Prepara tu solicitud de cita</h2>
+            <p>Marca estos pasos mientras revisas el portal. Es una guía interactiva local: no envía datos ni confirma una reserva.</p>
+            <p class="readiness-warning"><strong>Recuerda:</strong> el Hospital Regional del Norte de esta página es un caso académico ficticio. Para una atención real consulta al establecimiento de salud correspondiente.</p>
+            <a class="btn btn-outline" href="servicios.html">Revisar especialidades</a>
+          </div>
+          <div class="readiness-card">
+            <h3>Mi lista de preparación</h3>
+            <div class="readiness-progress" role="progressbar" aria-label="Progreso de preparación" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="progreso-barra">
+              <span id="progreso-relleno"></span>
+            </div>
+            <p class="readiness-count" id="progreso-texto" aria-live="polite">0 de 4 pasos completados</p>
+            <div class="readiness-checks">
+              <label><input type="checkbox" class="readiness-item"> Revisé las especialidades del portal.</label>
+              <label><input type="checkbox" class="readiness-item"> Leí qué campos requiere el formulario.</label>
+              <label><input type="checkbox" class="readiness-item"> Entiendo que una solicitud no confirma una cita médica real.</label>
+              <label><input type="checkbox" class="readiness-item"> Utilizaré datos ficticios para probar el proyecto.</label>
+            </div>
+            <button class="btn btn-primary" id="reiniciar-checklist" type="button">Reiniciar lista</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="ayuda-citas" aria-labelledby="ayuda-citas-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="info-kicker">Sobre el registro de citas</p>
+          <h2 id="ayuda-citas-titulo">Qué puedes hacer en este portal</h2>
+        </div>
+        <div class="readiness-help-grid">
+          <article class="readiness-help-card"><h3>Registrar una solicitud</h3><p>Completa el formulario con datos ficticios para observar sus validaciones y el mensaje que aparece al enviarlo.</p><a href="registro.html">Abrir formulario →</a></article>
+          <article class="readiness-help-card"><h3>Consultar un registro</h3><p>Accede a la sección de consultas y revisa los resultados disponibles en el sistema de demostración.</p><a href="consulta.html">Consultar cita →</a></article>
+          <article class="readiness-help-card"><h3>Información de contacto</h3><p>Consulta los datos que utiliza la simulación y los enlaces oficiales de orientación sanitaria incluidos en la página de contacto.</p><a href="contacto.html">Ver contacto →</a></article>
         </div>
       </div>
     </section>
@@ -137,7 +180,7 @@
       <div class="container">
         <div class="section-head">
           <h2>¿Listo para reservar?</h2>
-          <p>Con la especialidad y tus documentos definidos, el formulario te toma menos de tres minutos.</p>
+          <p>Cuando tengas claro qué especialidad necesitas, puedes probar el formulario académico sin utilizar información personal real.</p>
         </div>
         <a class="btn btn-accent" href="registro.html">Solicitar cita ahora</a>
       </div>
@@ -169,6 +212,7 @@
     <p class="footer-bottom">Proyecto académico — Diseño Web.</p>
   </footer>
 
+  <script src="js/guia-citas.js" defer></script>
   <script type="module" src="js/nav-rol.js"></script>
 </body>
 </html>
