@@ -1,0 +1,5 @@
+/* Pagina actualidad: todos los estilos permanecen en CSS. */
+@import url("./index.css");
+.pagina-portada-institucional{background:#e7f3ef}
+.pagina-portada-institucional h1{max-width:52rem}
+.pagina-portada-institucional p{max-width:57rem}

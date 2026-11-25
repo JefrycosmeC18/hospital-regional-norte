@@ -991,3 +991,6 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 @media(max-width:760px){.hero-renovado .container,.resumen-institucion-grid{grid-template-columns:1fr}.hero-renovado .hero-foto{order:0}.hero-renovado h1{max-width:none}.hero-foto img{height:280px}.novedades-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.accesos-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.accesos-grid a{transition:none}}
+
+/* El enlace al panel permanece oculto hasta que el controlador de roles lo habilita. */
+.main-nav .nav-link-panel{display:none;}
