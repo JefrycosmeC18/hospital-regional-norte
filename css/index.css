@@ -533,12 +533,13 @@ textarea { resize: vertical; min-height: 6rem; }
   border-bottom: 1px solid var(--color-line);
 }
 
-.quick-facts .container {
+.quick-facts .facts-track {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 2rem;
-  padding-top: 2.2rem;
-  padding-bottom: 2.2rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(.85rem, 1.6vw, 1.4rem);
+  padding-top: 1.9rem;
+  padding-bottom: .65rem;
 }
 
 .quick-facts dt {
@@ -558,15 +559,21 @@ textarea { resize: vertical; min-height: 6rem; }
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.4rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: clamp(.85rem, 1.6vw, 1.4rem);
 }
 
 .specialty-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 220px;
   background: var(--color-surface);
   border: 1px solid var(--color-line);
-  padding: 1.4rem 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 9px;
+  padding: 1.45rem;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
 
 .specialty-card:hover {
@@ -575,7 +582,8 @@ textarea { resize: vertical; min-height: 6rem; }
 }
 
 .specialty-card h3 { margin: 0 0 0.4rem; }
-.specialty-card p { margin: 0 0 0.8rem; font-size: 0.95rem; }
+.specialty-card p { margin: 0 0 1rem; font-size: 0.95rem; flex: 1; }
+.specialty-card .specialty-tag { align-self: flex-start; margin-top: auto; }
 
 .specialty-tag {
   display: inline-block;
@@ -736,11 +744,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 /* ---- Animaciones propias de index ---- */
 @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 .hero-art { animation: floatY 6s ease-in-out infinite; }
-.quick-facts dl { animation: revealIn 0.6s ease both; }
-.quick-facts dl:nth-child(1) { animation-delay: 0.15s; }
-.quick-facts dl:nth-child(2) { animation-delay: 0.30s; }
-.quick-facts dl:nth-child(3) { animation-delay: 0.45s; }
-.quick-facts dl:nth-child(4) { animation-delay: 0.60s; }
+/* La rotacion de las tarjetas se gestiona desde JS, evitando conflictos con animaciones CSS. */
 
 
 /* ==========================================================
@@ -876,4 +880,83 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 @media (prefers-reduced-motion: reduce) {
   .orientation-card { animation: none !important; }
   .orientation-card, .faq-list details, .faq-symbol { transition: none !important; }
+}
+
+
+/* ==========================================================
+   Tarjetas de informacion y especialidades con movimiento
+   Conserva la tipografia y los colores originales.
+   ========================================================== */
+.quick-facts .facts-track dl {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  min-width:0;
+  min-height:137px;
+  margin:0;
+  padding:1.15rem 1.25rem;
+  background:var(--color-surface);
+  border:1px solid var(--color-line);
+  border-left:3px solid var(--color-accent);
+  border-radius:9px;
+  box-shadow:0 4px 16px rgba(15,93,82,.04);
+}
+.quick-facts .facts-track dt { margin:0 0 .65rem; font-size:clamp(1.55rem,2.1vw,1.9rem); line-height:1.15; }
+.quick-facts .facts-track dd { line-height:1.55; overflow-wrap:break-word; }
+.quick-facts .facts-motion-controls {
+  display:flex;
+  justify-content:flex-end;
+  padding-top:0;
+  padding-bottom:1.25rem;
+}
+.specialty-footer {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1rem;
+  margin-top:1.6rem;
+}
+.specialty-footer .btn { flex:0 0 auto; }
+.specialty-cards .specialty-card:hover {
+  border-color:var(--color-primary);
+  box-shadow:0 12px 24px rgba(15,93,82,.14);
+  /* Evitamos translateY en hover para no interferir con la animacion de cambio de lugar. */
+  transform:none;
+}
+.motion-toggle {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+  border:1px solid var(--color-line);
+  border-radius:999px;
+  background:#fff;
+  padding:.45rem .85rem;
+  min-height:36px;
+  font:600 .82rem var(--font-body);
+  color:var(--color-primary-dark);
+  cursor:pointer;
+  transition:background-color .2s ease,border-color .2s ease;
+}
+.motion-toggle:hover { background:#e7f3ef; border-color:var(--color-primary); }
+.motion-toggle:focus-visible { outline:3px solid var(--color-accent); outline-offset:3px; }
+.motion-toggle[hidden] {display:none!important;}
+.motion-toggle-symbol {font-size:.95rem;line-height:1;}
+/* Disposicion estable en laptop, tablet y telefono */
+@media (max-width:950px) {
+  .quick-facts .facts-track,
+  .specialty-cards {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .specialty-card {min-height:200px;}
+}
+@media (max-width:560px) {
+  .quick-facts .facts-track,
+  .specialty-cards {grid-template-columns:1fr;gap:.85rem;}
+  .quick-facts .facts-track dl {min-height:104px;padding:1rem 1.15rem;}
+  .specialty-card {min-height:0;padding:1.2rem;}
+  .specialty-footer {align-items:stretch;flex-direction:column;}
+  .specialty-footer .btn,.specialty-footer .motion-toggle {align-self:stretch;text-align:center;}
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-toggle,.specialty-card {transition:none!important;}
 }
