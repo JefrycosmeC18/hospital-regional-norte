@@ -87,6 +87,12 @@
 
   menu.append(identidad, espacio);
   if (usuario.rol === 'administrador') {
+    const caja = document.createElement('a');
+    caja.href = 'caja.html';
+    caja.className = 'header-profile-link';
+    caja.textContent = 'Gestión de Caja';
+    menu.append(caja);
+
     const reportes = document.createElement('a');
     reportes.href = 'reportes.html';
     reportes.className = 'header-profile-link';

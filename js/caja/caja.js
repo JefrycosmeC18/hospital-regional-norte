@@ -125,7 +125,7 @@ $('#nombre-cajero').textContent = usuario.nombre;
 $('#btnCerrarSesion').addEventListener('click', (e) => { e.preventDefault(); cerrarSesion(); });
 
 // El administrador además puede volver a su panel
-if (usuario.rol === 'administrador') $('.nav-link-panel').style.display = '';
+if (usuario.rol === 'administrador') $('.nav-link-panel').style.display = 'list-item';
 
 // Fecha de HOY en Lima con formato AAAA-MM-DD (el que espera <input type="date">)
 const hoyEnLima = () => new Date().toLocaleDateString('en-CA', { timeZone: 'America/Lima' });
