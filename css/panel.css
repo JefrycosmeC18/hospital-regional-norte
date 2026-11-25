@@ -504,25 +504,6 @@ textarea { resize: vertical; min-height: 6rem; }
 
 /* ---------- Estilos específicos de panel.html ---------- */
 
-.panel-rol-banner {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: #E7F3EF;
-  border: 1px solid var(--color-primary);
-  color: var(--color-primary-dark);
-  padding: 0.6rem 1.1rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-top: 0.8rem;
-}
-
-.panel-rol-banner[data-rol="administrador"] {
-  background: #FBE9DC;
-  border-color: var(--color-accent);
-  color: var(--color-accent-dark);
-}
-
 .panel-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -664,12 +645,6 @@ textarea { resize: vertical; min-height: 6rem; }
   opacity: 0.6;
 }
 
-.panel-rol-banner[data-rol="empleado"] {
-  background: #FFF3E0;
-  border-color: #B8860B;
-  color: #8a6400;
-}
-
 /* Botones deshabilitados cuando el empleado está fuera de turno */
 .btn-editar-fila[aria-disabled="true"],
 .btn-eliminar-fila[aria-disabled="true"] {
@@ -677,12 +652,6 @@ textarea { resize: vertical; min-height: 6rem; }
   color: var(--color-ink-soft);
   cursor: not-allowed;
   opacity: 0.6;
-}
-
-.panel-rol-banner[data-rol="empleado"] {
-  background: #FFF3E0;
-  border-color: #B8860B;
-  color: #8a6400;
 }
 
 /* =========================================================
