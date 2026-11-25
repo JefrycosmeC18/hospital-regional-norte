@@ -127,6 +127,8 @@ function formatearFecha(valor) {
 
   // Solo el administrador ve el acceso a Caja
   if (usuarioActual.rol === 'administrador') document.querySelector('.nav-link-caja').style.display = '';
+  const reporteEnlace = document.querySelector('.nav-link-reportes');
+  if (reporteEnlace && usuarioActual.rol === 'administrador') reporteEnlace.hidden = false;
 
   const btnCerrarSesion = document.getElementById('btnCerrarSesion');
   btnCerrarSesion.addEventListener('click', (e) => {
