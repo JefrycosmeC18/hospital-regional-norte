@@ -910,7 +910,9 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
   align-items:stretch;
   flex:0 0 auto;
   gap:1.25rem;
-  padding-right:1.25rem;
+  margin:0;
+  padding:0 1.25rem 0 0;
+  list-style:none;
 }
 .quick-facts .facts-track dl {
   flex:0 0 clamp(220px,21vw,278px);
