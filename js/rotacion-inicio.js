@@ -4,9 +4,12 @@
   function crearTren(id, segundos) {
     const pista = document.getElementById(id);
     if (!pista || pista.children.length < 2 || pista.querySelector('.train-set')) return;
-    const grupo = document.createElement('div');
-    grupo.className = 'train-set';
-    while (pista.firstChild) grupo.appendChild(pista.firstChild);
+    let grupo = pista.querySelector(':scope > .train-set');
+    if (!grupo) {
+      grupo = document.createElement('div');
+      grupo.className = 'train-set';
+      while (pista.firstChild) grupo.appendChild(pista.firstChild);
+    }
     const copia = grupo.cloneNode(true);
     copia.setAttribute('aria-hidden','true');
     copia.inert = true;
