@@ -36,8 +36,9 @@
     const href = enlace.getAttribute('href') || '';
     if (
       enlace.id === 'btnCerrarSesion' ||
-      href.includes('login.html#iniciar') ||
-      href.includes('login.html#registrar') ||
+      href.split('#')[0] === 'login.html' ||
+      item.classList.contains('nav-link-login') ||
+      item.classList.contains('nav-link-register') ||
       item.classList.contains('nav-link-panel')
     ) {
       item.hidden = true;
