@@ -56,6 +56,37 @@
           <p id="confirmTexto">Operación realizada con éxito.</p>
         </div>
 
+        <section class="dashboard-resumen" aria-labelledby="resumen-citas-titulo">
+          <div class="dashboard-resumen-head">
+            <div>
+              <h2 id="resumen-citas-titulo">Resumen de citas</h2>
+              <p>Información actualizada desde los registros del sistema.</p>
+            </div>
+          </div>
+          <div class="dashboard-kpis">
+            <article class="dashboard-kpi">
+              <span class="dashboard-kpi-label">Total de citas</span>
+              <strong class="dashboard-kpi-valor" id="kpiTotal">—</strong>
+              <span class="dashboard-kpi-detalle">Todas las solicitudes</span>
+            </article>
+            <article class="dashboard-kpi" data-estado="registrado">
+              <span class="dashboard-kpi-label">Registradas</span>
+              <strong class="dashboard-kpi-valor" id="kpiRegistradas">—</strong>
+              <span class="dashboard-kpi-detalle">Pendientes de atención</span>
+            </article>
+            <article class="dashboard-kpi" data-estado="atendido">
+              <span class="dashboard-kpi-label">Atendidas</span>
+              <strong class="dashboard-kpi-valor" id="kpiAtendidas">—</strong>
+              <span class="dashboard-kpi-detalle">Atención completada</span>
+            </article>
+            <article class="dashboard-kpi" data-estado="cancelado">
+              <span class="dashboard-kpi-label">Canceladas</span>
+              <strong class="dashboard-kpi-valor" id="kpiCanceladas">—</strong>
+              <span class="dashboard-kpi-detalle">Solicitudes canceladas</span>
+            </article>
+          </div>
+        </section>
+
         <div class="panel-layout">
           <div>
             <form class="panel-crear" id="crearForm" novalidate>
@@ -107,6 +138,39 @@
                 <button type="submit" class="btn btn-primary">Registrar cita</button>
               </fieldset>
             </form>
+
+            <section class="dashboard-consultas" aria-labelledby="gestionar-citas-titulo">
+              <div class="dashboard-consultas-head">
+                <div>
+                  <h2 id="gestionar-citas-titulo">Buscar y gestionar solicitudes</h2>
+                  <p>Busca por paciente, DNI o código y filtra por estado y especialidad.</p>
+                </div>
+              </div>
+              <div class="dashboard-filtros">
+                <div class="dashboard-filtro dashboard-filtro-buscar">
+                  <label for="buscarCita">Buscar cita</label>
+                  <input id="buscarCita" type="search" placeholder="Nombre, DNI o código" autocomplete="off">
+                </div>
+                <div class="dashboard-filtro">
+                  <label for="filtroEstado">Estado</label>
+                  <select id="filtroEstado">
+                    <option value="">Todos los estados</option>
+                    <option value="registrado">Registradas</option>
+                    <option value="atendido">Atendidas</option>
+                    <option value="rechazado">Rechazadas</option>
+                    <option value="cancelado">Canceladas</option>
+                  </select>
+                </div>
+                <div class="dashboard-filtro">
+                  <label for="filtroEspecialidad">Especialidad</label>
+                  <select id="filtroEspecialidad">
+                    <option value="">Todas las especialidades</option>
+                  </select>
+                </div>
+                <button id="limpiarFiltrosPanel" type="button" class="btn btn-outline">Limpiar filtros</button>
+              </div>
+              <p class="dashboard-contador" id="contadorCitas" role="status">Cargando solicitudes...</p>
+            </section>
 
             <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
 
