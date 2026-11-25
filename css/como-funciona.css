@@ -743,3 +743,26 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 .steps li:nth-child(4)::before { animation-delay: 0.95s; }
 .steps li:nth-child(5) { animation-delay: 0.9s; }
 .steps li:nth-child(5)::before { animation-delay: 1.15s; }
+
+/* Mejora de guía de citas: paleta original intacta */
+.info-kicker{color:var(--color-accent-dark);font-size:.8rem;text-transform:uppercase;letter-spacing:.11em;font-weight:700;margin-bottom:.6rem;}
+.readiness-layout{display:grid;grid-template-columns: .9fr 1.1fr;gap:2rem;align-items:center;}
+.readiness-warning{margin:1.2rem 0;padding:1rem;background:#fff7ec;border-left:4px solid var(--color-accent-dark);border-radius:4px;}
+.readiness-card{background:#fff;border:1px solid var(--color-line);border-top:4px solid var(--color-primary);border-radius:12px;padding:1.8rem;box-shadow:0 12px 28px rgba(10,63,56,.06);}
+.readiness-progress{height:12px;background:#e8efeb;border-radius:999px;overflow:hidden;}
+.readiness-progress span{display:block;width:0;height:100%;background:var(--color-primary);border-radius:999px;transition:width .3s ease;}
+.readiness-count{margin:.65rem 0 1.2rem;font-weight:700;color:var(--color-primary-dark);}
+.readiness-checks{display:grid;gap:.75rem;margin-bottom:1.5rem;}
+.readiness-checks label{display:flex;align-items:flex-start;gap:.75rem;padding:.8rem;border:1px solid var(--color-line);background:#f8faf8;border-radius:8px;cursor:pointer;transition:background .2s ease,border-color .2s ease;}
+.readiness-checks label:hover{background:#e7f3ef;border-color:var(--color-primary);}
+.readiness-checks label:has(input:checked){background:#e7f3ef;border-color:var(--color-primary);}
+.readiness-item{width:1.1rem;height:1.1rem;margin-top:.15rem;accent-color:var(--color-primary);flex-shrink:0;}
+.readiness-help-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem;}
+.readiness-help-card{padding:1.4rem;background:#fff;border:1px solid var(--color-line);border-radius:10px;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease;}
+.readiness-help-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(15,93,82,.1);}
+.readiness-help-card p{flex:1;}
+.readiness-help-card a{font-weight:700;text-underline-offset:3px;}
+@keyframes checklistShow{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.readiness-card{animation:checklistShow .55s ease both;}
+@media(max-width:850px){.readiness-layout{grid-template-columns:1fr;}.readiness-help-grid{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){.readiness-card{animation:none;}.readiness-help-card,.readiness-progress span,.readiness-checks label{transition:none;}}

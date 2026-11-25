@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/servicios.css">
+  <link rel="stylesheet" href="css/nav-superior.css">
 </head>
 <body>
 
@@ -19,9 +20,9 @@
             <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
           </g>
         </svg>
-        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+        <strong>Emergencias:</strong> busca atención inmediata cuando sea necesario
       </span>
-      <a href="tel:+51073123456">☎ (073) 123-456</a>
+      <a href="contacto.html">Canales de atención</a>
     </div>
   </div>
 
@@ -74,8 +75,119 @@
             sizes="(max-width: 700px) 100vw, 74rem"
             alt="Un médico conversa con una paciente durante una consulta"
             loading="lazy" width="1200" height="560"></div>
-          <figcaption>Consulta externa: cada especialidad atiende con cita previa o por orden de llegada, según el caso.</figcaption>
+          <figcaption>Área de consulta externa.</figcaption>
         </figure>
+      </div>
+    </section>
+
+
+    <!-- Mejora del consolidado: información por especialidad y filtro funcional -->
+    <section class="section" id="guia-especialidades" aria-labelledby="guia-especialidades-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="info-kicker">Conoce los servicios del portal</p>
+          <h2 id="guia-especialidades-titulo">Información para elegir tu especialidad</h2>
+          <p>Explora las diez especialidades del proyecto y el servicio de emergencias. Las descripciones ayudan a identificar el área de atención más adecuada. Ante dudas, solicita orientación médica.</p>
+        </div>
+        <div class="service-filter" role="search" aria-label="Filtrar especialidades del hospital">
+          <div class="service-filter-field">
+            <label for="buscador-especialidades">Buscar especialidad</label>
+            <input id="buscador-especialidades" type="search" placeholder="Ejemplo: pediatría o cardiología" autocomplete="off">
+          </div>
+          <div class="service-filter-field">
+            <label for="categoria-especialidades">Tipo de atención</label>
+            <select id="categoria-especialidades">
+              <option value="todas">Todas</option>
+              <option value="general">Atención general</option>
+              <option value="familiar">Familia y maternidad</option>
+              <option value="especializada">Especialidades clínicas</option>
+              <option value="bienestar">Salud integral</option>
+              <option value="emergencia">Emergencias</option>
+            </select>
+          </div>
+          <button id="limpiar-especialidades" type="button" class="btn btn-outline">Limpiar filtros</button>
+        </div>
+        <p id="resultados-especialidades" class="service-result-count" aria-live="polite">Se muestran 11 servicios.</p>
+        <div class="service-detail-grid" id="tarjetas-especialidades">
+          <article class="service-detail-card" data-categoria="general">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Medicina General</h3>
+            <p class="service-subtitle">Consulta inicial y controles de salud</p>
+            <p>Atiende problemas de salud frecuentes, seguimiento general y orientación para acudir a una especialidad cuando corresponda.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="familiar">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Pediatría</h3>
+            <p class="service-subtitle">Atención orientada a niñas, niños y adolescentes</p>
+            <p>Se enfoca en el crecimiento, desarrollo y la salud de la población pediátrica.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="familiar">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Ginecología y Obstetricia</h3>
+            <p class="service-subtitle">Salud de la mujer y seguimiento del embarazo</p>
+            <p>Brinda orientación sobre salud ginecológica y controles durante la gestación.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="especializada">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Cardiología</h3>
+            <p class="service-subtitle">Evaluación de la salud cardiovascular</p>
+            <p>Se ocupa de enfermedades y alteraciones relacionadas con el corazón y el sistema circulatorio.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="especializada">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Traumatología</h3>
+            <p class="service-subtitle">Sistema musculoesquelético</p>
+            <p>Evalúa lesiones y problemas de huesos, articulaciones, músculos y ligamentos.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="especializada">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Cirugía General</h3>
+            <p class="service-subtitle">Valoración de condiciones quirúrgicas</p>
+            <p>Realiza evaluaciones y procedimientos quirúrgicos según indicación profesional.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="especializada">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Medicina Interna</h3>
+            <p class="service-subtitle">Atención clínica integral de personas adultas</p>
+            <p>Estudia y maneja enfermedades complejas o condiciones que requieren seguimiento especializado.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="especializada">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Oftalmología</h3>
+            <p class="service-subtitle">Salud de los ojos y la visión</p>
+            <p>Evalúa problemas oculares y alteraciones visuales.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="bienestar">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Odontología</h3>
+            <p class="service-subtitle">Cuidado de la salud bucal</p>
+            <p>Orienta sobre prevención, evaluación y atención de dientes y encías.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="bienestar">
+            <span class="service-eyebrow">Orientación de especialidad</span>
+            <h3>Psicología</h3>
+            <p class="service-subtitle">Bienestar emocional y salud mental</p>
+            <p>Brinda evaluación y acompañamiento psicológico según las necesidades de cada persona.</p>
+            <a href="registro.html">Solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="service-detail-card" data-categoria="emergencia">
+            <span class="service-eyebrow">Atención urgente</span>
+            <h3>Emergencia</h3>
+            <p class="service-subtitle">Situaciones que requieren atención inmediata</p>
+            <p>El servicio de emergencia está destinado a situaciones urgentes y no se gestiona mediante el formulario de citas.</p>
+            <a href="contacto.html">Ver orientación de contacto <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+        <p id="sin-resultados-especialidades" class="service-no-results" hidden>No encontramos resultados. Prueba con otra palabra o elimina los filtros.</p>
       </div>
     </section>
 
@@ -83,12 +195,12 @@
       <div class="container">
         <div class="section-head">
           <h2>Horario de atención por especialidad</h2>
-          <p>Consultorios externos de lunes a sábado. La Emergencia no tiene horario: atiende los 365 días del año.</p>
+          <p>Consulta los horarios por especialidad. Estos pueden cambiar según programación médica y disponibilidad.</p>
         </div>
 
         <div class="schedule-table-wrap">
           <table class="schedule-table">
-            <caption>Horarios de consulta externa — sede central. Los horarios pueden variar en feriados.</caption>
+            <caption>Horarios orientativos de consulta externa. Verifica la disponibilidad antes de acudir.</caption>
             <thead>
               <tr>
                 <th scope="col">Especialidad</th>
@@ -99,77 +211,77 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-categoria="general">
                 <td>Medicina General</td>
                 <td>Lunes a sábado</td>
                 <td>7:00 a.m. – 3:00 p.m.</td>
                 <td>101 – 104</td>
                 <td><span class="schedule-tag">Sin referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="familiar">
                 <td>Pediatría</td>
                 <td>Lunes a viernes</td>
                 <td>8:00 a.m. – 2:00 p.m.</td>
                 <td>205</td>
                 <td><span class="schedule-tag">Sin referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="familiar">
                 <td>Ginecología y Obstetricia</td>
                 <td>Lunes, miércoles y viernes</td>
                 <td>8:00 a.m. – 1:00 p.m.</td>
                 <td>210</td>
                 <td><span class="schedule-tag">Con SIS</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="especializada">
                 <td>Cardiología</td>
                 <td>Martes y jueves</td>
                 <td>9:00 a.m. – 1:00 p.m.</td>
                 <td>301</td>
                 <td><span class="schedule-tag">Con referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="especializada">
                 <td>Traumatología</td>
                 <td>Lunes a viernes</td>
                 <td>2:00 p.m. – 6:00 p.m.</td>
                 <td>108</td>
                 <td><span class="schedule-tag">Con referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="especializada">
                 <td>Cirugía General</td>
                 <td>Lunes y miércoles</td>
                 <td>8:00 a.m. – 12:00 p.m.</td>
                 <td>305</td>
                 <td><span class="schedule-tag">Con referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="especializada">
                 <td>Medicina Interna</td>
                 <td>Martes a viernes</td>
                 <td>8:00 a.m. – 1:00 p.m.</td>
                 <td>303</td>
                 <td><span class="schedule-tag">Con referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="especializada">
                 <td>Oftalmología</td>
                 <td>Miércoles y viernes</td>
                 <td>9:00 a.m. – 1:00 p.m.</td>
                 <td>207</td>
                 <td><span class="schedule-tag">Sin referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="bienestar">
                 <td>Odontología</td>
                 <td>Lunes a sábado</td>
                 <td>8:00 a.m. – 4:00 p.m.</td>
                 <td>Módulo dental</td>
                 <td><span class="schedule-tag">Sin referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="bienestar">
                 <td>Psicología</td>
                 <td>Martes, jueves y sábado</td>
                 <td>9:00 a.m. – 1:00 p.m.</td>
                 <td>212</td>
                 <td><span class="schedule-tag">Sin referencia</span></td>
               </tr>
-              <tr>
+              <tr data-categoria="emergencia">
                 <td>Emergencia</td>
                 <td>Todos los días</td>
                 <td data-status="emergencia">24 horas</td>
@@ -200,7 +312,7 @@
     <div class="container">
       <div>
         <h4>Hospital Regional del Norte</h4>
-        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+        <p>Información sobre especialidades, citas y servicios de atención al paciente.</p>
       </div>
       <div>
         <h4>Navegación</h4>
@@ -213,14 +325,17 @@
       <div>
         <h4>Emergencia</h4>
         <ul>
-          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Canales de atención</a></li>
           <li><a href="contacto.html">Ver todas las sedes</a></li>
         </ul>
       </div>
     </div>
-    <p class="footer-bottom">Proyecto académico — Diseño Web.</p>
+    <p class="footer-bottom">© Hospital Regional del Norte · Atención al paciente.</p>
   </footer>
 
-  <script type="module" src="js/nav-rol.js"></script>
+  <script src="js/servicios-interactivo.js" defer></script>
+  <script type="module" src="js/nav-rol/nav-rol.js"></script>
+  <script src="js/perfil-usuario.js" defer></script>
+  <script src="js/accesibilidad.js" defer></script>
 </body>
 </html>

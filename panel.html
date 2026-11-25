@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/panel.css">
+  <link rel="stylesheet" href="css/nav-superior.css">
 </head>
 <body>
 
@@ -32,6 +33,7 @@
         <ul>
           <li><a href="index.html">Inicio</a></li>
           <li><a href="panel.html" aria-current="page">Panel</a></li>
+          <li class="nav-link-reportes" hidden><a href="reportes.html">Reportes</a></li>
           <li class="nav-link-caja" style="display:none;"><a href="caja.html">Caja</a></li>
           <li><a href="#" id="btnCerrarSesion" style="color: #E0762E;">Cerrar Sesión</a></li>
         </ul>
@@ -45,7 +47,6 @@
         <div class="section-head">
           <h1>Panel de gestión de citas</h1>
           <p>Crea, consulta, actualiza (incluido el estado) y elimina cualquier solicitud de cita del sistema.</p>
-          <span class="panel-rol-banner" id="rolBanner"></span>
         </div>
 
         <div class="confirm-box" id="confirmBox" hidden>
@@ -55,6 +56,61 @@
           </svg>
           <p id="confirmTexto">Operación realizada con éxito.</p>
         </div>
+
+        <section class="dashboard-resumen" aria-labelledby="resumen-citas-titulo">
+          <div class="dashboard-resumen-head">
+            <div>
+              <h2 id="resumen-citas-titulo">Resumen de citas</h2>
+              <p>Información actualizada desde los registros del sistema.</p>
+            </div>
+          </div>
+          <div class="dashboard-kpis">
+            <article class="dashboard-kpi">
+              <span class="dashboard-kpi-label">Total de citas</span>
+              <strong class="dashboard-kpi-valor" id="kpiTotal">—</strong>
+              <span class="dashboard-kpi-detalle">Todas las solicitudes</span>
+            </article>
+            <article class="dashboard-kpi" data-estado="registrado">
+              <span class="dashboard-kpi-label">Registradas</span>
+              <strong class="dashboard-kpi-valor" id="kpiRegistradas">—</strong>
+              <span class="dashboard-kpi-detalle">Pendientes de atención</span>
+            </article>
+            <article class="dashboard-kpi" data-estado="atendido">
+              <span class="dashboard-kpi-label">Atendidas</span>
+              <strong class="dashboard-kpi-valor" id="kpiAtendidas">—</strong>
+              <span class="dashboard-kpi-detalle">Atención completada</span>
+            </article>
+            <article class="dashboard-kpi" data-estado="cancelado">
+              <span class="dashboard-kpi-label">Canceladas</span>
+              <strong class="dashboard-kpi-valor" id="kpiCanceladas">—</strong>
+              <span class="dashboard-kpi-detalle">Solicitudes canceladas</span>
+            </article>
+          </div>
+        </section>
+
+        <section class="calendario-seccion" aria-labelledby="calendario-citas-titulo">
+          <div class="calendario-encabezado">
+            <div>
+              <h2 id="calendario-citas-titulo">Calendario de citas</h2>
+              <p>Visualiza las solicitudes por <strong>fecha preferida</strong>. Selecciona un día para filtrar la lista de gestión.</p>
+            </div>
+            <div class="calendario-navegacion" aria-label="Cambiar mes del calendario">
+              <button type="button" id="calendarioMesAnterior" aria-label="Mes anterior">‹</button>
+              <h3 id="calendarioTitulo" aria-live="polite">Calendario</h3>
+              <button type="button" id="calendarioMesSiguiente" aria-label="Mes siguiente">›</button>
+            </div>
+          </div>
+          <div class="calendario-panel">
+            <div class="calendario-semana" aria-hidden="true">
+              <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+            </div>
+            <div class="calendario-cuadricula" id="calendarioCuadricula" role="group" aria-label="Fechas del mes"></div>
+            <div class="calendario-pie">
+              <p id="calendarioDiaSeleccionado" role="status">Selecciona una fecha para filtrar solicitudes.</p>
+              <button type="button" id="limpiarDiaCalendario" class="btn btn-outline" hidden>Mostrar todas las fechas</button>
+            </div>
+          </div>
+        </section>
 
         <div class="panel-layout">
           <div>
@@ -108,6 +164,39 @@
               </fieldset>
             </form>
 
+            <section class="dashboard-consultas" aria-labelledby="gestionar-citas-titulo">
+              <div class="dashboard-consultas-head">
+                <div>
+                  <h2 id="gestionar-citas-titulo">Buscar y gestionar solicitudes</h2>
+                  <p>Busca por paciente, DNI o código y filtra por estado y especialidad.</p>
+                </div>
+              </div>
+              <div class="dashboard-filtros">
+                <div class="dashboard-filtro dashboard-filtro-buscar">
+                  <label for="buscarCita">Buscar cita</label>
+                  <input id="buscarCita" type="search" placeholder="Nombre, DNI o código" autocomplete="off">
+                </div>
+                <div class="dashboard-filtro">
+                  <label for="filtroEstado">Estado</label>
+                  <select id="filtroEstado">
+                    <option value="">Todos los estados</option>
+                    <option value="registrado">Registradas</option>
+                    <option value="atendido">Atendidas</option>
+                    <option value="rechazado">Rechazadas</option>
+                    <option value="cancelado">Canceladas</option>
+                  </select>
+                </div>
+                <div class="dashboard-filtro">
+                  <label for="filtroEspecialidad">Especialidad</label>
+                  <select id="filtroEspecialidad">
+                    <option value="">Todas las especialidades</option>
+                  </select>
+                </div>
+                <button id="limpiarFiltrosPanel" type="button" class="btn btn-outline">Limpiar filtros</button>
+              </div>
+              <p class="dashboard-contador" id="contadorCitas" role="status">Cargando solicitudes...</p>
+            </section>
+
             <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
 
             <div class="panel-table-wrap">
@@ -140,12 +229,14 @@
     <div class="container">
       <div>
         <h4>Hospital Regional del Norte</h4>
-        <p>Proyecto académico — Panel interno de administrador/empleado.</p>
+        <p>Área de administración y gestión de citas.</p>
       </div>
     </div>
   </footer>
 
   <script type="module" src="js/panel/panel.js"></script>
 
+  <script src="js/perfil-usuario.js" defer></script>
+  <script src="js/accesibilidad.js" defer></script>
 </body>
 </html>

@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/consulta.css">
+  <link rel="stylesheet" href="css/nav-superior.css">
 </head>
 <body>
 
@@ -19,9 +20,9 @@
             <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
           </g>
         </svg>
-        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+        <strong>Emergencias:</strong> busca atención inmediata cuando sea necesario
       </span>
-      <a href="tel:+51073123456">☎ (073) 123-456</a>
+      <a href="contacto.html">Canales de atención</a>
     </div>
   </div>
 
@@ -64,12 +65,38 @@
         <div class="section-head">
           <h1>Mis citas</h1>
           <p>Estos son los registros de "Solicitud de cita" guardados a tu nombre en el sistema. Mientras el estado siga en <strong>registrado</strong> y no estén pagados, puedes editarlos. Si tienen costo, aquí mismo puedes pagarlos.</p>
-          <p id="usuarioBienvenida" style="font-weight: 600; color: #0F5D52; margin-top: 0.5rem;"></p>
         </div>
 
-        <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+        <section class="mis-citas-busqueda" aria-labelledby="mis-citas-filtros-titulo">
+          <div class="mis-citas-titulo">
+            <h2 id="mis-citas-filtros-titulo">Encuentra tu cita</h2>
+            <p>Consulta los datos de tus solicitudes, sus estados y los pagos asociados.</p>
+          </div>
+          <div class="mis-citas-filtros">
+            <div class="mis-citas-campo">
+              <label for="buscarMisCitas">Buscar por código o especialidad</label>
+              <input type="search" id="buscarMisCitas" placeholder="Código de seguimiento o especialidad" autocomplete="off">
+            </div>
+            <div class="mis-citas-campo">
+              <label for="estadoMisCitas">Estado de la solicitud</label>
+              <select id="estadoMisCitas">
+                <option value="">Todos los estados</option>
+                <option value="registrado">Registradas</option>
+                <option value="atendido">Atendidas</option>
+                <option value="rechazado">Rechazadas</option>
+                <option value="cancelado">Canceladas</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-outline" id="limpiarMisCitas">Limpiar filtros</button>
+          </div>
+          <p class="mis-citas-contador" id="contadorMisCitas" role="status">Cargando citas...</p>
+        </section>
+                <div class="skeleton" id="cargando" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="mis-citas-tarjetas" id="tarjetasMisCitas" aria-live="off"></div>
 
-        <div class="registros-table-wrap">
+        <details class="mis-citas-tabla-detalle" id="detalleTablaMisCitas" hidden>
+          <summary>Ver mis citas en formato de tabla</summary>
+          <div class="registros-table-wrap">
           <table class="registros-table" id="tablaRegistros" hidden>
             <thead>
               <tr>
@@ -85,7 +112,8 @@
             </thead>
             <tbody id="cuerpoRegistros"></tbody>
           </table>
-        </div>
+          </div>
+        </details>
 
         <p class="registros-vacio" id="registrosVacio" hidden>Todavía no tienes solicitudes de cita registradas. <a href="registro.html">Solicita una cita</a>.</p>
       </div>
@@ -96,7 +124,7 @@
     <div class="container">
       <div>
         <h4>Hospital Regional del Norte</h4>
-        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+        <p>Información sobre especialidades, citas y servicios de atención al paciente.</p>
       </div>
       <div>
         <h4>Navegación</h4>
@@ -109,15 +137,17 @@
       <div>
         <h4>Emergencia</h4>
         <ul>
-          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Canales de atención</a></li>
           <li><a href="contacto.html">Ver todas las sedes</a></li>
         </ul>
       </div>
     </div>
-    <p class="footer-bottom">Proyecto académico — Diseño Web, Unidad 1. No corresponde a un establecimiento real.</p>
+    <p class="footer-bottom">© Hospital Regional del Norte · Atención al paciente.</p>
   </footer>
 
   <script type="module" src="js/consulta/consulta.js"></script>
 
+  <script src="js/perfil-usuario.js" defer></script>
+  <script src="js/accesibilidad.js" defer></script>
 </body>
 </html>

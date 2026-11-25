@@ -76,7 +76,7 @@ function accionEditar(td, r) {
 }
 
 function accionDePago(td, r) {
-  if (r.estado_pago === 'pendiente') {
+  if (r.estado_pago === 'pendiente' && r.estado !== 'cancelado' && r.estado !== 'rechazado') {
     const a = document.createElement('a');
     a.className = 'btn-pagar-fila';
     a.href = `pago.html?id=${r.id}`;
@@ -107,41 +107,214 @@ function accionDePago(td, r) {
   const vacio = document.getElementById('registrosVacio');
   const cargando = document.getElementById('cargando'); // esqueleto shimmer
 
+  const tarjetas = document.getElementById('tarjetasMisCitas');
+  const buscar = document.getElementById('buscarMisCitas');
+  const estadoFiltro = document.getElementById('estadoMisCitas');
+  const limpiar = document.getElementById('limpiarMisCitas');
+  const contador = document.getElementById('contadorMisCitas');
+  const tablaDetalle = document.getElementById('detalleTablaMisCitas');
+  let registrosCache = [];
+
+  const normalizar = (valor) => String(valor ?? '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+
+  // Ruta de atención vinculada a los valores existentes de Neon.
+  // "Registrado" no significa que ya exista una cita confirmada.
+  function crearRutaAtencion(r) {
+    const ruta = document.createElement('section');
+    ruta.className = 'ruta-atencion';
+    ruta.setAttribute('aria-label', 'Ruta de atención de la cita ' + (r.codigo_seguimiento || ''));
+
+    const encabezado = document.createElement('div');
+    encabezado.className = 'ruta-encabezado';
+    const titulo = document.createElement('h4');
+    titulo.textContent = 'Mi Ruta de Atención';
+    const nota = document.createElement('small');
+    nota.textContent = 'Seguimiento de tu solicitud';
+    encabezado.append(titulo, nota);
+
+    const lista = document.createElement('ol');
+    lista.className = 'ruta-pasos';
+    const finalizada = r.estado === 'atendido';
+    const cerrada = r.estado === 'cancelado' || r.estado === 'rechazado';
+    const pagada = r.estado_pago === 'pagado';
+    const exonerada = r.estado_pago === 'exonerado';
+    const pasoPagoListo = pagada || exonerada;
+
+    // Evitar presentar como confirmación médica los estados que no existen en la BD.
+    let estados;
+    if (cerrada) {
+      estados = [
+        ['Solicitud registrada', 'Se guardó la solicitud en el sistema.', 'completo'],
+        [r.estado === 'cancelado' ? 'Solicitud cancelada' : 'Solicitud rechazada',
+          'Esta solicitud no continuará con atención. Consulta las opciones disponibles.', 'alerta']
+      ];
+    } else {
+      estados = [
+        ['Solicitud registrada', 'Tu registro y código de seguimiento están disponibles.', 'completo'],
+        [exonerada ? 'Atención exonerada' : 'Revisión de pago',
+          exonerada ? 'La solicitud figura exonerada de pago.' :
+            pagada ? 'El pago figura registrado.' : 'El pago aparece pendiente.',
+          pasoPagoListo ? 'completo' : 'actual'],
+        ['Seguimiento de la solicitud',
+          finalizada ? 'El sistema indica que la atención fue completada.' :
+          'Consulta el estado de tu solicitud; todavía figura como registrada.',
+          finalizada ? 'completo' : pasoPagoListo ? 'actual' : 'pendiente'],
+        ['Atención médica',
+          finalizada ? 'La cita tiene estado atendido.' :
+          'Este paso figurará como completo al cambiar el estado a atendido.',
+          finalizada ? 'completo' : 'pendiente']
+      ];
+    }
+    for (const [nombre, descripcion, estado] of estados) {
+      const li = document.createElement('li');
+      li.className = 'ruta-paso';
+      li.dataset.pasoEstado = estado;
+      const indicador = document.createElement('span');
+      indicador.className = 'ruta-paso-indicador';
+      indicador.setAttribute('aria-hidden', 'true');
+      indicador.textContent = estado === 'completo' ? '✓' : estado === 'alerta' ? '!' : '•';
+      const texto = document.createElement('div');
+      const fuerte = document.createElement('strong');
+      fuerte.textContent = nombre;
+      const parrafo = document.createElement('p');
+      parrafo.textContent = descripcion;
+      texto.append(fuerte, parrafo);
+      li.append(indicador, texto);
+      lista.append(li);
+    }
+
+    const siguiente = document.createElement('p');
+    siguiente.className = 'ruta-proxima-accion';
+    if (cerrada) {
+      siguiente.textContent = 'Siguiente acción: revisa el motivo con el área de atención o solicita una nueva cita.';
+    } else if (finalizada) {
+      siguiente.textContent = 'Atención completada según el estado registrado.';
+    } else if (r.estado_pago === 'pendiente') {
+      siguiente.textContent = 'Siguiente acción: revisa tu pago pendiente.';
+    } else {
+      siguiente.textContent = 'Siguiente acción: consulta las actualizaciones de tu solicitud.';
+    }
+    ruta.append(encabezado, lista, siguiente);
+    return ruta;
+  }
+
+  function mostrarTarjeta(r) {
+    const card = document.createElement('article');
+    card.className = 'mis-cita-card';
+    card.dataset.estado = r.estado;
+
+    const cabecera = document.createElement('div');
+    cabecera.className = 'mis-cita-card-top';
+    const titulo = document.createElement('h3');
+    titulo.textContent = NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad;
+    cabecera.append(titulo, insignia('estado-badge', 'estado', r.estado, r.estado));
+
+    const codigo = document.createElement('p');
+    codigo.className = 'mis-cita-codigo';
+    codigo.textContent = 'Código de seguimiento: ' + (r.codigo_seguimiento || '—');
+
+    const detalles = document.createElement('dl');
+    detalles.className = 'mis-cita-detalles';
+    function dato(etiqueta, valor) {
+      const contenedor = document.createElement('div');
+      const dt = document.createElement('dt');
+      const dd = document.createElement('dd');
+      dt.textContent = etiqueta;
+      dd.textContent = valor;
+      contenedor.append(dt, dd);
+      detalles.append(contenedor);
+    }
+    dato('Fecha preferida', formatearFecha(r.fecha_preferida));
+    dato('Fecha de registro', formatearFecha(r.fecha_registro));
+    dato('Monto', r.estado_pago === 'exonerado' ? 'S/ 0.00' : formatearSoles(Number(r.monto_calculado)));
+    const pago = document.createElement('div');
+    const pagoDt = document.createElement('dt');
+    pagoDt.textContent = 'Estado del pago';
+    const pagoDd = document.createElement('dd');
+    pagoDd.append(insignia('pago-badge', 'pago', r.estado_pago, r.estado_pago));
+    pago.append(pagoDt, pagoDd);
+    detalles.append(pago);
+
+    const acciones = document.createElement('div');
+    acciones.className = 'mis-cita-acciones';
+    accionEditar(acciones, r);
+    accionDePago(acciones, r);
+    card.append(cabecera, codigo, detalles, crearRutaAtencion(r), acciones);
+    return card;
+  }
+
+  function mostrarTabla(registros) {
+    cuerpo.replaceChildren();
+    for (const r of registros) {
+      const tr = document.createElement('tr');
+      celda(tr, r.codigo_seguimiento);
+      celda(tr, NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad);
+      celda(tr, formatearFecha(r.fecha_preferida));
+      celda(tr).append(insignia('estado-badge', 'estado', r.estado, r.estado));
+      celda(tr, r.estado_pago === 'exonerado' ? 'S/ 0.00' : formatearSoles(Number(r.monto_calculado)));
+      celda(tr).append(insignia('pago-badge', 'pago', r.estado_pago, r.estado_pago));
+      celda(tr, formatearFecha(r.fecha_registro));
+      const tdAcciones = celda(tr);
+      tdAcciones.className = 'acciones-fila';
+      accionEditar(tdAcciones, r);
+      accionDePago(tdAcciones, r);
+      cuerpo.append(tr);
+    }
+  }
+
+  function aplicarFiltros() {
+    const palabra = normalizar(buscar.value);
+    const estado = estadoFiltro.value;
+    const filtrados = registrosCache.filter(r => {
+      const criterio = normalizar((r.codigo_seguimiento || '') + ' ' +
+        (NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad));
+      return (!palabra || criterio.includes(palabra)) && (!estado || r.estado === estado);
+    });
+    tarjetas.replaceChildren();
+    for (const r of filtrados) tarjetas.append(mostrarTarjeta(r));
+    mostrarTabla(filtrados);
+    const vacioTotal = registrosCache.length === 0;
+    vacio.hidden = !vacioTotal && filtrados.length > 0;
+    vacio.replaceChildren();
+    if (vacioTotal) {
+      vacio.append('Todavía no tienes solicitudes de cita registradas. ');
+      const enlace = document.createElement('a');
+      enlace.href = 'registro.html';
+      enlace.textContent = 'Solicita una cita';
+      vacio.append(enlace);
+    } else {
+      vacio.textContent = 'No encontramos citas que coincidan con los filtros.';
+    }
+    tablaDetalle.hidden = filtrados.length === 0;
+    tabla.hidden = filtrados.length === 0;
+    contador.textContent = 'Mostrando ' + filtrados.length + ' de ' + registrosCache.length + ' citas';
+  }
+  buscar.addEventListener('input', aplicarFiltros);
+  estadoFiltro.addEventListener('change', aplicarFiltros);
+  limpiar.addEventListener('click', () => {
+    buscar.value = '';
+    estadoFiltro.value = '';
+    aplicarFiltros();
+    buscar.focus();
+  });
+
+
   (async function cargar() {
     try {
       const registros = await listarMisRegistros(usuarioActual.id);
       cargando.hidden = true;
 
-      if (registros.length === 0) {
-        vacio.hidden = false;
-        tabla.hidden = true;
-        return;
-      }
-
-      vacio.hidden = true;
-      tabla.hidden = false;
-      cuerpo.replaceChildren();
-
-      registros.forEach(function (r) {
-        const tr = document.createElement('tr');
-        celda(tr, r.codigo_seguimiento);
-        celda(tr, NOMBRES_ESPECIALIDAD[r.especialidad] || r.especialidad);
-        celda(tr, formatearFecha(r.fecha_preferida));
-        celda(tr).append(insignia('estado-badge', 'estado', r.estado, r.estado));
-        celda(tr, r.estado_pago === 'exonerado' ? 'S/ 0.00' : formatearSoles(Number(r.monto_calculado)));
-        celda(tr).append(insignia('pago-badge', 'pago', r.estado_pago, r.estado_pago));
-        celda(tr, formatearFecha(r.fecha_registro));
-        const tdAcciones = celda(tr);
-        tdAcciones.className = 'acciones-fila';
-        accionEditar(tdAcciones, r);
-        accionDePago(tdAcciones, r);
-        cuerpo.append(tr);
-      });
+      registrosCache = registros;
+      aplicarFiltros();
     } catch (error) {
       cargando.hidden = true;
       console.error('Error al consultar registros:', error);
       vacio.hidden = false;
       vacio.textContent = 'No se pudieron cargar tus citas en este momento. Intenta de nuevo más tarde.';
+      contador.textContent = 'No se pudo actualizar la lista.';
+      tablaDetalle.hidden = true;
       tabla.hidden = true;
     }
   })();

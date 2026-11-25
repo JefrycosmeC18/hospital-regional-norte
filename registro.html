@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/registro.css">
+  <link rel="stylesheet" href="css/nav-superior.css">
 </head>
 <body>
 
@@ -19,9 +20,9 @@
             <path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/>
           </g>
         </svg>
-        <strong>Emergencias 24 horas:</strong> atención inmediata, sin cita previa
+        <strong>Emergencias:</strong> busca atención inmediata cuando sea necesario
       </span>
-      <a href="tel:+51073123456">☎ (073) 123-456</a>
+      <a href="contacto.html">Canales de atención</a>
     </div>
   </div>
 
@@ -63,8 +64,8 @@
       <div class="container">
         <div class="section-head">
           <h1>Solicitud de cita médica</h1>
-          <p>Completa tus datos y te confirmaremos la fecha y hora por teléfono o correo electrónico dentro de las siguientes 24 horas hábiles.</p>
-          <p id="usuarioBienvenida" style="font-weight: 600; color: #0F5D52; margin-top: 0.5rem;"></p>
+          <p>Completa tus datos, selecciona una especialidad y guarda el código de seguimiento de tu solicitud.</p>
+
         </div>
 
         <div class="confirm-box" id="confirmBox" hidden>
@@ -72,16 +73,27 @@
             <circle cx="12" cy="12" r="11" fill="#0F5D52"/>
             <path d="M7 12.5l3 3 7-7" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <p id="confirmTexto">¡Listo! Registramos tu solicitud de cita. Te confirmaremos la fecha y hora por teléfono o correo dentro de 24 horas hábiles.</p>
+          <p id="confirmTexto">Solicitud recibida. Conserva tu código de seguimiento para consultar el estado.</p>
         </div>
+
+        <div class="booking-overview" aria-label="Pasos de la solicitud">
+          <div class="booking-overview-step"><span class="booking-step-number">01</span><div><strong>Datos del paciente</strong><small>Identificación y contacto</small></div></div>
+          <div class="booking-overview-step"><span class="booking-step-number">02</span><div><strong>Datos de la cita</strong><small>Especialidad y preferencia</small></div></div>
+          <div class="booking-overview-step"><span class="booking-step-number">03</span><div><strong>Registro y consulta</strong><small>Código para el seguimiento</small></div></div>
+        </div>
+        <div class="cita-progreso" role="progressbar" aria-label="Progreso de la solicitud" aria-valuemin="0" aria-valuemax="3" aria-valuenow="1" id="citaProgreso">
+          <span id="citaProgresoBarra"></span>
+        </div>
+        <p class="cita-paso-etiqueta" id="citaPasoEtiqueta" aria-live="polite">Paso 1 de 3 · Datos del paciente</p>
+        <p class="booking-safety-note"><strong>Importante:</strong> la fecha solicitada está sujeta a disponibilidad. Consulta tu estado con el código de seguimiento.</p>
 
         <!-- CONTENEDOR EN 2 COLUMNAS PARA APROVECHAR EL ESPACIO -->
         <div class="citas-layout">
 
           <!-- COLUMNA IZQUIERDA: FORMULARIO -->
-          <form class="form-card" id="citaForm" action="https://formsubmit.co/citas@hospitalregionaldelnorte.example.pe" method="POST" novalidate>
+          <form class="form-card" id="citaForm" novalidate>
 
-            <fieldset>
+            <fieldset class="cita-etapa" data-paso="1">
               <legend>Datos del paciente</legend>
 
               <div class="field">
@@ -111,7 +123,7 @@
               </div>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="cita-etapa" data-paso="2" hidden>
               <legend>Datos de la cita</legend>
 
               <div class="field">
@@ -156,9 +168,24 @@
               </div>
             </fieldset>
 
-            <p class="form-footnote">Si tu situación es una emergencia, no completes este formulario: acude directamente al hospital o llama al <a href="tel:+51073123456">(073) 123-456</a>.</p>
-
-            <button type="submit" class="btn btn-primary">Enviar solicitud de cita</button>
+            <section class="cita-etapa cita-confirmacion" data-paso="3" hidden aria-labelledby="confirmacionCitaTitulo">
+              <h2 id="confirmacionCitaTitulo">Revisa tu solicitud</h2>
+              <p>Comprueba tus datos antes de enviarlos. La fecha preferida está sujeta a disponibilidad.</p>
+              <dl class="cita-resumen">
+                <div><dt>Paciente</dt><dd id="resumenNombre">—</dd></div>
+                <div><dt>Especialidad</dt><dd id="resumenEspecialidad">—</dd></div>
+                <div><dt>Fecha preferida</dt><dd id="resumenFecha">—</dd></div>
+                <div><dt>Forma de pago</dt><dd id="resumenPago">—</dd></div>
+                <div><dt>Ticket estimado</dt><dd id="resumenMonto">—</dd></div>
+              </dl>
+              <p class="form-footnote">Si necesitas atención inmediata, acude al servicio de emergencias más cercano. Este formulario es para solicitudes de cita programada.</p>
+              <button type="submit" class="btn btn-primary">Enviar solicitud de cita</button>
+            </section>
+            <div class="cita-pasos-controles">
+              <button type="button" class="btn btn-outline" id="pasoAnterior" hidden>Anterior</button>
+              <button type="button" class="btn btn-primary" id="pasoSiguiente">Continuar</button>
+            </div>
+            <p class="cita-validacion-mensaje" id="pasoError" role="alert" hidden>Revisa los campos requeridos antes de continuar.</p>
           </form>
 
           <!-- COLUMNA DERECHA: PANEL INFORMATIVO LATERAL -->
@@ -196,7 +223,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Tus solicitudes en este navegador</h2>
-          <p>Como mejora al formulario, cada solicitud enviada también queda guardada localmente (simulando una base de datos) para que puedas revisarla más tarde. Esta información no sale de tu navegador ni reemplaza la confirmación oficial por teléfono o correo. Para ver el estado real, revisa <a href="consulta.html">Mis citas</a>.</p>
+          <p>En este apartado puedes revisar tus solicitudes guardadas en este navegador. Para consultar su estado actualizado, entra a <a href="consulta.html">Mis citas</a>.</p>
         </div>
 
         <ul class="my-requests" id="misSolicitudesLista"></ul>
@@ -211,7 +238,7 @@
     <div class="container">
       <div>
         <h4>Hospital Regional del Norte</h4>
-        <p>Establecimiento de salud del Ministerio de Salud (MINSA), red de Piura. Caso académico con nombre ficticio para fines de enseñanza.</p>
+        <p>Información sobre especialidades, citas y servicios de atención al paciente.</p>
       </div>
       <div>
         <h4>Navegación</h4>
@@ -225,15 +252,17 @@
       <div>
         <h4>Emergencia</h4>
         <ul>
-          <li><a href="tel:+51073123456">(073) 123-456</a></li>
+          <li><a href="contacto.html">Canales de atención</a></li>
           <li><a href="contacto.html">Ver todas las sedes</a></li>
         </ul>
       </div>
     </div>
-    <p class="footer-bottom">Proyecto académico — Diseño Web, Unidad 1. No corresponde a un establecimiento real.</p>
+    <p class="footer-bottom">© Hospital Regional del Norte · Atención al paciente.</p>
   </footer>
 
   <script type="module" src="js/registro/registro.js"></script>
 
+  <script src="js/perfil-usuario.js" defer></script>
+  <script src="js/accesibilidad.js" defer></script>
 </body>
 </html>

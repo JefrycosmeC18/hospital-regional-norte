@@ -59,6 +59,98 @@ export async function guardarRegistro(datos) {
   const borrarBtn = document.getElementById('borrarSolicitudes');
   const submitBtn = form.querySelector('button[type="submit"]');
 
+  // Navegación de tres pasos sin modificar la operación original de registro.
+  const etapas = [...form.querySelectorAll('.cita-etapa')];
+  const siguiente = document.getElementById('pasoSiguiente');
+  const anterior = document.getElementById('pasoAnterior');
+  const errorPaso = document.getElementById('pasoError');
+  const barra = document.getElementById('citaProgresoBarra');
+  const progreso = document.getElementById('citaProgreso');
+  const etiqueta = document.getElementById('citaPasoEtiqueta');
+  const indicadores = [...document.querySelectorAll('.booking-overview-step')];
+  const etiquetas = ['Datos del paciente', 'Datos de la cita', 'Confirmación'];
+  let pasoActual = 1;
+
+  function resumenSolicitud() {
+    const datos = leerFormulario();
+    const especialidad = document.getElementById('especialidad');
+    document.getElementById('resumenNombre').textContent = String(datos.nombre || '').trim() || '—';
+    document.getElementById('resumenEspecialidad').textContent =
+      especialidad.selectedOptions[0]?.textContent || '—';
+    const fecha = String(datos.fecha_preferida || '');
+    document.getElementById('resumenFecha').textContent = fecha
+      ? fecha.split('-').reverse().join('/') : '—';
+    document.getElementById('resumenPago').textContent = datos.pago === 'sis' ? 'SIS' : 'Particular';
+    document.getElementById('resumenMonto').textContent = salidaMonto.textContent;
+  }
+
+  function mostrarPaso(numero) {
+    pasoActual = numero;
+    for (const etapa of etapas) {
+      etapa.hidden = Number(etapa.dataset.paso) !== numero;
+    }
+    indicadores.forEach((indicador, indice) => {
+      const actual = indice + 1 === numero;
+      indicador.dataset.activo = String(actual);
+      indicador.dataset.completo = String(indice + 1 < numero);
+      if (actual) indicador.setAttribute('aria-current', 'step');
+      else indicador.removeAttribute('aria-current');
+    });
+    anterior.hidden = numero === 1;
+    siguiente.hidden = numero === 3;
+    barra.style.width = (numero / 3 * 100) + '%';
+    progreso.setAttribute('aria-valuenow', String(numero));
+    etiqueta.textContent = 'Paso ' + numero + ' de 3 · ' + etiquetas[numero - 1];
+    errorPaso.hidden = true;
+    if (numero === 3) resumenSolicitud();
+  }
+
+  function validarEtapa(numero) {
+    const etapa = etapas[numero - 1];
+    const primeroInvalido = [...etapa.querySelectorAll('input, select, textarea')]
+      .find(control => !control.checkValidity());
+    if (!primeroInvalido) return true;
+    errorPaso.hidden = false;
+    errorPaso.textContent = 'Completa o corrige los campos de ' + etiquetas[numero - 1].toLowerCase() + '.';
+    primeroInvalido.reportValidity();
+    return false;
+  }
+
+  function avanzar() {
+    if (!validarEtapa(pasoActual)) return;
+    if (pasoActual < 3) mostrarPaso(pasoActual + 1);
+  }
+
+  siguiente.addEventListener('click', avanzar);
+  anterior.addEventListener('click', () => mostrarPaso(pasoActual - 1));
+
+  // Impide enviar accidentalmente el formulario al presionar Enter en pasos 1 y 2.
+  // En el último paso se mantiene el manejador de Neon y pagos original.
+  form.addEventListener('submit', (evento) => {
+    if (pasoActual < 3) {
+      evento.preventDefault();
+      evento.stopImmediatePropagation();
+      avanzar();
+      return;
+    }
+    const invalido = [...form.querySelectorAll('input, select, textarea')]
+      .find(control => !control.checkValidity());
+    if (invalido) {
+      evento.preventDefault();
+      evento.stopImmediatePropagation();
+      const etapaInvalida = invalido.closest('.cita-etapa');
+      const numero = Number(etapaInvalida?.dataset.paso || 1);
+      mostrarPaso(numero);
+      validarEtapa(numero);
+    }
+  }, true);
+
+  form.addEventListener('reset', () => {
+    setTimeout(() => mostrarPaso(1), 0);
+  });
+  mostrarPaso(1);
+
+
   // --- Restricción de fechas ---
   // Fecha de HOY en Lima (AAAA-MM-DD). Con toISOString() saldría la fecha UTC y, a partir de las
   // 7:00 p.m. de Lima, ya sería "mañana": el paciente no podría elegir el día de hoy.
