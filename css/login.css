@@ -745,3 +745,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
   .loader-cross, .loader-icon::before, .loader-overlay[data-estado="ok"] .loader-check { animation: none !important; }
   .loader-check path { animation: none !important; stroke-dashoffset: 0 !important; }
 }
+
+.login-feedback{font-weight:600;margin-bottom:1rem;}
+.login-feedback-error{color:#b30000;}
+.login-submit{margin-top:1rem;width:100%;}

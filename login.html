@@ -56,7 +56,7 @@
             <form class="form-card" id="formLogin">
               <fieldset>
                 <legend>Iniciar Sesión</legend>
-                <div id="msgLogin" class="hint" style="color: #b30000; font-weight: 600; margin-bottom: 1rem;"></div>
+                <div id="msgLogin" class="hint login-feedback login-feedback-error"></div>
 
                 <div class="field">
                   <label for="loginCorreo">Correo electrónico</label>
@@ -69,7 +69,7 @@
                     <input type="password" id="loginPass" required placeholder="••••••••">
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 1rem; width: 100%;">Ingresar al sistema</button>
+                <button type="submit" class="btn btn-primary login-submit">Ingresar al sistema</button>
               </fieldset>
             </form>
           </div>
@@ -79,7 +79,7 @@
             <form class="form-card" id="formRegister">
               <fieldset>
                 <legend>Registrar Nueva Cuenta</legend>
-                <div id="msgRegister" class="hint" style="font-weight: 600; margin-bottom: 1rem;"></div>
+                <div id="msgRegister" class="hint login-feedback"></div>
 
                 <div class="field">
                   <label for="regNombre">Nombres y Apellidos</label>
@@ -97,7 +97,7 @@
                     <input type="password" id="regPass" required placeholder="Mínimo 6 caracteres">
                   </div>
                 </div>
-                <button type="submit" class="btn btn-outline" style="margin-top: 1rem; width: 100%;">Crear mi cuenta</button>
+                <button type="submit" class="btn btn-outline login-submit">Crear mi cuenta</button>
               </fieldset>
             </form>
           </div>

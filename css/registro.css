@@ -784,3 +784,7 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 .cita-validacion-mensaje{border-left:3px solid var(--color-emergency);background:#fff2f0;padding:.8rem;color:var(--color-emergency-dark);}
 @media(max-width:600px){.cita-resumen{grid-template-columns:1fr;}.cita-confirmacion{padding:1rem;}}
 @media(prefers-reduced-motion:reduce){.cita-progreso span{transition:none;}}
+
+.registro-texto-secundario{margin:0;font-size:.9rem;color:#4a5568;}
+.registro-nota-destacada{border-left-color:#E0762E;margin-top:1.5rem;}
+.registro-texto-pie{margin:0;font-size:.85rem;color:#4a5568;}

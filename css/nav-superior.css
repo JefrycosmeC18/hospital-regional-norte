@@ -230,3 +230,7 @@ html.modo-facil-contraste a{text-decoration-thickness:2px;text-underline-offset:
 @media(max-width:390px){
   .site-header .access-trigger{font-size:.69rem;padding:.3rem .35rem;}
 }
+
+/* Elementos comunes de navegacion: sin estilos en HTML. */
+.site-header .main-nav .nav-link-panel,.site-header .main-nav .nav-link-caja{display:none;}
+.site-header #btnCerrarSesion{color:#E0762E;}
