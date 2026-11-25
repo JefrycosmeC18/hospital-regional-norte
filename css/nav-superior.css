@@ -157,9 +157,13 @@
   .site-header .header-profile{order:1;margin-left:auto;}
   .site-header .nav-toggle-label{order:2;margin:0 0 0 .4rem;}
   .site-header .main-nav{order:3;}
-  .site-header .header-profile-text,.site-header .header-profile-chevron{display:none;}
-  .header-profile-trigger{padding:.28rem;border-radius:50%;min-height:42px;}
+  .header-profile-trigger{padding:.28rem .62rem .28rem .28rem;min-height:42px;}
   .header-profile-avatar{width:34px;height:34px;}
+  .header-profile-text strong{max-width:95px;}
+}
+@media(max-width:560px){
+  .site-header .header-profile-text,.site-header .header-profile-chevron{display:none;}
+  .header-profile-trigger{padding:.28rem;border-radius:50%;}
 }
 @media(max-width:390px){
   .site-header .brand-text .name{font-size:.82rem;}
