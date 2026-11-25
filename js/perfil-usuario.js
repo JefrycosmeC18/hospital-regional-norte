@@ -85,7 +85,15 @@
     window.location.assign('login.html#iniciar');
   });
 
-  menu.append(identidad, espacio, salir);
+  menu.append(identidad, espacio);
+  if (usuario.rol === 'administrador') {
+    const reportes = document.createElement('a');
+    reportes.href = 'reportes.html';
+    reportes.className = 'header-profile-link';
+    reportes.textContent = 'Reportes administrativos';
+    menu.append(reportes);
+  }
+  menu.append(salir);
   perfil.append(abrir, menu);
   encabezado.append(perfil);
 
