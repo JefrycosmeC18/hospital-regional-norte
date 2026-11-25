@@ -195,9 +195,16 @@ function accionDePago(td, r) {
     mostrarTabla(filtrados);
     const vacioTotal = registrosCache.length === 0;
     vacio.hidden = !vacioTotal && filtrados.length > 0;
-    vacio.textContent = vacioTotal
-      ? 'Todavía no tienes solicitudes de cita registradas.'
-      : 'No encontramos citas que coincidan con los filtros.';
+    vacio.replaceChildren();
+    if (vacioTotal) {
+      vacio.append('Todavía no tienes solicitudes de cita registradas. ');
+      const enlace = document.createElement('a');
+      enlace.href = 'registro.html';
+      enlace.textContent = 'Solicita una cita';
+      vacio.append(enlace);
+    } else {
+      vacio.textContent = 'No encontramos citas que coincidan con los filtros.';
+    }
     tablaDetalle.hidden = filtrados.length === 0;
     tabla.hidden = filtrados.length === 0;
     contador.textContent = 'Mostrando ' + filtrados.length + ' de ' + registrosCache.length + ' citas';
