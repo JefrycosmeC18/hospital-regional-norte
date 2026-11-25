@@ -64,8 +64,15 @@
       <div class="container">
         <div class="section-head">
           <h1>Solicitud de cita médica</h1>
-          <p>Completa tus datos y te confirmaremos la fecha y hora por teléfono o correo electrónico dentro de las siguientes 24 horas hábiles.</p>
-          <p id="usuarioBienvenida" style="font-weight: 600; color: #0F5D52; margin-top: 0.5rem;"></p>
+          <p>Registra una solicitud de demostración, revisa la estimación del ticket y consulta el código generado. Este portal es un caso académico, no un sistema oficial de citas médicas.</p>
+          <div class="patient-session-card">
+            <span class="patient-session-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+            </span>
+            <p id="usuarioBienvenida"></p>
+          </div>
         </div>
 
         <div class="confirm-box" id="confirmBox" hidden>
@@ -75,6 +82,13 @@
           </svg>
           <p id="confirmTexto">¡Listo! Registramos tu solicitud de cita. Te confirmaremos la fecha y hora por teléfono o correo dentro de 24 horas hábiles.</p>
         </div>
+
+        <div class="booking-overview" aria-label="Pasos de la solicitud de prueba">
+          <div class="booking-overview-step"><span class="booking-step-number">01</span><div><strong>Datos del paciente</strong><small>Identificación y contacto</small></div></div>
+          <div class="booking-overview-step"><span class="booking-step-number">02</span><div><strong>Datos de la cita</strong><small>Especialidad y preferencia</small></div></div>
+          <div class="booking-overview-step"><span class="booking-step-number">03</span><div><strong>Registro y consulta</strong><small>Código para el seguimiento</small></div></div>
+        </div>
+        <p class="booking-safety-note"><strong>Para las pruebas del curso:</strong> utiliza únicamente datos ficticios. Una solicitud registrada no equivale a una cita médica real confirmada.</p>
 
         <!-- CONTENEDOR EN 2 COLUMNAS PARA APROVECHAR EL ESPACIO -->
         <div class="citas-layout">
@@ -157,7 +171,7 @@
               </div>
             </fieldset>
 
-            <p class="form-footnote">Si tu situación es una emergencia, no completes este formulario: acude directamente al hospital o llama al <a href="tel:+51073123456">(073) 123-456</a>.</p>
+            <p class="form-footnote">Si tienes una emergencia real, no utilices este formulario académico: busca atención inmediata en un establecimiento de salud y sus canales oficiales. El teléfono que aparece en el encabezado es ilustrativo y no debe utilizarse para solicitar ayuda.</p>
 
             <button type="submit" class="btn btn-primary">Enviar solicitud de cita</button>
           </form>
