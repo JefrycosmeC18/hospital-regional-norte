@@ -1037,3 +1037,18 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
  .hero-beneficios .beneficio:nth-child(n+3){border-top:1px solid #c3d6d0;}
 }
 @media(max-width:390px){.hero-portada .hero-actions .btn{min-height:48px;padding:.65rem .8rem;font-size:.88rem;}.hero-beneficios .beneficio svg{width:25px;height:25px;}}
+
+
+/* Entrada suave de la franja de beneficios al cargar Inicio. */
+@keyframes beneficios-entrar {
+  from { opacity: 0; transform: translateY(72px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-portada .hero-beneficios {
+  animation: beneficios-entrar 900ms cubic-bezier(.2,.75,.25,1) 180ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-portada .hero-beneficios {
+    animation: none;
+  }
+}
