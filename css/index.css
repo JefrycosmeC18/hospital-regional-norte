@@ -1052,3 +1052,30 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
     animation: none;
   }
 }
+
+
+/* Entrada escalonada del contenido izquierdo de la portada. */
+@keyframes portada-texto-entrar {
+  from { opacity: 0; transform: translateX(-46px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.hero-portada .hero-acento {
+  animation: portada-texto-entrar 700ms ease-out 90ms both;
+}
+.hero-portada .hero-copy h1 {
+  animation: portada-texto-entrar 850ms cubic-bezier(.2,.75,.25,1) 220ms both;
+}
+.hero-portada .hero-copy > p {
+  animation: portada-texto-entrar 850ms cubic-bezier(.2,.75,.25,1) 420ms both;
+}
+.hero-portada .hero-actions {
+  animation: portada-texto-entrar 850ms cubic-bezier(.2,.75,.25,1) 620ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-portada .hero-acento,
+  .hero-portada .hero-copy h1,
+  .hero-portada .hero-copy > p,
+  .hero-portada .hero-actions {
+    animation: none;
+  }
+}
