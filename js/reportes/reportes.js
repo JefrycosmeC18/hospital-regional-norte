@@ -29,7 +29,7 @@ $('btnCerrarSesion')?.addEventListener('click',e=>{e.preventDefault();cerrarSesi
 
 // La consulta no trae datos identificables de pacientes: solo dimensiones y montos.
 export async function consultarReportes() {
-  return await sql(["SELECT especialidad, fecha_preferida::text AS fecha_preferida, estado, estado_pago, monto_calculado FROM citas_medicas"]);
+  return await sql`SELECT especialidad, fecha_preferida::text AS fecha_preferida, estado, estado_pago, monto_calculado FROM citas_medicas`;
 }
 const agrupar=(lista,campo)=>lista.reduce((m,r)=>{
   const clave=campo(r);m.set(clave,(m.get(clave)||0)+1);return m;
