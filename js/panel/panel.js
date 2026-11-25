@@ -260,29 +260,83 @@ function formatearFecha(valor) {
   }
 
   let registrosCache = [];
+  const buscarCita = document.getElementById('buscarCita');
+  const filtroEstado = document.getElementById('filtroEstado');
+  const filtroEspecialidad = document.getElementById('filtroEspecialidad');
+  const limpiarFiltrosPanel = document.getElementById('limpiarFiltrosPanel');
+  const contadorCitas = document.getElementById('contadorCitas');
+
+  for (const [clave, nombre] of Object.entries(NOMBRES_ESPECIALIDAD)) {
+    const opcion = document.createElement('option');
+    opcion.value = clave;
+    opcion.textContent = nombre;
+    filtroEspecialidad.appendChild(opcion);
+  }
+
+  // Los indicadores siempre describen todas las citas consultadas,
+  // mientras que los filtros solo afectan la tabla.
+  function actualizarIndicadores() {
+    const contar = (estado) => registrosCache.filter(r => r.estado === estado).length;
+    document.getElementById('kpiTotal').textContent = String(registrosCache.length);
+    document.getElementById('kpiRegistradas').textContent = String(contar('registrado'));
+    document.getElementById('kpiAtendidas').textContent = String(contar('atendido'));
+    document.getElementById('kpiCanceladas').textContent = String(contar('cancelado'));
+  }
+
+  function normalizar(valor) {
+    return String(valor ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  }
+
+  function filtrarRegistros() {
+    const texto = normalizar(buscarCita.value);
+    const estado = filtroEstado.value;
+    const especialidad = filtroEspecialidad.value;
+    return registrosCache.filter(r => {
+      const coincideTexto = !texto || normalizar(
+        [r.codigo_seguimiento, r.nombre_paciente, r.dni].join(' ')
+      ).includes(texto);
+      return coincideTexto &&
+        (!estado || r.estado === estado) &&
+        (!especialidad || r.especialidad === especialidad);
+    });
+  }
+
+  function mostrarRegistrosFiltrados() {
+    const lista = filtrarRegistros();
+    cuerpo.replaceChildren();
+    lista.forEach(r => cuerpo.appendChild(filaVista(r)));
+    const sinRegistros = registrosCache.length === 0;
+    tabla.hidden = sinRegistros || lista.length === 0;
+    vacio.hidden = !sinRegistros && lista.length !== 0;
+    vacio.textContent = sinRegistros
+      ? 'Aún no hay registros de citas en el sistema.'
+      : 'No hay citas que coincidan con tu búsqueda o filtros.';
+    contadorCitas.textContent = `Mostrando ${lista.length} de ${registrosCache.length} solicitudes`;
+  }
+
+  buscarCita.addEventListener('input', mostrarRegistrosFiltrados);
+  filtroEstado.addEventListener('change', mostrarRegistrosFiltrados);
+  filtroEspecialidad.addEventListener('change', mostrarRegistrosFiltrados);
+  limpiarFiltrosPanel.addEventListener('click', () => {
+    buscarCita.value = '';
+    filtroEstado.value = '';
+    filtroEspecialidad.value = '';
+    mostrarRegistrosFiltrados();
+    buscarCita.focus();
+  });
 
   async function cargar() {
     try {
       registrosCache = await listarTodos();
       cargando.hidden = true;
-
-      if (registrosCache.length === 0) {
-        vacio.hidden = false;
-        tabla.hidden = true;
-        return;
-      }
-
-      vacio.hidden = true;
-      tabla.hidden = false;
-      cuerpo.replaceChildren();
-      registrosCache.forEach(function (r) {
-        cuerpo.appendChild(filaVista(r));
-      });
+      actualizarIndicadores();
+      mostrarRegistrosFiltrados();
     } catch (error) {
       cargando.hidden = true;
       console.error('Error al listar registros:', error);
       vacio.hidden = false;
       vacio.textContent = 'No se pudieron cargar los registros. Intenta de nuevo más tarde.';
+      contadorCitas.textContent = 'No se pudo actualizar el resumen. Intenta nuevamente.';
       tabla.hidden = true;
     }
   }
