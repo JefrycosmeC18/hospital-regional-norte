@@ -114,11 +114,11 @@
               <source media="(min-width: 601px)" srcset="https://images.pexels.com/photos/9741531/pexels-photo-9741531.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1">
               <img src="https://images.pexels.com/photos/9741531/pexels-photo-9741531.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1" alt="Vista de un edificio hospitalario moderno con una cruz de salud iluminada al atardecer" loading="lazy" width="900" height="600">
             </picture></div>
-            <figcaption>Fachada principal, sede Piura.</figcaption>
+            <figcaption>Fotografía referencial de infraestructura hospitalaria.</figcaption>
           </figure>
           <figure>
             <div class="img-zoom"><img src="https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900&amp;h=600&amp;dpr=1" alt="Letrero de emergencia en rojo en la entrada de un hospital" loading="lazy" width="900" height="600"></div>
-            <figcaption>Ingreso de Emergencia, disponible las 24 horas.</figcaption>
+            <figcaption>Fotografía referencial de un acceso a emergencias.</figcaption>
           </figure>
         </div>
       </div>
@@ -165,6 +165,95 @@
         <a class="btn btn-accent" href="registro.html">Ir al formulario de citas</a>
       </div>
     </section>
+
+    <!-- NUEVA SECCIÓN: orientación al paciente, versión mejorada -->
+    <section class="section section--alt" id="orientacion-paciente" aria-labelledby="orientacion-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="info-kicker">Orientación al paciente</p>
+          <h2 id="orientacion-titulo">Toda la información para preparar tu atención</h2>
+          <p>Consulta los pasos y requisitos generales antes de enviar una solicitud. Este portal es un prototipo académico: no reemplaza los canales oficiales de un establecimiento de salud.</p>
+        </div>
+        <div class="orientation-grid">
+          <article class="orientation-card">
+            <span class="orientation-number" aria-hidden="true">01</span>
+            <h3>Elige la especialidad</h3>
+            <p>Revisa las áreas disponibles y las orientaciones generales de consulta. Si no sabes qué especialidad elegir, consulta primero con personal de salud.</p>
+            <a href="servicios.html">Explorar especialidades <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="orientation-card">
+            <span class="orientation-number" aria-hidden="true">02</span>
+            <h3>Prepara tu documentación</h3>
+            <p>Ten a mano tu documento de identidad y, si corresponde, la información de tu seguro o referencia. Los requisitos concretos dependen de cada atención.</p>
+            <a href="como-funciona.html">Ver guía de citas <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="orientation-card">
+            <span class="orientation-number" aria-hidden="true">03</span>
+            <h3>Solicita y consulta</h3>
+            <p>Utiliza el formulario del proyecto para registrar una solicitud de prueba y revisar su seguimiento desde la página de consultas.</p>
+            <a href="registro.html">Ir a solicitar cita <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="orientation-card">
+            <span class="orientation-number" aria-hidden="true">04</span>
+            <h3>Identifica una emergencia</h3>
+            <p>Una situación que requiere atención inmediata no debe esperar una cita programada. Acude a un establecimiento de emergencia o utiliza los canales oficiales de tu localidad.</p>
+            <a href="contacto.html">Ver orientación de contacto <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: recorrido de atención -->
+    <section class="section visit-section" id="pasos-cita" aria-labelledby="pasos-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="info-kicker">Guía de uso del portal</p>
+          <h2 id="pasos-titulo">Tu solicitud de cita, en cuatro pasos</h2>
+          <p>Este recorrido muestra cómo utilizar los formularios de demostración del Hospital, desde la elección de una especialidad hasta la consulta del registro.</p>
+        </div>
+        <ol class="visit-steps">
+          <li><strong>Selecciona el servicio</strong><span>Consulta las especialidades y sus indicaciones.</span></li>
+          <li><strong>Completa la solicitud</strong><span>Llena los campos requeridos con datos ficticios durante las pruebas.</span></li>
+          <li><strong>Revisa la confirmación</strong><span>Comprueba el mensaje y el resultado que muestra el formulario.</span></li>
+          <li><strong>Consulta el registro</strong><span>Utiliza la opción de consulta para comprobar la información.</span></li>
+        </ol>
+        <div class="visit-actions">
+          <a class="btn btn-primary" href="registro.html">Comenzar solicitud de prueba</a>
+          <a class="btn btn-outline" href="consulta.html">Consultar solicitudes</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NUEVA SECCIÓN: preguntas frecuentes interactivas con HTML nativo -->
+    <section class="section section--alt faq-section" id="preguntas-frecuentes" aria-labelledby="faq-titulo">
+      <div class="container">
+        <div class="section-head">
+          <p class="info-kicker">Preguntas frecuentes</p>
+          <h2 id="faq-titulo">Resuelve tus dudas antes de solicitar una cita</h2>
+          <p>Abre cada pregunta para conocer el funcionamiento del portal. Los procedimientos aquí explicados corresponden al caso académico.</p>
+        </div>
+        <div class="faq-list">
+          <details>
+            <summary>¿Cómo puedo elegir una especialidad?<span aria-hidden="true" class="faq-symbol">+</span></summary>
+            <div class="faq-answer"><p>Visita <a href="servicios.html">Especialidades</a> para revisar las opciones incluidas en el prototipo. La elección de atención médica real debe seguir la orientación del profesional de salud.</p></div>
+          </details>
+          <details>
+            <summary>¿Qué información necesito para registrar una solicitud?<span aria-hidden="true" class="faq-symbol">+</span></summary>
+            <div class="faq-answer"><p>El formulario indica los campos obligatorios. En demostraciones utiliza datos ficticios, no datos personales reales. También puedes revisar la página <a href="como-funciona.html">Cómo pedir cita</a>.</p></div>
+          </details>
+          <details>
+            <summary>¿Cómo compruebo si registré mi solicitud?<span aria-hidden="true" class="faq-symbol">+</span></summary>
+            <div class="faq-answer"><p>Después de enviar la solicitud, revisa el mensaje mostrado por el sistema y accede a <a href="consulta.html">Consultar cita</a>. El registro de la solicitud no equivale por sí solo a una cita médica confirmada.</p></div>
+          </details>
+          <details>
+            <summary>¿Qué hago si tengo una emergencia?<span aria-hidden="true" class="faq-symbol">+</span></summary>
+            <div class="faq-answer"><p>No esperes una respuesta del formulario. Busca atención inmediata en un servicio de emergencias y consulta los canales oficiales de salud de tu localidad.</p></div>
+          </details>
+        </div>
+        <p class="academic-notice"><strong>Importante:</strong> este Hospital Regional del Norte es un caso ficticio para el curso de Diseño Web. La información presentada es educativa y no representa citas, horarios, direcciones ni atención oficial de una institución de salud.</p>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
