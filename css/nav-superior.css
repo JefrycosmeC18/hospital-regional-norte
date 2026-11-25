@@ -334,3 +334,13 @@ html.modo-facil-contraste a{text-decoration-thickness:2px;text-underline-offset:
     transition: none;
   }
 }
+
+
+/* Solo el menu principal permanece visible al desplazarse.
+   La barra de emergencias sigue su desplazamiento normal. */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(10,63,56,.10);
+}
