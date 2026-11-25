@@ -234,3 +234,103 @@ html.modo-facil-contraste a{text-decoration-thickness:2px;text-underline-offset:
 /* Elementos comunes de navegacion: sin estilos en HTML. */
 .site-header .main-nav .nav-link-panel,.site-header .main-nav .nav-link-caja{display:none;}
 .site-header #btnCerrarSesion{color:#E0762E;}
+
+
+/* Barra de emergencia: icono + en la misma linea que el mensaje. */
+.emergency-bar .container > span {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: .35rem;
+  row-gap: .15rem;
+}
+.emergency-bar .emergency-icon {
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  margin-right: .15rem;
+  vertical-align: middle;
+}
+
+/* Movimiento suave para tarjetas informativas: no interfiere con formularios. */
+:is(
+  .novedades-grid > article,
+  .orientation-grid > article,
+  .accesos-grid > a,
+  .specialty-card,
+  .service-detail-card,
+  .contact-card,
+  .readiness-card,
+  .readiness-help-card,
+  .photo-feature,
+  .dashboard-kpi,
+  .reportes-kpi,
+  .reportes-grafico,
+  .resumen-pilares > article
+) {
+  transition: transform .28s cubic-bezier(.2,.7,.2,1),
+              box-shadow .28s ease,
+              border-color .28s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(
+    .novedades-grid > article,
+    .orientation-grid > article,
+    .accesos-grid > a,
+    .specialty-card,
+    .service-detail-card,
+    .contact-card,
+    .readiness-card,
+    .readiness-help-card,
+    .photo-feature,
+    .dashboard-kpi,
+    .reportes-kpi,
+    .reportes-grafico,
+    .resumen-pilares > article
+  ):hover {
+    transform: translateY(-6px);
+    box-shadow: 0 17px 34px rgba(10,63,56,.13);
+    border-color: rgba(15,93,82,.36);
+  }
+}
+/* Los enlaces dentro de los cuadros muestran respuesta visual al enfocarlos. */
+:is(
+  .novedades-grid > article,
+  .orientation-grid > article,
+  .accesos-grid > a,
+  .specialty-card,
+  .service-detail-card,
+  .contact-card,
+  .readiness-card,
+  .readiness-help-card
+):focus-within {
+  box-shadow: 0 0 0 3px rgba(224,118,46,.23), 0 12px 28px rgba(10,63,56,.1);
+  border-color: #E0762E;
+}
+:is(.novedades-grid, .orientation-grid) > article a {
+  transition: color .2s ease, text-decoration-color .2s ease;
+  text-underline-offset: .25em;
+}
+:is(.novedades-grid, .orientation-grid) > article a:hover {
+  color: #B85A1D;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(
+    .novedades-grid > article,
+    .orientation-grid > article,
+    .accesos-grid > a,
+    .specialty-card,
+    .service-detail-card,
+    .contact-card,
+    .readiness-card,
+    .readiness-help-card,
+    .photo-feature,
+    .dashboard-kpi,
+    .reportes-kpi,
+    .reportes-grafico,
+    .resumen-pilares > article
+  ) {
+    transition: none;
+  }
+}
