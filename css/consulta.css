@@ -824,3 +824,27 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 @media(max-width:850px){.mis-citas-filtros{grid-template-columns:1fr 1fr;}.mis-citas-filtros .btn{grid-column:1/-1;}}
 @media(max-width:650px){.mis-citas-filtros,.mis-citas-tarjetas,.mis-cita-detalles{grid-template-columns:1fr;}.mis-citas-filtros .btn{grid-column:auto;}.mis-citas-busqueda{padding:1.15rem;}}
 @media(prefers-reduced-motion:reduce){.mis-cita-card{transition:none;}}
+
+
+/* Mi Ruta de Atención: seguimiento basado en el estado real de cada registro */
+.ruta-atencion{border-top:1px solid var(--color-line);margin:1.1rem 0 0;padding:1.1rem 0 0;}
+.ruta-encabezado{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.9rem;}
+.ruta-encabezado h4{margin:0;color:var(--color-primary-dark);font-size:1.06rem;}
+.ruta-encabezado small{font-size:.77rem;color:var(--color-ink-soft);}
+.ruta-pasos{list-style:none;padding:0;margin:0;display:grid;gap:0;}
+.ruta-paso{display:grid;grid-template-columns:30px minmax(0,1fr);gap:.7rem;position:relative;padding-bottom:1rem;}
+.ruta-paso:not(:last-child)::before{
+  content:"";position:absolute;left:14px;top:28px;bottom:0;
+  width:2px;background:var(--color-line);
+}
+.ruta-paso-indicador{
+  position:relative;z-index:1;width:30px;height:30px;border-radius:50%;
+  display:grid;place-items:center;
+  background:#edf1ef;color:#64746e;font-weight:700;
+}
+.ruta-paso[data-paso-estado="completo"] .ruta-paso-indicador{background:var(--color-primary);color:#fff;}
+.ruta-paso[data-paso-estado="actual"] .ruta-paso-indicador{background:#fff2df;color:#9c5b12;border:1px solid var(--color-accent);}
+.ruta-paso[data-paso-estado="alerta"] .ruta-paso-indicador{background:#fff0ee;color:var(--color-emergency-dark);border:1px solid var(--color-emergency);}
+.ruta-paso strong{display:block;font-size:.88rem;color:var(--color-primary-dark);}
+.ruta-paso p{margin:.1rem 0 0;font-size:.79rem;color:var(--color-ink-soft);line-height:1.5;}
+.ruta-proxima-accion{margin:.1rem 0 .3rem;padding:.75rem .85rem;background:#e7f3ef;border-left:3px solid var(--color-primary);font-weight:700;font-size:.84rem;color:var(--color-primary-dark);}
