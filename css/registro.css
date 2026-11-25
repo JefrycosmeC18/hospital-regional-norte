@@ -764,3 +764,23 @@ input:focus, select:focus, textarea:focus { box-shadow: 0 0 0 4px rgba(15, 93, 8
 .booking-overview-step:nth-child(3){animation-delay:.16s;}
 @media(max-width:800px){.booking-overview{grid-template-columns:1fr;}}
 @media(prefers-reduced-motion:reduce){.booking-overview-step{animation:none;}}
+
+
+/* Solicitud de citas guiada en 3 pasos */
+.cita-progreso{height:9px;background:#e0e9e5;border-radius:999px;overflow:hidden;margin:.7rem 0 .35rem;}
+.cita-progreso span{display:block;width:33.333%;height:100%;background:var(--color-primary);border-radius:999px;transition:width .3s ease;}
+.cita-paso-etiqueta{font-size:.87rem;font-weight:700;color:var(--color-primary-dark);margin:0 0 1.2rem;}
+.booking-overview-step[data-activo="true"]{background:#e7f3ef;border-color:var(--color-primary);box-shadow:0 5px 18px rgba(15,93,82,.07);}
+.booking-overview-step[data-completo="true"] .booking-step-number{background:var(--color-primary);color:#fff;}
+.cita-etapa[hidden],#pasoAnterior[hidden],#pasoSiguiente[hidden],#pasoError[hidden]{display:none!important;}
+.cita-pasos-controles{display:flex;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin:1.2rem 0 .4rem;}
+.cita-pasos-controles #pasoSiguiente{margin-left:auto;}
+.cita-confirmacion{background:#fff;border:1px solid var(--color-line);border-radius:10px;padding:1.4rem;}
+.cita-confirmacion h2{font-size:1.45rem;}
+.cita-resumen{margin:1.2rem 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem;}
+.cita-resumen div{background:#f6faf8;padding:.8rem;border:1px solid var(--color-line);border-radius:7px;min-width:0;}
+.cita-resumen dt{font-size:.8rem;font-weight:700;color:var(--color-ink-soft);}
+.cita-resumen dd{margin:.3rem 0 0;color:var(--color-primary-dark);font-weight:600;overflow-wrap:anywhere;}
+.cita-validacion-mensaje{border-left:3px solid var(--color-emergency);background:#fff2f0;padding:.8rem;color:var(--color-emergency-dark);}
+@media(max-width:600px){.cita-resumen{grid-template-columns:1fr;}.cita-confirmacion{padding:1rem;}}
+@media(prefers-reduced-motion:reduce){.cita-progreso span{transition:none;}}
