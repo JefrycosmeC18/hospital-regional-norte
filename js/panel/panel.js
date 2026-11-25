@@ -260,6 +260,100 @@ function formatearFecha(valor) {
   }
 
   let registrosCache = [];
+
+  const calendarioTitulo = document.getElementById('calendarioTitulo');
+  const calendarioCuadricula = document.getElementById('calendarioCuadricula');
+  const calendarioSeleccion = document.getElementById('calendarioDiaSeleccionado');
+  const limpiarDia = document.getElementById('limpiarDiaCalendario');
+  const mesAnterior = document.getElementById('calendarioMesAnterior');
+  const mesSiguiente = document.getElementById('calendarioMesSiguiente');
+
+  const hoyEnLima = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Lima', year: 'numeric', month: 'numeric', day: 'numeric'
+  }).formatToParts(new Date());
+  const parteLima = (tipo) => Number(hoyEnLima.find(p => p.type === tipo).value);
+  const hoyAno = parteLima('year');
+  const hoyMes = parteLima('month') - 1;
+  const hoyDia = parteLima('day');
+  let mesCalendario = hoyMes;
+  let anoCalendario = hoyAno;
+  let fechaCalendarioSeleccionada = '';
+
+  const isoDia = (ano, mes, dia) =>
+    String(ano) + '-' + String(mes + 1).padStart(2, '0') + '-' + String(dia).padStart(2, '0');
+
+  function actualizarCalendario() {
+    calendarioTitulo.textContent = new Intl.DateTimeFormat('es-PE', {
+      month: 'long', year: 'numeric'
+    }).format(new Date(anoCalendario, mesCalendario, 15));
+    calendarioCuadricula.replaceChildren();
+    const diasDelMes = new Date(anoCalendario, mesCalendario + 1, 0).getDate();
+    const inicioLunes = (new Date(anoCalendario, mesCalendario, 1).getDay() + 6) % 7;
+    const porDia = new Map();
+    for (const r of registrosCache) {
+      const fecha = formatearFecha(r.fecha_preferida);
+      porDia.set(fecha, (porDia.get(fecha) || 0) + 1);
+    }
+    for (let i = 0; i < inicioLunes; i++) {
+      const vacio = document.createElement('span');
+      vacio.className = 'calendario-espacio';
+      vacio.setAttribute('aria-hidden', 'true');
+      calendarioCuadricula.append(vacio);
+    }
+    for (let dia = 1; dia <= diasDelMes; dia++) {
+      const fecha = isoDia(anoCalendario, mesCalendario, dia);
+      const total = porDia.get(fecha) || 0;
+      const boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'calendario-dia';
+      boton.dataset.fecha = fecha;
+      boton.dataset.hoy = String(anoCalendario === hoyAno && mesCalendario === hoyMes && dia === hoyDia);
+      boton.dataset.vacio = String(total === 0);
+      boton.setAttribute('aria-pressed', String(fecha === fechaCalendarioSeleccionada));
+      boton.setAttribute('aria-label', dia + ' de ' + calendarioTitulo.textContent +
+        ': ' + total + (total === 1 ? ' solicitud' : ' solicitudes'));
+      const numero = document.createElement('span');
+      numero.className = 'calendario-numero';
+      numero.textContent = String(dia);
+      const cantidad = document.createElement('span');
+      cantidad.className = 'calendario-cantidad';
+      cantidad.textContent = total ? total + (total === 1 ? ' cita' : ' citas') : '—';
+      boton.append(numero, cantidad);
+      boton.addEventListener('click', () => {
+        fechaCalendarioSeleccionada = fechaCalendarioSeleccionada === fecha ? '' : fecha;
+        actualizarCalendario();
+        mostrarRegistrosFiltrados();
+        document.getElementById('gestionar-citas-titulo').scrollIntoView({
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+          block: 'start'
+        });
+      });
+      calendarioCuadricula.append(boton);
+    }
+    limpiarDia.hidden = !fechaCalendarioSeleccionada;
+    calendarioSeleccion.textContent = fechaCalendarioSeleccionada
+      ? 'Filtro por fecha preferida: ' + fechaCalendarioSeleccionada.split('-').reverse().join('/')
+      : 'Selecciona una fecha para ver sus solicitudes.';
+  }
+
+  mesAnterior.addEventListener('click', () => {
+    const fecha = new Date(anoCalendario, mesCalendario - 1, 15);
+    anoCalendario = fecha.getFullYear();
+    mesCalendario = fecha.getMonth();
+    actualizarCalendario();
+  });
+  mesSiguiente.addEventListener('click', () => {
+    const fecha = new Date(anoCalendario, mesCalendario + 1, 15);
+    anoCalendario = fecha.getFullYear();
+    mesCalendario = fecha.getMonth();
+    actualizarCalendario();
+  });
+  limpiarDia.addEventListener('click', () => {
+    fechaCalendarioSeleccionada = '';
+    actualizarCalendario();
+    mostrarRegistrosFiltrados();
+  });
+
   const buscarCita = document.getElementById('buscarCita');
   const filtroEstado = document.getElementById('filtroEstado');
   const filtroEspecialidad = document.getElementById('filtroEspecialidad');
@@ -297,7 +391,8 @@ function formatearFecha(valor) {
       ).includes(texto);
       return coincideTexto &&
         (!estado || r.estado === estado) &&
-        (!especialidad || r.especialidad === especialidad);
+        (!especialidad || r.especialidad === especialidad) &&
+        (!fechaCalendarioSeleccionada || formatearFecha(r.fecha_preferida) === fechaCalendarioSeleccionada);
     });
   }
 
@@ -311,7 +406,8 @@ function formatearFecha(valor) {
     vacio.textContent = sinRegistros
       ? 'Aún no hay registros de citas en el sistema.'
       : 'No hay citas que coincidan con tu búsqueda o filtros.';
-    contadorCitas.textContent = `Mostrando ${lista.length} de ${registrosCache.length} solicitudes`;
+    contadorCitas.textContent = `Mostrando ${lista.length} de ${registrosCache.length} solicitudes` +
+      (fechaCalendarioSeleccionada ? ' · Fecha: ' + fechaCalendarioSeleccionada.split('-').reverse().join('/') : '');
   }
 
   buscarCita.addEventListener('input', mostrarRegistrosFiltrados);
@@ -321,6 +417,8 @@ function formatearFecha(valor) {
     buscarCita.value = '';
     filtroEstado.value = '';
     filtroEspecialidad.value = '';
+    fechaCalendarioSeleccionada = '';
+    actualizarCalendario();
     mostrarRegistrosFiltrados();
     buscarCita.focus();
   });
@@ -330,6 +428,7 @@ function formatearFecha(valor) {
       registrosCache = await listarTodos();
       cargando.hidden = true;
       actualizarIndicadores();
+      actualizarCalendario();
       mostrarRegistrosFiltrados();
     } catch (error) {
       cargando.hidden = true;
