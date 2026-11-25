@@ -1,0 +1,91 @@
+/* Navegación consistente para las páginas del Hospital.
+   Respeta las variables de color que ya define cada página. */
+.site-header .container{
+  max-width:90rem;
+  column-gap:1.2rem;
+  padding-inline:clamp(1rem,2.6vw,2rem);
+}
+.site-header .brand{flex:0 0 auto;min-width:0;}
+.site-header .brand-text .name{font-size:clamp(.98rem,1.2vw,1.16rem);line-height:1.16;}
+.site-header .main-nav{margin-left:auto;min-width:0;}
+.site-header .main-nav ul{
+  display:flex;align-items:center;justify-content:flex-end;
+  flex-wrap:nowrap;gap:.16rem;
+}
+.site-header .main-nav li{flex:0 0 auto;}
+.site-header .main-nav a{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:40px;padding:.58rem .64rem;
+  border:0;border-radius:8px;white-space:nowrap;
+  font-size:.88rem;font-weight:600;
+  transition:background-color .2s,color .2s,transform .2s;
+}
+.site-header .main-nav a:hover,
+.site-header .main-nav a[aria-current="page"]{
+  background:rgba(15,93,82,.10);
+  color:var(--color-primary-dark);
+}
+.site-header .main-nav .nav-link-login a,
+.site-header .main-nav .nav-link-register a{
+  padding-inline:.85rem;
+  border:1px solid var(--color-line);
+}
+.site-header .main-nav .nav-link-register a{
+  border-color:var(--color-primary);
+  color:var(--color-primary);
+  background:rgba(15,93,82,.06);
+}
+.site-header .main-nav .nav-link-login a:hover,
+.site-header .main-nav .nav-link-register a:hover{
+  background:rgba(15,93,82,.12);
+}
+.site-header .main-nav .nav-user-summary{
+  display:flex;align-items:center;gap:.55rem;
+  padding:.35rem .62rem;
+  margin-left:.25rem;
+  border:1px solid var(--color-line);border-radius:999px;
+  background:var(--color-surface,#fff);
+  color:var(--color-primary-dark);font-size:.87rem;font-weight:700;
+}
+.site-header .main-nav .nav-user-avatar{
+  display:grid;place-items:center;
+  width:30px;height:30px;border-radius:50%;
+  background:var(--color-primary);color:#fff;flex-shrink:0;
+}
+.site-header .main-nav .nav-user-avatar svg{width:17px;height:17px;}
+.site-header .main-nav .nav-user-name{max-width:13ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.site-header .main-nav #btnCerrarSesion{
+  color:var(--color-accent-dark)!important;
+  background:rgba(224,118,46,.08);
+}
+.site-header .main-nav #btnCerrarSesion:hover{background:rgba(224,118,46,.16);}
+/* Medidas intermedias: el menú ocupa una segunda fila ordenada, sin comprimir enlaces. */
+@media (min-width:961px) and (max-width:1400px){
+  .site-header .container{flex-wrap:wrap;row-gap:.65rem;}
+  .site-header .main-nav{margin:0;flex:0 0 100%;order:3;}
+  .site-header .main-nav ul{justify-content:center;flex-wrap:wrap;gap:.25rem .35rem;}
+}
+@media (max-width:960px){
+  .site-header .container{flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .site-header .nav-toggle-label{display:flex;margin-left:auto;}
+  .site-header .main-nav{flex-basis:100%;width:100%;margin:0;order:3;}
+  .site-header .main-nav ul{
+    display:none;flex-direction:column;align-items:stretch;justify-content:flex-start;
+    flex-wrap:nowrap;width:100%;gap:.15rem;
+    padding:.7rem 0 0;margin:.4rem 0 0;
+    border-top:1px solid var(--color-line);
+  }
+  .site-header .main-nav li{width:100%;}
+  .site-header .main-nav a{display:flex;justify-content:flex-start;width:100%;padding:.75rem .85rem;white-space:normal;}
+  .site-header .main-nav .nav-link-login a,.site-header .main-nav .nav-link-register a{justify-content:flex-start;}
+  .site-header .main-nav .nav-user-summary{margin:.5rem 0;justify-content:flex-start;max-width:100%;}
+  .site-header .nav-toggle:checked ~ .main-nav ul{display:flex;}
+}
+@media (max-width:410px){
+  .site-header .brand-mark{width:34px;height:34px;}
+  .site-header .brand-text .name{font-size:.95rem;}
+  .site-header .brand-text .tagline{font-size:.68rem;}
+}
+@media(prefers-reduced-motion:reduce){
+  .site-header .main-nav a{transition:none;}
+}
