@@ -76,7 +76,7 @@ function accionEditar(td, r) {
 }
 
 function accionDePago(td, r) {
-  if (r.estado_pago === 'pendiente') {
+  if (r.estado_pago === 'pendiente' && r.estado !== 'cancelado' && r.estado !== 'rechazado') {
     const a = document.createElement('a');
     a.className = 'btn-pagar-fila';
     a.href = `pago.html?id=${r.id}`;
@@ -117,6 +117,88 @@ function accionDePago(td, r) {
 
   const normalizar = (valor) => String(valor ?? '')
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+
+  // Ruta de atención vinculada a los valores existentes de Neon.
+  // "Registrado" no significa que ya exista una cita confirmada.
+  function crearRutaAtencion(r) {
+    const ruta = document.createElement('section');
+    ruta.className = 'ruta-atencion';
+    ruta.setAttribute('aria-label', 'Ruta de atención de la cita ' + (r.codigo_seguimiento || ''));
+
+    const encabezado = document.createElement('div');
+    encabezado.className = 'ruta-encabezado';
+    const titulo = document.createElement('h4');
+    titulo.textContent = 'Mi Ruta de Atención';
+    const nota = document.createElement('small');
+    nota.textContent = 'Seguimiento de tu solicitud';
+    encabezado.append(titulo, nota);
+
+    const lista = document.createElement('ol');
+    lista.className = 'ruta-pasos';
+    const finalizada = r.estado === 'atendido';
+    const cerrada = r.estado === 'cancelado' || r.estado === 'rechazado';
+    const pagada = r.estado_pago === 'pagado';
+    const exonerada = r.estado_pago === 'exonerado';
+    const pasoPagoListo = pagada || exonerada;
+
+    // Evitar presentar como confirmación médica los estados que no existen en la BD.
+    let estados;
+    if (cerrada) {
+      estados = [
+        ['Solicitud registrada', 'Se guardó la solicitud en el sistema.', 'completo'],
+        [r.estado === 'cancelado' ? 'Solicitud cancelada' : 'Solicitud rechazada',
+          'Esta solicitud no continuará con atención. Consulta las opciones disponibles.', 'alerta']
+      ];
+    } else {
+      estados = [
+        ['Solicitud registrada', 'Tu registro y código de seguimiento están disponibles.', 'completo'],
+        [exonerada ? 'Atención exonerada' : 'Revisión de pago',
+          exonerada ? 'La solicitud figura exonerada de pago.' :
+            pagada ? 'El pago figura registrado.' : 'El pago aparece pendiente.',
+          pasoPagoListo ? 'completo' : 'actual'],
+        ['Seguimiento de la solicitud',
+          finalizada ? 'El sistema indica que la atención fue completada.' :
+          'Consulta el estado de tu solicitud; todavía figura como registrada.',
+          finalizada ? 'completo' : pasoPagoListo ? 'actual' : 'pendiente'],
+        ['Atención médica',
+          finalizada ? 'La cita tiene estado atendido.' :
+          'Este paso figurará como completo al cambiar el estado a atendido.',
+          finalizada ? 'completo' : 'pendiente']
+      ];
+    }
+    for (const [nombre, descripcion, estado] of estados) {
+      const li = document.createElement('li');
+      li.className = 'ruta-paso';
+      li.dataset.pasoEstado = estado;
+      const indicador = document.createElement('span');
+      indicador.className = 'ruta-paso-indicador';
+      indicador.setAttribute('aria-hidden', 'true');
+      indicador.textContent = estado === 'completo' ? '✓' : estado === 'alerta' ? '!' : '•';
+      const texto = document.createElement('div');
+      const fuerte = document.createElement('strong');
+      fuerte.textContent = nombre;
+      const parrafo = document.createElement('p');
+      parrafo.textContent = descripcion;
+      texto.append(fuerte, parrafo);
+      li.append(indicador, texto);
+      lista.append(li);
+    }
+
+    const siguiente = document.createElement('p');
+    siguiente.className = 'ruta-proxima-accion';
+    if (cerrada) {
+      siguiente.textContent = 'Siguiente acción: revisa el motivo con el área de atención o solicita una nueva cita.';
+    } else if (finalizada) {
+      siguiente.textContent = 'Atención completada según el estado registrado.';
+    } else if (r.estado_pago === 'pendiente') {
+      siguiente.textContent = 'Siguiente acción: revisa tu pago pendiente.';
+    } else {
+      siguiente.textContent = 'Siguiente acción: consulta las actualizaciones de tu solicitud.';
+    }
+    ruta.append(encabezado, lista, siguiente);
+    return ruta;
+  }
 
   function mostrarTarjeta(r) {
     const card = document.createElement('article');
@@ -159,7 +241,7 @@ function accionDePago(td, r) {
     acciones.className = 'mis-cita-acciones';
     accionEditar(acciones, r);
     accionDePago(acciones, r);
-    card.append(cabecera, codigo, detalles, acciones);
+    card.append(cabecera, codigo, detalles, crearRutaAtencion(r), acciones);
     return card;
   }
 
