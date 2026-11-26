@@ -1,0 +1,30 @@
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { Link, NavLink, useNavigate, Navigate, useLocation } from 'react-router-dom';
+import { useAuth, homeFor } from '../context/AuthContext';
+import { specialties, states } from '../services/domain';
+export function Guard({ roles, children }) { const { user } = useAuth(); const loc = useLocation(); if (!user)
+    return <Navigate to="/login#iniciar" state={{ from: loc.pathname + loc.search }} replace/>; if (roles && !roles.includes(user.rol))
+    return <Navigate to={homeFor(user.rol)} replace/>; return children; }
+export function Page({ name, title, children }) { const loc = useLocation(); useLayoutEffect(() => { document.title = title; const sheet = document.createElement('link'); sheet.rel = 'stylesheet'; sheet.href = `${import.meta.env.BASE_URL}css/${name}.css`; const nav = document.querySelector('link[href="/css/nav-superior.css"]'); document.head.insertBefore(sheet, nav); return () => sheet.remove(); }, [name, title]); useEffect(() => { if (loc.hash) {
+    let id; try { id = decodeURIComponent(loc.hash.slice(1)); } catch { id = loc.hash.slice(1); }
+    const el = document.getElementById(id);
+    if (el) {
+        el.scrollIntoView();
+        return;
+    }
+} window.scrollTo(0, 0); }, [loc.pathname, loc.hash]); return children; }
+export function Feedback({ error, success, loading }) { return <>{loading && <p role="status">Cargando…</p>}{error && <p className="api-error" role="alert">{error}</p>}{success && <p className="confirm-box show" role="status">{success}</p>}</>; }
+export function Options({ all = false, source = specialties }) { return <>{all && <option value="">Todas</option>}{Object.entries(source).map(([v, t]) => <option key={v} value={v}>{t}</option>)}</>; }
+export function StateOptions() { return states.map(v => <option key={v} value={v}>{v}</option>); }
+export function Badge({ type, value, children }) { return <span className={`${type}-badge`} {...{ [`data-${type}`]: value }}>{children ?? value ?? '—'}</span>; }
+export function Train({ id, className, seconds, children }) { const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches); useEffect(() => { const m = window.matchMedia('(prefers-reduced-motion: reduce)'); const change = () => setReduced(m.matches); m.addEventListener('change', change); return () => m.removeEventListener('change', change); }, []); return <div id={id} className={className + (reduced ? '' : ' is-moving')} style={{ '--train-duration': `${seconds}s` }}><div className="train-set">{children}</div>{!reduced && <div className="train-set" aria-hidden="true" inert={true}>{children}</div>}</div>; }
+export function HeaderTools() { const { user, logout } = useAuth(); const nav = useNavigate(); const [open, setOpen] = useState(''); const [prefs, setPrefs] = useState(() => { try {
+    return JSON.parse(localStorage.getItem('hrn_accesibilidad')) || {};
+}
+catch {
+    return {};
+} }); const root = useRef(); useEffect(() => { document.documentElement.classList.toggle('modo-facil-grande', !!prefs.grande); document.documentElement.classList.toggle('modo-facil-contraste', !!prefs.contraste); try {
+    localStorage.setItem('hrn_accesibilidad', JSON.stringify(prefs));
+}
+catch { } }, [prefs]); useEffect(() => { const close = e => { if (e.key === 'Escape' || (e.type === 'pointerdown' && !root.current?.contains(e.target)))
+    setOpen(''); }; document.addEventListener('pointerdown', close); document.addEventListener('keydown', close); return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', close); }; }, []); const toggle = v => setOpen(s => s === v ? '' : v); return <div ref={root} className="header-tools"><button type="button" id="modoFacilControl" className="access-trigger" aria-expanded={open === 'access'} aria-controls="modoFacilOpciones" onClick={() => toggle('access')}>Aa Modo fácil</button><section className="access-panel" id="modoFacilOpciones" hidden={open !== 'access'}><h2>Facilita la lectura</h2><p>Personaliza la presentación del portal.</p>{[['grande', 'Letras y botones grandes'], ['contraste', 'Contraste mejorado']].map(([k, t]) => <label className="access-option" key={k}><input type="checkbox" checked={!!prefs[k]} onChange={e => setPrefs(p => ({ ...p, [k]: e.target.checked }))}/><span>{t}</span></label>)}<button type="button" className="access-reset" onClick={() => setPrefs({})}>Restablecer tamaño y contraste</button></section>{user && <div className="header-profile"><button type="button" className="header-profile-trigger" aria-expanded={open === 'profile'} onClick={() => toggle('profile')}><span className="header-profile-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span className="header-profile-text"><strong className="header-profile-name">{user.nombre.split(/\s+/)[0]}</strong><small className="header-profile-role">{user.rol}</small></span><span className="header-profile-chevron">⌄</span></button><div className="header-profile-menu" hidden={open !== 'profile'}><div className="header-profile-identity"><strong>{user.nombre}</strong><small>{user.rol}</small></div><Link className="header-profile-link" to={user.rol === 'cliente' ? '/consulta' : homeFor(user.rol)} onClick={() => setOpen('')}>{({ cliente: 'Mis citas', administrador: 'Panel de gestión', empleado: 'Panel de gestión', cajero: 'Área de caja' })[user.rol]}</Link>{user.rol === 'administrador' && <>{[['/caja', 'Gestión de Caja'], ['/reportes', 'Reportes administrativos'], ['/usuarios', 'Usuarios y roles']].map(([p, t]) => <Link key={p} className="header-profile-link" to={p} onClick={() => setOpen('')}>{t}</Link>)}</>}<button type="button" className="header-profile-logout" onClick={() => { logout(); nav('/login#iniciar'); }}>Cerrar sesión</button></div></div>}</div>; }

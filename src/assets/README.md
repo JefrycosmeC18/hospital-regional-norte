@@ -1,0 +1,2 @@
+# Recursos visuales
+La rama original no contiene archivos de imagen locales: usa imágenes públicas por URL de Pexels y SVG incorporados. Se conservaron las URL y los SVG en las páginas JSX. Las fuentes Google Fonts también se mantienen. Si el proyecto debe funcionar sin Internet, descarga los recursos con licencia y reemplaza las URL por importaciones desde esta carpeta. No se incluyeron archivos de credenciales ni recursos de la base de datos.

@@ -1,0 +1,9 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useResource } from './useResource';
+import { specialties, norm, date } from '../services/domain';
+import { formatearSoles as money } from '../services/tarifario';
+import { Badge } from '../components/Common';
+import { AppointmentActions, AppointmentCard } from '../components/Clinical';
+import { useBase, bind, click, hidden, message } from './modelUtils';
+export function useConsulta() { const m = useBase(), r = useResource('/citas/mias', 'citas'), [text, setText] = useState(''), [state, setState] = useState(''); const rows = (r.data ?? []).filter(x => (!state || x.estado === state) && norm(`${x.codigo_seguimiento} ${specialties[x.especialidad] ?? x.especialidad}`).includes(norm(text))); m.props = { buscarMisCitas: bind(text, setText), estadoMisCitas: bind(state, setState), limpiarMisCitas: click(() => { setText(''); setState(''); }), cargando: hidden(!r.loading), detalleTablaMisCitas: hidden(!rows.length), tablaRegistros: hidden(!rows.length), registrosVacio: hidden(!r.data || rows.length > 0) }; m.content = { contadorMisCitas: r.data ? `${rows.length} de ${r.data.length} solicitudes` : message(r), tarjetasMisCitas: rows.map(x => <AppointmentCard key={x.id} r={x}/>), cuerpoRegistros: rows.map(x => <tr key={x.id}><td>{x.codigo_seguimiento}</td><td>{specialties[x.especialidad] ?? x.especialidad}</td><td>{date(x.fecha_preferida)}</td><td><Badge type="estado" value={x.estado}/></td><td>{money(Number(x.monto_calculado))}</td><td><Badge type="pago" value={x.estado_pago}/></td><td>{date(x.fecha_registro)}</td><td className="acciones-fila"><AppointmentActions r={x}/></td></tr>), registrosVacio: <>No hay solicitudes que coincidan. <Link to="/registro">Solicita una cita</Link>.</> }; return { ...m, error: r.error }; }

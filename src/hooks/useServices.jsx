@@ -1,0 +1,4 @@
+import { useState } from 'react';
+import { norm } from '../services/domain';
+import { useBase, bind, click, hidden } from './modelUtils';
+export function useServices(cards) { const m = useBase(), [text, setText] = useState(''), [category, setCategory] = useState('todas'); const visible = (t, c) => (category === 'todas' || c === category) && norm(t).includes(norm(text)); const found = cards.filter(c => visible(c.text, c.category)); m.visible = visible; m.schedule = n => found.some(c => norm(c.name) === norm(n)); m.props = { 'buscador-especialidades': bind(text, setText), 'categoria-especialidades': bind(category, setCategory), 'limpiar-especialidades': click(() => { setText(''); setCategory('todas'); }), 'sin-resultados-especialidades': hidden(found.length !== 0) }; m.content = { 'resultados-especialidades': `Se muestran ${found.length} de ${cards.length} servicios.` }; return m; }
