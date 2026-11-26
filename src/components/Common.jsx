@@ -1,18 +1,126 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { useAuth, homeFor } from '../context/AuthContext';
 import { specialties, states } from '../services/domain';
 export function Guard({ roles, children }) { const { user } = useAuth(); const loc = useLocation(); if (!user)
     return <Navigate to="/login#iniciar" state={{ from: loc.pathname + loc.search }} replace/>; if (roles && !roles.includes(user.rol))
     return <Navigate to={homeFor(user.rol)} replace/>; return children; }
-export function Page({ name, title, children }) { const loc = useLocation(); useLayoutEffect(() => { document.title = title; const sheet = document.createElement('link'); sheet.rel = 'stylesheet'; sheet.href = `${import.meta.env.BASE_URL}css/${name}.css`; const nav = document.querySelector('link[href="/css/nav-superior.css"]'); document.head.insertBefore(sheet, nav); return () => sheet.remove(); }, [name, title]); useEffect(() => { if (loc.hash) {
-    let id; try { id = decodeURIComponent(loc.hash.slice(1)); } catch { id = loc.hash.slice(1); }
-    const el = document.getElementById(id);
-    if (el) {
+const routeCssCache = new Map();
+
+function obtenerCss(name) {
+  if (routeCssCache.has(name)) {
+    return routeCssCache.get(name);
+  }
+
+  const sheet = document.createElement('link');
+  sheet.rel = 'stylesheet';
+  sheet.href = `${import.meta.env.BASE_URL}css/${name}.css`;
+  sheet.media = 'not all';
+
+  const entry = { sheet, estado: 'cargando' };
+
+  entry.promise = new Promise(resolve => {
+    sheet.addEventListener('load', () => {
+      entry.estado = 'listo';
+      resolve('listo');
+    }, { once: true });
+
+    sheet.addEventListener('error', () => {
+      entry.estado = 'error';
+      resolve('error');
+    }, { once: true });
+  });
+
+  routeCssCache.set(name, entry);
+
+  const nav = document.querySelector(
+    'link[href$="/css/nav-superior.css"]'
+  );
+
+  document.head.insertBefore(sheet, nav);
+
+  return entry;
+}
+
+export function Page({ name, title, children }) {
+  const loc = useLocation();
+
+  const [resultado, setResultado] = useState({
+    name: null,
+    estado: 'cargando'
+  });
+
+  const estado = resultado.name === name
+    ? resultado.estado
+    : 'cargando';
+
+  useLayoutEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  useLayoutEffect(() => {
+    let activo = true;
+    const entry = obtenerCss(name);
+
+    entry.sheet.media = 'all';
+
+    setResultado({ name, estado: entry.estado });
+
+    entry.promise.then(estado => {
+      if (activo) setResultado({ name, estado });
+    });
+
+    return () => {
+      activo = false;
+      entry.sheet.media = 'not all';
+    };
+  }, [name]);
+
+  useEffect(() => {
+    const paginas = [
+      'index', 'institucion', 'actualidad',
+      'servicios', 'contacto', 'como-funciona',
+      'login', 'registro', 'consulta',
+      'actualizar', 'pago', 'comprobante',
+      'panel', 'caja', 'reportes'
+    ];
+
+    paginas.forEach(obtenerCss);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (estado !== 'listo') return;
+
+    if (loc.hash) {
+      let id;
+
+      try {
+        id = decodeURIComponent(loc.hash.slice(1));
+      } catch {
+        id = loc.hash.slice(1);
+      }
+
+      const el = document.getElementById(id);
+
+      if (el) {
         el.scrollIntoView();
         return;
+      }
     }
-} window.scrollTo(0, 0); }, [loc.pathname, loc.hash]); return children; }
+
+    window.scrollTo(0, 0);
+  }, [loc.pathname, loc.hash, estado]);
+
+  if (estado === 'error') {
+    return <p role="alert">Error al cargar los estilos.</p>;
+  }
+
+  if (estado !== 'listo') {
+    return <div style={{ minHeight: '100vh' }} />;
+  }
+
+  return children;
+}
 export function Feedback({ error, success, loading }) { return <>{loading && <p role="status">Cargando…</p>}{error && <p className="api-error" role="alert">{error}</p>}{success && <p className="confirm-box show" role="status">{success}</p>}</>; }
 export function Options({ all = false, source = specialties }) { return <>{all && <option value="">Todas</option>}{Object.entries(source).map(([v, t]) => <option key={v} value={v}>{t}</option>)}</>; }
 export function StateOptions() { return states.map(v => <option key={v} value={v}>{v}</option>); }
@@ -28,3 +136,4 @@ catch {
 }
 catch { } }, [prefs]); useEffect(() => { const close = e => { if (e.key === 'Escape' || (e.type === 'pointerdown' && !root.current?.contains(e.target)))
     setOpen(''); }; document.addEventListener('pointerdown', close); document.addEventListener('keydown', close); return () => { document.removeEventListener('pointerdown', close); document.removeEventListener('keydown', close); }; }, []); const toggle = v => setOpen(s => s === v ? '' : v); return <div ref={root} className="header-tools"><button type="button" id="modoFacilControl" className="access-trigger" aria-expanded={open === 'access'} aria-controls="modoFacilOpciones" onClick={() => toggle('access')}>Aa Modo fácil</button><section className="access-panel" id="modoFacilOpciones" hidden={open !== 'access'}><h2>Facilita la lectura</h2><p>Personaliza la presentación del portal.</p>{[['grande', 'Letras y botones grandes'], ['contraste', 'Contraste mejorado']].map(([k, t]) => <label className="access-option" key={k}><input type="checkbox" checked={!!prefs[k]} onChange={e => setPrefs(p => ({ ...p, [k]: e.target.checked }))}/><span>{t}</span></label>)}<button type="button" className="access-reset" onClick={() => setPrefs({})}>Restablecer tamaño y contraste</button></section>{user && <div className="header-profile"><button type="button" className="header-profile-trigger" aria-expanded={open === 'profile'} onClick={() => toggle('profile')}><span className="header-profile-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span className="header-profile-text"><strong className="header-profile-name">{user.nombre.split(/\s+/)[0]}</strong><small className="header-profile-role">{user.rol}</small></span><span className="header-profile-chevron">⌄</span></button><div className="header-profile-menu" hidden={open !== 'profile'}><div className="header-profile-identity"><strong>{user.nombre}</strong><small>{user.rol}</small></div><Link className="header-profile-link" to={user.rol === 'cliente' ? '/consulta' : homeFor(user.rol)} onClick={() => setOpen('')}>{({ cliente: 'Mis citas', administrador: 'Panel de gestión', empleado: 'Panel de gestión', cajero: 'Área de caja' })[user.rol]}</Link>{user.rol === 'administrador' && <>{[['/caja', 'Gestión de Caja'], ['/reportes', 'Reportes administrativos'], ['/usuarios', 'Usuarios y roles']].map(([p, t]) => <Link key={p} className="header-profile-link" to={p} onClick={() => setOpen('')}>{t}</Link>)}</>}<button type="button" className="header-profile-logout" onClick={() => { logout(); nav('/login#iniciar'); }}>Cerrar sesión</button></div></div>}</div>; }
+
